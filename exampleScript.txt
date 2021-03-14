@@ -17,18 +17,18 @@ function add2ExtraCredit = value + 2; //Functions can be applied to sets of valu
 function convertToPercent = value / total.value;    //This example can be used for a table that inputs quizes as a score and has a column for
                                                     //Each student as well as a "total" column for the highest possible.
 
-scheme classWeights {       //For each column in a given subset, averages the values of the subset as value then performs a function
-    quiz: (value * .2),     //Performs an action on the given subset
-    test: (value * .4),
-    project: (value *.4),
+scheme classWeights = {       //For each column in a given subset, averages the values of the subset as value then performs a function
+    quiz: value * .2,     //Performs an action on the given subset
+    test: value * .4,
+    project: value *.4,
 }
 
 cell max = tommy.quiz2
 for entry in quiz2: //Iterates through each cell object in a subset.
     if (entry > max): //Compares entry cell.value to max cell.value
         cell max = entry;
-    endif;
-endfor;
+    end if;
+end for;
 
 end actions;
 
