@@ -1,0 +1,2 @@
+read inFile.csv as inFile
+subset a = [a1, b3];

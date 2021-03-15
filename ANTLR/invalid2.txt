@@ -1,0 +1,19 @@
+input:
+
+read infile.csv as inFile;
+
+end input;
+
+
+actions:
+
+subset 1 = [col1, col2];
+
+end actions;
+
+
+output:
+
+write inFile to outFile.csv;
+
+end output;

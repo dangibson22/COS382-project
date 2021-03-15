@@ -27,21 +27,26 @@ action			: ifStatement
 				| functionAssignment
 				;
 
-subsetAssignment: SUBSET ID '=' set;
+subsetAssignment: 'subset' ID '=' set;
 set				: '[' references ']';
-references		: reference ',' references
+references		: reference
+				| reference ',' references
 				| /* epsilon */
 				;
 reference		: ID // row or column name
 				| ID '.' ID // colName.rowName
-				| reference '-' reference
+				| reference 'to' reference
 				;
 
-cellAssignment	: CELL ID '=' reference;
+cellAssignment	: 'cell' ID '=' reference;
 
-schemeAssignment: SCHEME ID '=' '{' rules '}';
+schemeAssignment: 'scheme' ID '=' '{' r '}';
 
-rules			: ID ':' expr ',' rules ; //ID corresponds to a subset or cell
+r				: ID ':' expr rules;
+
+rules			: ',' r rules //ID corresponds to a subset or cell
+				|
+				;
 expr			: term terms ;
 /*The below code was ripped from A02 to register mathematical expressions*/
 terms			: '+' term terms
@@ -52,17 +57,16 @@ term			: factor factors;
 
 factors			: '*' factor factors
 				| '/' factor factors
-				| MOD factor factors
+				| 'mod' factor factors
 				| ;
 
 factor			: '(' expr ')'
-				| VALUE
-				| ID '.' VALUE //This ID should be a reference to a column or row
-				| INT
+				| value
+				| ID '.' ID //This ID should be a reference to a column or row
 				;
 /*End Math portion*/
 
-functionAssignment: FUNCTION ID '=' expr ; //A rule is a mathematical operation to apply to the value of a cell or subset
+functionAssignment: 'function' ID '=' expr ; //A rule is a mathematical operation to apply to the value of a cell or subset
 
 ifStatement		: 'if' '(' conditional ')' actionBlock 'end if';
 
@@ -73,19 +77,23 @@ conditional		: value OPERATOR value
 
 value			: INT
 				| ID
+				| realNumber
 				;
 /*End actions phase*/
 
 output          : 'output:' outputStatement 'end output' ';' ;
 outputStatement : outputRule outputWrite ;
 
-outputRule      : 'use' ID 'on' ID ';' outputRule //first ID corresponds to rule. Second ID corresponds to set.
+outputRule      : 'use' ID 'on' reference ';' outputRule //first ID corresponds to rule. Second ID corresponds to set.
                 | /* epsilon */
                 ;
 
 outputWrite     : 'write' ID filename ';' ; //ID corresponds to a subsection
 
-filename		: ALPHANUM '.csv';
+filename		: ID '.csv'
+				| ALPHANUM '.csv';
+
+realNumber		: INT '.' INT ;
 
 INT     : [0-9]+ ;
 ID      : [a-zA-Z_] [0-9a-zA-Z_]+ ;
@@ -93,9 +101,3 @@ NEWLINE : '\r'? '\n' -> skip;
 WS      : [ \t]+ -> skip ;  // tells ANTLR to ignore these
 OPERATOR: ('>=' | '<=' | '>' | '<' | '==' | '!=');
 ALPHANUM: [0-9a-zA-Z_]+ ;
-SUBSET	: 'subset';
-CELL	: 'cell';
-SCHEME	: 'scheme';
-FUNCTION: 'function';
-VALUE	: 'value';
-MOD		: 'mod';
