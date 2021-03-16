@@ -1,18 +1,33 @@
 **Gradebook DSL**
 
-This language is meant to read in grades from a CSV and perform manipulations on them based on a given script.
+Domain: Teachers managing a csv gradebook<br>
+Problem: This language is meant to enable educators to perform manipulations on a gradebook, such as getting the highest / lowest grade, an average
+for an assignment, or even curving a grade or applying a new weighting system.<br>
 
 Variable Types and Declarations
 ===============
 file: a CSV file that has been read in as a subset of all the data<br>
-~~~~~~~~~none
-Read inputFile.csv as varName
-~~~~~~~~~
-col: ___<br>
-row: ___<br>
+col: Group of rows that point to individual cells<br>
+row: group of cols that point to individual cells<br>
 subset: a group of rows, columns, or even individual cells, represented as a 2d array with enumerable rows/cols<br>
 cell: an object that contains its rowHeader, colHeader and value
 
+Script Overview
+===============
+Input
+----------------
+Given a csv file, the language will convert it to a subset variable with the column headers and rows as their respective objects.
+
+**Invalid characters**: If a column header contains invalid characters, such as '&'' or '$', they will be removed from the column reference.
+Spaces in column headers will be replaced with underscores.
+
+**Conflicting names**: If 2 columns contain the same name, the second one will have the number 1 appended to the end, and the next 2, and so on.
+If a column and row share the same name, '_col' will be appended to the column version, and '_row' to the row version.
+
+Actions
+---------------
+Actions consist of the bulk of the script. New subsets can be defined, conditional statements and loops can provide manipulations to data, and
+weight systems aka schemes, can be declared
 
 
 
