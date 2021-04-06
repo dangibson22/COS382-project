@@ -1,0 +1,42 @@
+input:
+
+read filepath.csv as inFile;
+read secondFile.csv as alternate (noRowHeader);
+
+end input;
+
+
+actions:
+
+subset quiz = [quiz1, quiz2 to quiz5];
+subset groupA = [tommy, billy, joe];
+subset bestQuizGrades = [tommy.quiz4, billy.quiz2];
+
+function add2ExtraCredit = value + 2;
+function convertToPercent = value / total.value;
+
+scheme classWeights = {
+    quiz: value * 0.2,
+    test: value * 0.4,
+    project: value *0.4
+};
+
+if (entry > max)
+	cell max = entry;
+end if;
+
+for item in [quiz1, quiz2 to quiz5]
+	function total = total + item;
+end for;
+
+end actions;
+
+
+output:
+
+cell max = tommy.quiz2;
+use classWeights on inFile;
+use add2ExtraCredit on groupA.quiz2;
+write inFile out.csv;
+
+end output;

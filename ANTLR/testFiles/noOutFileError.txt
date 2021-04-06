@@ -22,9 +22,13 @@ scheme classWeights = {
 };
 
 cell max = tommy.quiz2;
-    if (entry > max)
-        cell max = entry;
-    end if;
+if (entry > max)
+	cell max = entry;
+end if;
+
+for item in [quiz1, quiz2 to quiz5]
+	function total = total + item;
+end for;
 
 end actions;
 
@@ -33,6 +37,5 @@ output:
 
 use classWeights on inFile;
 use add2ExtraCredit on groupA.quiz2;
-write inFile out.csv;
 
 end output;

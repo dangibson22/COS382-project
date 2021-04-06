@@ -21,6 +21,7 @@ actionBlock		: action ';' actionBlock
 				| /* epsilon */
 				;
 action			: ifStatement
+				| forStatement
 				| subsetAssignment
 				| cellAssignment
 				| schemeAssignment
@@ -69,6 +70,10 @@ factor			: '(' expr ')'
 functionAssignment: 'function' ID '=' expr ; //A rule is a mathematical operation to apply to the value of a cell or subset
 
 ifStatement		: 'if' '(' conditional ')' actionBlock 'end if';
+
+forStatement	: 'for' ID 'in' ID actionBlock 'end for'
+				| 'for' ID 'in' set actionBlock 'end for'
+				;
 
 conditional		: value OPERATOR value
 				| '('conditional')' 'and' '('conditional')'
