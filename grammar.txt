@@ -1,0 +1,14 @@
+start -> input actions output EOF
+input -> "input:" inputStatement
+
+inputStatement -> "read" filename "as" id ";" inputStatement
+		| /* epsilon */
+
+inputFlags -> "(" inputFlag ")"
+	    | /* epsilon */
+
+inputFlag -> "noRowHeader"
+	   | "noColHeader"
+	   | "noRowHeader" "," "noColHeader"
+	   | "noColHeader" "," "noRowHeader"
+	   

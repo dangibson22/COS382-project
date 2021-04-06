@@ -1,21 +1,47 @@
 **Gradebook DSL**
 
-Domain: Teachers managing a csv gradebook<br>
-Problem: This language is meant to enable educators to perform manipulations on a gradebook, such as getting the highest / lowest grade, an average
-for an assignment, or even curving a grade or applying a new weighting system.<br>
+
+Author
+===============
+
+<div class="noheader firstcol">
+    |             
+------------------|-------------
+name              | Daniel Gibson & Trevor Mitchell
+computer + OS     | Euler lab machines (Linux)
+</div>
+
+Introduction to Language
+===============
+
+**Domain:** Teachers managing a CSV gradebook
+
+**Problem:** This language is meant to enable educators to perform 
+manipulations on a gradebook, such as getting the highest / lowest 
+grade, an average for an assignment, or even curving a grade or 
+applying a new weighting system.
+
 
 Variable Types and Declarations
 ===============
-file: a CSV file that has been read in as a subset of all the data<br>
-col: Group of rows that point to individual cells<br>
-row: group of cols that point to individual cells<br>
-subset: a group of rows, columns, or even individual cells, represented as a 2d array with enumerable rows/cols<br>
-cell: an object that contains its rowHeader, colHeader and value
+
+`file`: a CSV file that has been read in as a subset of all the data
+
+`col`: Group of rows that point to individual cells
+
+`row`: group of cols that point to individual cells
+
+`subset`: a group of rows, columns, or even individual cells, represented 
+as a 2d array with enumerable rows/cols
+
+`cell`: an object that contains its rowHeader, colHeader and value
 
 Script Overview
 ===============
+
 Input
 ----------------
+
 Given a csv file, the language will convert it to a subset variable with the column headers and rows as their respective objects.
 
 **Invalid characters**: If a column header contains invalid characters, such as '&'' or '$', they will be removed from the column reference.
@@ -26,8 +52,204 @@ If a column and row share the same name, '_col' will be appended to the column v
 
 Actions
 ---------------
-Actions consist of the bulk of the script. New subsets can be defined, conditional statements and loops can provide manipulations to data, and
-weight systems aka schemes, can be declared
+
+Actions consist of the bulk of the script. New subsets can be defined, 
+conditional statements and loops can provide manipulations to data, and
+weight systems aka schemes, can be declared. These are all applied in the 
+`output` section of the program.
+
+The actions section is intended to define any 
+modifications to be made to the data. This way, all 
+computation is contained within the actions section, 
+and the output section only uses the precomputed 
+data types to prepare the output.
+
+Output
+---------------
+
+The output section is used to define the structure of the resulting file. 
+It applies pre-defined schemes, rules and functions to certain subsets 
+and writes those results to the specified CSV file.
+
+Sample Program
+===============
+
+The following code is an example of a program written 
+in this language. This is what we used to test the 
+grammar and help structure it.
+
+~~~
+input:
+
+read filepath.csv as inFile;    //populates an inFile variable with key-value pairs of columns, which is an object of key-value pairs of rows 
+                                //that contain cell data.
+read secondFile.csv as alterate (noRowHeader);
+
+end input;
+
+
+actions:
+
+subset quiz = [quiz1, quiz2 to quiz5];  //Defined using row names
+subset groupA = [tommy, billy, joe];    //Defined using col names
+subset bestQuizGrades = [tommy.quiz4, billy.quiz2];  //Defined using individual cells
+
+function add2ExtraCredit = value + 2; //Functions can be applied to sets of values to set the new value = to the old one + 2 in this instance.
+function convertToPercent = value / total.value;    //This example can be used for a table that inputs quizes as a score and has a column for
+                                                    //Each student as well as a "total" column for the highest possible.
+
+scheme classWeights = {       //For each column in a given subset, averages the values of the subset as value then performs a function
+    quiz: value * .2,     //Performs an action on the given subset
+    test: value * .4,
+    project: value *.4,
+}
+
+cell max = tommy.quiz2
+for entry in quiz2: //Iterates through each cell object in a subset.
+    if (entry > max): //Compares entry cell.value to max cell.value
+        cell max = entry;
+    end if;
+end for;
+
+end actions;
+
+
+output:
+
+use classWeights on inFile;
+use add2ExtraCredit on groupA.quiz2;
+write inFile out.csv;
+
+end output;
+~~~
+
+Grammar
+===============
+
+The following grammar is defined for the program:
+
+~~~
+grammar CSVScript;
+
+start   : input actions output EOF ;
+
+input   : 'input:' inputStatement 'end input' ';' ;
+inputStatement  : 'read' filename 'as' ID inputFlags ';' inputStatement
+                | /* epsilon */
+                ;
+inputFlags      : '(' inputFlag ')'
+                | /* epsilon */
+                ;
+inputFlag       : 'noRowHeader'
+                | 'noColHeader'
+                | 'noRowHeader' ',' 'noColHeader'
+                | 'noColHeader' ',' 'noRowHeader'
+                ;
+/*End input phase*/
+
+actions			: 'actions:' actionBlock 'end actions' ';' ;
+actionBlock		: action ';' actionBlock
+				| /* epsilon */
+				;
+action			: ifStatement
+				| subsetAssignment
+				| cellAssignment
+				| schemeAssignment
+				| functionAssignment
+				;
+
+subsetAssignment: 'subset' ID '=' set;
+set				: '[' references ']';
+references		: reference
+				| reference ',' references
+				| /* epsilon */
+				;
+reference		: ID // row or column name
+				| ID '.' ID // colName.rowName
+				| reference 'to' reference
+				;
+
+cellAssignment	: 'cell' ID '=' reference;
+
+schemeAssignment: 'scheme' ID '=' '{' r '}';
+
+r				: ID ':' expr rules;
+
+rules			: ',' r rules //ID corresponds to a subset or cell
+				|
+				;
+expr			: term terms ;
+/*The below code was ripped from A02 to register mathematical expressions*/
+terms			: '+' term terms
+				| '-' term terms
+				| ;
+
+term			: factor factors;
+
+factors			: '*' factor factors
+				| '/' factor factors
+				| 'mod' factor factors
+				| ;
+
+factor			: '(' expr ')'
+				| value
+				| ID '.' ID //This ID should be a reference to a column or row
+				;
+/*End Math portion*/
+
+functionAssignment: 'function' ID '=' expr ; //A rule is a mathematical operation to apply to the value of a cell or subset
+
+ifStatement		: 'if' '(' conditional ')' actionBlock 'end if';
+
+conditional		: value OPERATOR value
+				| '('conditional')' 'and' '('conditional')'
+				| '('conditional')' 'or' '('conditional')'
+				;
+
+value			: INT
+				| ID
+				| realNumber
+				;
+/*End actions phase*/
+
+output          : 'output:' outputStatement 'end output' ';' ;
+outputStatement : outputRule outputWrite ;
+
+outputRule      : 'use' ID 'on' reference ';' outputRule //first ID corresponds to rule. Second ID corresponds to set.
+                | /* epsilon */
+                ;
+
+outputWrite     : 'write' ID filename ';' ; //ID corresponds to a subsection
+
+filename		: ID '.csv'
+				| ALPHANUM '.csv';
+
+realNumber		: INT '.' INT ;
+
+INT     : [0-9]+ ;
+ID      : [a-zA-Z_] [0-9a-zA-Z_]+ ;
+NEWLINE : '\r'? '\n' -> skip;
+WS      : [ \t]+ -> skip ;  // tells ANTLR to ignore these
+OPERATOR: ('>=' | '<=' | '>' | '<' | '==' | '!=');
+ALPHANUM: [0-9a-zA-Z_]+ ;
+~~~
+
+The grammar matches the program as expected and is 
+able to handle all the functionality we have currently 
+designed the program with.
+
+Reflection
+===================
+
+This grammar is not exhaustive, but it covers most cases 
+fairly well. It is possible that we will add more functionality 
+to the language in the future, in which case we would 
+have to add to the grammar. We may also go back and restructure 
+the grammar in places to make it less ambiguous, especially 
+if we discover issues further down the line. However, 
+at this point in time the grammar works quite well for 
+our purposes and provides a strong starting point for 
+developing the language.
 
 
 
