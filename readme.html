@@ -64,6 +64,11 @@ computation is contained within the actions section,
 and the output section only uses the precomputed 
 data types to prepare the output.
 
+**For loops ** will likely not be implemented super often, as functions can be applied to each cell in a set. However,
+it still does provide some usefulness, especially when combined with conditional statements to only modify cells that
+match a given criteria. The first ID in a for loop statement will be the variable name of the current cell, and the second
+ID will be the set that is being iterated over.
+
 Output
 ---------------
 
@@ -135,39 +140,40 @@ start   : input actions output EOF ;
 
 input   : 'input:' inputStatement 'end input' ';' ;
 inputStatement  : 'read' filename 'as' ID inputFlags ';' inputStatement
-                | /* epsilon */
-                ;
+| /* epsilon */
+;
 inputFlags      : '(' inputFlag ')'
-                | /* epsilon */
-                ;
+| /* epsilon */
+;
 inputFlag       : 'noRowHeader'
-                | 'noColHeader'
-                | 'noRowHeader' ',' 'noColHeader'
-                | 'noColHeader' ',' 'noRowHeader'
-                ;
+| 'noColHeader'
+| 'noRowHeader' ',' 'noColHeader'
+| 'noColHeader' ',' 'noRowHeader'
+;
 /*End input phase*/
 
 actions			: 'actions:' actionBlock 'end actions' ';' ;
 actionBlock		: action ';' actionBlock
-				| /* epsilon */
-				;
+| /* epsilon */
+;
 action			: ifStatement
-				| subsetAssignment
-				| cellAssignment
-				| schemeAssignment
-				| functionAssignment
-				;
+| forStatement
+| subsetAssignment
+| cellAssignment
+| schemeAssignment
+| functionAssignment
+;
 
 subsetAssignment: 'subset' ID '=' set;
 set				: '[' references ']';
 references		: reference
-				| reference ',' references
-				| /* epsilon */
-				;
+| reference ',' references
+| /* epsilon */
+;
 reference		: ID // row or column name
-				| ID '.' ID // colName.rowName
-				| reference 'to' reference
-				;
+| ID '.' ID // colName.rowName
+| reference 'to' reference
+;
 
 cellAssignment	: 'cell' ID '=' reference;
 
@@ -176,53 +182,57 @@ schemeAssignment: 'scheme' ID '=' '{' r '}';
 r				: ID ':' expr rules;
 
 rules			: ',' r rules //ID corresponds to a subset or cell
-				|
-				;
+|
+;
 expr			: term terms ;
 /*The below code was ripped from A02 to register mathematical expressions*/
 terms			: '+' term terms
-				| '-' term terms
-				| ;
+| '-' term terms
+| ;
 
 term			: factor factors;
 
 factors			: '*' factor factors
-				| '/' factor factors
-				| 'mod' factor factors
-				| ;
+| '/' factor factors
+| 'mod' factor factors
+| ;
 
 factor			: '(' expr ')'
-				| value
-				| ID '.' ID //This ID should be a reference to a column or row
-				;
+| value
+| ID '.' ID //This ID should be a reference to a column or row
+;
 /*End Math portion*/
 
 functionAssignment: 'function' ID '=' expr ; //A rule is a mathematical operation to apply to the value of a cell or subset
 
 ifStatement		: 'if' '(' conditional ')' actionBlock 'end if';
 
+forStatement	: 'for' ID 'in' ID actionBlock 'end for'
+| 'for' ID 'in' set actionBlock 'end for'
+;
+
 conditional		: value OPERATOR value
-				| '('conditional')' 'and' '('conditional')'
-				| '('conditional')' 'or' '('conditional')'
-				;
+| '('conditional')' 'and' '('conditional')'
+| '('conditional')' 'or' '('conditional')'
+;
 
 value			: INT
-				| ID
-				| realNumber
-				;
+| ID
+| realNumber
+;
 /*End actions phase*/
 
 output          : 'output:' outputStatement 'end output' ';' ;
 outputStatement : outputRule outputWrite ;
 
 outputRule      : 'use' ID 'on' reference ';' outputRule //first ID corresponds to rule. Second ID corresponds to set.
-                | /* epsilon */
-                ;
+| /* epsilon */
+;
 
 outputWrite     : 'write' ID filename ';' ; //ID corresponds to a subsection
 
 filename		: ID '.csv'
-				| ALPHANUM '.csv';
+| ALPHANUM '.csv';
 
 realNumber		: INT '.' INT ;
 
@@ -238,18 +248,31 @@ The grammar matches the program as expected and is
 able to handle all the functionality we have currently 
 designed the program with.
 
+Testing
+====================
+A whole suite of test files were used to check against isolated issues, such as no output file, an integer being used
+as a variable id, actions in the output block, and no input block. We also tested against a larger script that should
+utilize most, if not all of the grammar rules.
+
 Reflection
 ===================
 
-This grammar is not exhaustive, but it covers most cases 
-fairly well. It is possible that we will add more functionality 
-to the language in the future, in which case we would 
-have to add to the grammar. We may also go back and restructure 
-the grammar in places to make it less ambiguous, especially 
-if we discover issues further down the line. However, 
-at this point in time the grammar works quite well for 
-our purposes and provides a strong starting point for 
+P01
+-------------
+This grammar is not exhaustive, but it covers most cases
+fairly well. It is possible that we will add more functionality
+to the language in the future, in which case we would
+have to add to the grammar. We may also go back and restructure
+the grammar in places to make it less ambiguous, especially
+if we discover issues further down the line. However,
+at this point in time the grammar works quite well for
+our purposes and provides a strong starting point for
 developing the language.
+
+P02
+---------------
+At this point, the grammar should be fully functional. Perhaps some adjustments will be made to simplify parser
+implementation. The grammar has displayed expected behavior for various syntax errors and valid inputs.
 
 
 
