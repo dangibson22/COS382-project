@@ -16,7 +16,8 @@ public class startTranslator {
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         CSVScriptParser parser = new CSVScriptParser(tokens);
         ParseTree tree = parser.start();
-        dslListener extractor = new dslListener();
-        ParseTreeWalker.DEFAULT.walk(extractor, tree);
+
+        dslVisitor scriptVisitor = new dslVisitor();
+        scriptVisitor.visit(tree);
     }
 }
