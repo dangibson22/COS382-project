@@ -105,4 +105,4 @@ ID      : [a-zA-Z_] [0-9a-zA-Z_]+ ;
 NEWLINE : '\r'? '\n' -> skip;
 WS      : [ \t]+ -> skip ;  // tells ANTLR to ignore these
 OPERATOR: ('>=' | '<=' | '>' | '<' | '==' | '!=');
-ALPHANUM: [0-9a-zA-Z_]+ ;
+ALPHANUM: [0-9a-zA-Z_/]+ ;

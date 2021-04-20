@@ -23,18 +23,13 @@ applying a new weighting system.
 
 
 Variable Types and Declarations
-===============
+================================
 
-`file`: a CSV file that has been read in as a subset of all the data
+`file`: a CSV file that has been read in as a 2d array
 
-`col`: Group of rows that point to individual cells
+`subset`: an object that contains a list of cell locations and the file it refers to.
 
-`row`: group of cols that point to individual cells
-
-`subset`: a group of rows, columns, or even individual cells, represented 
-as a 2d array with enumerable rows/cols
-
-`cell`: an object that contains its rowHeader, colHeader and value
+`cell`: an object that contains the file it resides in, the row index, and the col index.
 
 Script Overview
 ===============

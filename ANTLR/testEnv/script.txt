@@ -1,7 +1,6 @@
 input:
 
-read filepath.csv as inFile;
-read folder/fsecondFile.csv as alternate (noRowHeader);
+read testEnv/gradebook.csv as gradesTable (noRowHeader);
 
 end input;
 

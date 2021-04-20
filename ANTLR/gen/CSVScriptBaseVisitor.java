@@ -1,6 +1,8 @@
 // Generated from /home/trevor/cos382/P00-DSL/ANTLR/CSVScript.g4 by ANTLR 4.9.1
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
+import java.io.FileNotFoundException;
+
 /**
  * This class provides an empty implementation of {@link CSVScriptVisitor},
  * which can be extended to create a visitor which only needs to handle a subset
