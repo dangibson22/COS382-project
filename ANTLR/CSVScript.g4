@@ -34,7 +34,8 @@ references		: reference
 				| reference ',' references
 				| /* epsilon */
 				;
-reference		: ID // row or column name
+reference		: 'row' ID // row name
+                | 'col' ID // col name
 				| ID '.' ID // colName.rowName
 				| reference 'to' reference
 				;

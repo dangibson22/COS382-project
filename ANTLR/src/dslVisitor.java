@@ -1,12 +1,19 @@
 import org.antlr.v4.runtime.misc.ParseCancellationException;
-
 import java.io.*;
 import java.util.*;
 
 public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
-    private LinkedList<String[][]> inFiles = new LinkedList<>(); //List of all our inFiles
+    private ArrayList<String[][]> inFiles = new ArrayList<>(); //List of all our inFiles
     private int inFilesSize = 0;
-    private Map<String, Integer> fileVarListIdx = new Hashtable<>(); //Maps each file's variable name to one of our array tables
+    private Hashtable<String, Integer> fileVarListIdx = new Hashtable<>(); //Maps each file's variable name to one of our array tables
+
+    private Hashtable<String, Integer> rowHeaders = new Hashtable<>();
+    private Hashtable<String, Integer> colHeaders = new Hashtable<>();
+
+    private class Subset {
+        LinkedList<int[]> cellLocations;
+        String fileVar;
+    }
 
     private int[] getRowColSize(File spreadsheet) throws FileNotFoundException {
         int[] rowColSize = {1, 1}; //[rowSize, colSize]
@@ -26,6 +33,31 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
         return rowColSize;
     }
 
+    private String scrubHeader(String oldHeader) {
+        StringBuilder fixingString = new StringBuilder();
+        if (! Character.isDigit(oldHeader.charAt(0)) ) { //Make sure first char is alphabetical or _
+            fixingString.append(oldHeader.charAt(0));
+        }
+        for (int i=1; i<oldHeader.length(); i++) { //Make sure rest of characters are valid [0-9A-Za-z_]
+            char c = oldHeader.charAt(i);
+            if (Character.isDigit(c) | Character.isAlphabetic(c) | c == '_') {
+                fixingString.append(c);
+            }
+        }
+        return fixingString.toString();
+    }
+    private String indexHeader(String oldHeader, Hashtable<String, Integer> headerTable) {
+        String header=oldHeader;
+        if ( headerTable.get(header) != null ) { //Indexes headers of the same name.
+            int suffix = 2;
+            while ( colHeaders.get(header + "_" + suffix) != null ) {
+                suffix++;
+            }
+            header = header + "_" + suffix;
+        }
+        return header;
+    }
+
     @Override
     public T visitInputStatement(CSVScriptParser.InputStatementContext ctx) {
         /*
@@ -34,18 +66,45 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
          */
         if (ctx.getChildCount() == 0) return null; //Parser matched epsilon rule
         String filename = (String) visit(ctx.filename());
+        boolean[] inputflags = (boolean[]) visit(ctx.inputFlags()); //first bool is noRowHeader, second is noColHeader
 
         try {
             File inFile = new File(filename);
             Scanner myReader = new Scanner(inFile);
             int[] rowColSize = getRowColSize(inFile);
             String[][] spreadsheet = new String[rowColSize[0]][rowColSize[1]];
-            int row = 0;
             //Initialize the array
+            if (! inputflags[1]) { //Col headers exist
+                String line = myReader.nextLine();
+                String[] data = line.split(",");
+                for (int i=0; i<data.length; i++) {
+                    String header;
+                    if (data[i] != null && !data[i].equals("") ) {
+                        header = scrubHeader(data[i]);
+                    } else {
+                        header = "col_" + i;
+                    }
+                    header = indexHeader(header, colHeaders);
+                    colHeaders.put(header, i);
+                }
+                spreadsheet[0] = data;
+            }
+            int row = 1;
             while (myReader.hasNextLine()) {
                 String line = myReader.nextLine();
                 String[] data = line.split(",");
+                if (! inputflags[0]) { //row headers exist
+                    String header;
+                    if (data.length > 0 && data[0] != null && !data[0].equals("")) {
+                        header = scrubHeader((data[0]));
+                    } else {
+                        header = "row_" + row;
+                    }
+                    header = indexHeader(header, rowHeaders);
+                    rowHeaders.put(header, row);
+                }
                 spreadsheet[row] = data;
+                row ++;
             }
             //Add array to stored data
             String fileVarName = ctx.ID().toString();
@@ -67,5 +126,17 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
         return (T) ctx.getText();
     }
 
+    @Override
+    public T visitInputFlags(CSVScriptParser.InputFlagsContext ctx) {
+        if (ctx.getChildCount() == 0) return null;
+        return visit(ctx.inputFlag());
+    }
 
+    @Override
+    public T visitInputFlag(CSVScriptParser.InputFlagContext ctx) {
+        boolean[] inputflags = {false, false};
+        if (! ctx.getTokens(8).isEmpty()) inputflags[0] = true; //Get noRowHeader flag
+        if (! ctx.getTokens(9).isEmpty()) inputflags[1] = true; //Get noColHeader flag
+        return (T) inputflags;
+    }
 }
