@@ -34,7 +34,8 @@ references		: reference
 				| reference ',' references
 				| /* epsilon */
 				;
-reference		: ID // row or column name
+reference		: 'row' ID // row name
+                | 'col' ID // col name
 				| ID '.' ID // colName.rowName
 				| reference 'to' reference
 				;
@@ -105,4 +106,4 @@ ID      : [a-zA-Z_] [0-9a-zA-Z_]+ ;
 NEWLINE : '\r'? '\n' -> skip;
 WS      : [ \t]+ -> skip ;  // tells ANTLR to ignore these
 OPERATOR: ('>=' | '<=' | '>' | '<' | '==' | '!=');
-ALPHANUM: [0-9a-zA-Z_]+ ;
+ALPHANUM: [0-9a-zA-Z_/]+ ;
