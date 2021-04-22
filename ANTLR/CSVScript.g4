@@ -28,7 +28,7 @@ action			: ifStatement
 				| functionAssignment
 				;
 
-subsetAssignment: 'subset' ID '=' set;
+subsetAssignment: ID 'subset' ID '=' set;
 set				: '[' references ']';
 references		: reference
 				| reference ',' references

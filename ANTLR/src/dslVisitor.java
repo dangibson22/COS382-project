@@ -74,7 +74,7 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
             int[] rowColSize = getRowColSize(inFile);
             String[][] spreadsheet = new String[rowColSize[0]][rowColSize[1]];
             //Initialize the array
-            if (! inputflags[1]) { //Col headers exist
+            if (inputflags == null || !inputflags[1]) { //Col headers exist
                 String line = myReader.nextLine();
                 String[] data = line.split(",");
                 for (int i=0; i<data.length; i++) {
@@ -93,7 +93,9 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
             while (myReader.hasNextLine()) {
                 String line = myReader.nextLine();
                 String[] data = line.split(",");
-                if (! inputflags[0]) { //row headers exist
+                // Skip over null rows such as: ",,,,,"
+                // if (data.length > 0) {
+                if (inputflags == null || !inputflags[0]) { //row headers exist
                     String header;
                     if (data.length > 0 && data[0] != null && !data[0].equals("")) {
                         header = scrubHeader((data[0]));
@@ -104,7 +106,8 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
                     rowHeaders.put(header, row);
                 }
                 spreadsheet[row] = data;
-                row ++;
+                row++;
+                // }
             }
             //Add array to stored data
             String fileVarName = ctx.ID().toString();
@@ -137,6 +140,16 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
         boolean[] inputflags = {false, false};
         if (! ctx.getTokens(8).isEmpty()) inputflags[0] = true; //Get noRowHeader flag
         if (! ctx.getTokens(9).isEmpty()) inputflags[1] = true; //Get noColHeader flag
+        T a = (T) inputflags;
         return (T) inputflags;
     }
+
+    @Override
+    public T visitSubsetAssignment(CSVScriptParser.SubsetAssignmentContext ctx) {
+        String file = ctx.ID(0).toString();
+        String subsetToken = ctx.ID(1).toString();
+
+        return null;
+    }
+
 }

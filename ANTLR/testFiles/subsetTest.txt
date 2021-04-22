@@ -1,0 +1,18 @@
+input:
+
+read testEnv/gradebook.csv as inFile;
+
+end input;
+
+actions:
+
+inFile subset quiz = [col quiz1, col quiz2 to col quiz5];
+inFile subset groupA = [row tommy, row billy, row joe];
+
+end actions;
+
+output:
+
+write inFile out.csv;
+
+end output;
