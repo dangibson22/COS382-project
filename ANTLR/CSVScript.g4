@@ -36,11 +36,13 @@ references		: reference
 				;
 reference		: 'row' ID // row name
                 | 'col' ID // col name
-				| ID '.' ID // colName.rowName
+				| cellReference // colName.rowName
 				| reference 'to' reference
 				;
 
-cellAssignment	: 'cell' ID '=' reference;
+cellAssignment	: 'cell' ID '=' cellReference;
+
+cellReference   : ID '.' ID;
 
 schemeAssignment: 'scheme' ID '=' '{' r '}';
 
@@ -49,6 +51,7 @@ r				: ID ':' expr rules;
 rules			: ',' r rules //ID corresponds to a subset or cell
 				|
 				;
+
 expr			: term terms ;
 /*The below code was ripped from A02 to register mathematical expressions*/
 terms			: '+' term terms

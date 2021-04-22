@@ -60,10 +60,6 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
 
     @Override
     public T visitInputStatement(CSVScriptParser.InputStatementContext ctx) {
-        /*
-        Probably will have to do more coding to handle headers vs noheaders.
-        Make another 2 maps that map colHeader to column index and rowHeader to row index
-         */
         if (ctx.getChildCount() == 0) return null; //Parser matched epsilon rule
         String filename = (String) visit(ctx.filename());
         boolean[] inputflags = (boolean[]) visit(ctx.inputFlags()); //first bool is noRowHeader, second is noColHeader
@@ -149,6 +145,23 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
         String file = ctx.ID(0).toString();
         String subsetToken = ctx.ID(1).toString();
 
+        return null;
+    }
+
+    @Override
+    public T visitValue(CSVScriptParser.ValueContext ctx) {
+        if (ctx.INT() != null) {
+            return (T) ctx.INT().getText();
+        }
+        if (ctx.realNumber() != null) {
+            return (T) ctx.realNumber().getText();
+        }
+        if (ctx.ID() != null) {
+            String key = ctx.ID().getText();
+            try {
+                float value =
+            }
+        }
         return null;
     }
 
