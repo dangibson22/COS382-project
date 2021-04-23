@@ -136,7 +136,6 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
         boolean[] inputflags = {false, false};
         if (! ctx.getTokens(8).isEmpty()) inputflags[0] = true; //Get noRowHeader flag
         if (! ctx.getTokens(9).isEmpty()) inputflags[1] = true; //Get noColHeader flag
-        T a = (T) inputflags;
         return (T) inputflags;
     }
 
@@ -157,9 +156,61 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
             return (T) ctx.realNumber().getText();
         }
         if (ctx.ID() != null) {
-            String key = ctx.ID().getText();
-            try {
-                float value =
+            if (ctx.ID().getText().equals("value")) {
+                //Lookup key for current cell which will be set elsewhere
+                //get value in current cell
+            }
+            else {
+                //Lookup id in symbol table
+            }
+            return null;
+        }
+        return null;
+    }
+
+    @Override
+    public T visitIfStatement(CSVScriptParser.IfStatementContext ctx) {
+        if ( (boolean) visit(ctx.conditional()) ) {
+            visit(ctx.actionBlock());
+        }
+        return null;
+    }
+
+    public T visitConditional(CSVScriptParser.ConditionalContext ctx) {
+        if(!ctx.value().isEmpty()) {
+            if (ctx.OPERATOR().getText().equals(">=") ) {
+                Boolean condition = Float.parseFloat((String) visit(ctx.value(0))) >= Float.parseFloat((String) visit(ctx.value(1)));
+                return (T) condition;
+            }
+            if (ctx.OPERATOR().getText().equals("<=") ) {
+                Boolean condition = Float.parseFloat((String) visit(ctx.value(0))) <= Float.parseFloat((String) visit(ctx.value(1)));
+                return (T) condition;
+            }
+            if (ctx.OPERATOR().getText().equals(">") ) {
+                Boolean condition = Float.parseFloat((String) visit(ctx.value(0))) > Float.parseFloat((String) visit(ctx.value(1)));
+                return (T) condition;
+            }
+            if (ctx.OPERATOR().getText().equals("<") ) {
+                Boolean condition = Float.parseFloat((String) visit(ctx.value(0))) < Float.parseFloat((String) visit(ctx.value(1)));
+                return (T) condition;
+            }
+            if (ctx.OPERATOR().getText().equals("==") ) {
+                Boolean condition = Float.parseFloat((String) visit(ctx.value(0))) == Float.parseFloat((String) visit(ctx.value(1)));
+                return (T) condition;
+            }
+            if (ctx.OPERATOR().getText().equals("!=") ) {
+                Boolean condition = Float.parseFloat((String) visit(ctx.value(0))) == Float.parseFloat((String) visit(ctx.value(1)));
+                return (T) condition;
+            }
+        }
+        else {
+            if (ctx.AND() != null) {
+                Boolean condition = (boolean) visit(ctx.conditional(0)) & (boolean) visit(ctx.conditional(1));
+                return (T) condition;
+            }
+            if (ctx.OR() != null) {
+                Boolean condition = (boolean) visit(ctx.conditional(0)) | (boolean) visit(ctx.conditional(1));
+                return (T) condition;
             }
         }
         return null;

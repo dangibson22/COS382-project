@@ -28,21 +28,23 @@ action			: ifStatement
 				| functionAssignment
 				;
 
-subsetAssignment: ID 'subset' ID '=' set;
+subsetAssignment: ID 'subset' ID '=' set; // First ID is fileVar, second is subsetVar
+
 set				: '[' references ']';
 references		: reference
 				| reference ',' references
 				| /* epsilon */
 				;
-reference		: 'row' ID // row name
-                | 'col' ID // col name
+reference		: ID //subset reference
 				| cellReference // colName.rowName
 				| reference 'to' reference
 				;
 
 cellAssignment	: 'cell' ID '=' cellReference;
 
-cellReference   : ID '.' ID;
+cellReference   : ID '.' ID // colName.rowName
+                | ID // Cell variable name
+                ;
 
 schemeAssignment: 'scheme' ID '=' '{' r '}';
 
@@ -80,8 +82,8 @@ forStatement	: 'for' ID 'in' ID actionBlock 'end for'
 				;
 
 conditional		: value OPERATOR value
-				| '('conditional')' 'and' '('conditional')'
-				| '('conditional')' 'or' '('conditional')'
+				| '('conditional')' AND '('conditional')'
+				| '('conditional')' OR '('conditional')'
 				;
 
 value			: INT
@@ -105,8 +107,10 @@ filename		: ID '.csv'
 realNumber		: INT '.' INT ;
 
 INT     : [0-9]+ ;
+AND     : 'and';
+OR      : 'or';
+OPERATOR: ('>=' | '<=' | '>' | '<' | '==' | '!=');
 ID      : [a-zA-Z_] [0-9a-zA-Z_]+ ;
+ALPHANUM: [0-9a-zA-Z_/]+ ;
 NEWLINE : '\r'? '\n' -> skip;
 WS      : [ \t]+ -> skip ;  // tells ANTLR to ignore these
-OPERATOR: ('>=' | '<=' | '>' | '<' | '==' | '!=');
-ALPHANUM: [0-9a-zA-Z_/]+ ;

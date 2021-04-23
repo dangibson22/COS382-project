@@ -1,4 +1,4 @@
-// Generated from /home/CS/users/dgibson/.linux/Documents/COS382/project/COS382-project/ANTLR/CSVScript.g4 by ANTLR 4.9.1
+// Generated from /home/trevor/cos382/PXX-DSL/ANTLR/CSVScript.g4 by ANTLR 4.9.1
 import org.antlr.v4.runtime.atn.*;
 import org.antlr.v4.runtime.dfa.DFA;
 import org.antlr.v4.runtime.*;
@@ -21,25 +21,26 @@ public class CSVScriptParser extends Parser {
 		T__17=18, T__18=19, T__19=20, T__20=21, T__21=22, T__22=23, T__23=24, 
 		T__24=25, T__25=26, T__26=27, T__27=28, T__28=29, T__29=30, T__30=31, 
 		T__31=32, T__32=33, T__33=34, T__34=35, T__35=36, T__36=37, T__37=38, 
-		T__38=39, T__39=40, T__40=41, T__41=42, T__42=43, T__43=44, INT=45, ID=46, 
-		NEWLINE=47, WS=48, OPERATOR=49, ALPHANUM=50;
+		T__38=39, T__39=40, INT=41, AND=42, OR=43, OPERATOR=44, ID=45, ALPHANUM=46, 
+		NEWLINE=47, WS=48;
 	public static final int
 		RULE_start = 0, RULE_input = 1, RULE_inputStatement = 2, RULE_inputFlags = 3, 
 		RULE_inputFlag = 4, RULE_actions = 5, RULE_actionBlock = 6, RULE_action = 7, 
 		RULE_subsetAssignment = 8, RULE_set = 9, RULE_references = 10, RULE_reference = 11, 
-		RULE_cellAssignment = 12, RULE_schemeAssignment = 13, RULE_r = 14, RULE_rules = 15, 
-		RULE_expr = 16, RULE_terms = 17, RULE_term = 18, RULE_factors = 19, RULE_factor = 20, 
-		RULE_functionAssignment = 21, RULE_ifStatement = 22, RULE_forStatement = 23, 
-		RULE_conditional = 24, RULE_value = 25, RULE_output = 26, RULE_outputStatement = 27, 
-		RULE_outputRule = 28, RULE_outputWrite = 29, RULE_filename = 30, RULE_realNumber = 31;
+		RULE_cellAssignment = 12, RULE_cellReference = 13, RULE_schemeAssignment = 14, 
+		RULE_r = 15, RULE_rules = 16, RULE_expr = 17, RULE_terms = 18, RULE_term = 19, 
+		RULE_factors = 20, RULE_factor = 21, RULE_functionAssignment = 22, RULE_ifStatement = 23, 
+		RULE_forStatement = 24, RULE_conditional = 25, RULE_value = 26, RULE_output = 27, 
+		RULE_outputStatement = 28, RULE_outputRule = 29, RULE_outputWrite = 30, 
+		RULE_filename = 31, RULE_realNumber = 32;
 	private static String[] makeRuleNames() {
 		return new String[] {
 			"start", "input", "inputStatement", "inputFlags", "inputFlag", "actions", 
 			"actionBlock", "action", "subsetAssignment", "set", "references", "reference", 
-			"cellAssignment", "schemeAssignment", "r", "rules", "expr", "terms", 
-			"term", "factors", "factor", "functionAssignment", "ifStatement", "forStatement", 
-			"conditional", "value", "output", "outputStatement", "outputRule", "outputWrite", 
-			"filename", "realNumber"
+			"cellAssignment", "cellReference", "schemeAssignment", "r", "rules", 
+			"expr", "terms", "term", "factors", "factor", "functionAssignment", "ifStatement", 
+			"forStatement", "conditional", "value", "output", "outputStatement", 
+			"outputRule", "outputWrite", "filename", "realNumber"
 		};
 	}
 	public static final String[] ruleNames = makeRuleNames();
@@ -48,10 +49,10 @@ public class CSVScriptParser extends Parser {
 		return new String[] {
 			null, "'input:'", "'end input'", "';'", "'read'", "'as'", "'('", "')'", 
 			"'noRowHeader'", "'noColHeader'", "','", "'actions:'", "'end actions'", 
-			"'subset'", "'='", "'['", "']'", "'row'", "'col'", "'.'", "'to'", "'cell'", 
-			"'scheme'", "'{'", "'}'", "':'", "'+'", "'-'", "'*'", "'/'", "'mod'", 
-			"'function'", "'if'", "'end if'", "'for'", "'in'", "'end for'", "'and'", 
-			"'or'", "'output:'", "'end output'", "'use'", "'on'", "'write'", "'.csv'"
+			"'subset'", "'='", "'['", "']'", "'to'", "'cell'", "'.'", "'scheme'", 
+			"'{'", "'}'", "':'", "'+'", "'-'", "'*'", "'/'", "'mod'", "'function'", 
+			"'if'", "'end if'", "'for'", "'in'", "'end for'", "'output:'", "'end output'", 
+			"'use'", "'on'", "'write'", "'.csv'", null, "'and'", "'or'"
 		};
 	}
 	private static final String[] _LITERAL_NAMES = makeLiteralNames();
@@ -60,8 +61,8 @@ public class CSVScriptParser extends Parser {
 			null, null, null, null, null, null, null, null, null, null, null, null, 
 			null, null, null, null, null, null, null, null, null, null, null, null, 
 			null, null, null, null, null, null, null, null, null, null, null, null, 
-			null, null, null, null, null, null, null, null, null, "INT", "ID", "NEWLINE", 
-			"WS", "OPERATOR", "ALPHANUM"
+			null, null, null, null, null, "INT", "AND", "OR", "OPERATOR", "ID", "ALPHANUM", 
+			"NEWLINE", "WS"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -151,13 +152,13 @@ public class CSVScriptParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(64);
-			input();
-			setState(65);
-			actions();
 			setState(66);
-			output();
+			input();
 			setState(67);
+			actions();
+			setState(68);
+			output();
+			setState(69);
 			match(EOF);
 			}
 		}
@@ -201,13 +202,13 @@ public class CSVScriptParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(69);
-			match(T__0);
-			setState(70);
-			inputStatement();
 			setState(71);
-			match(T__1);
+			match(T__0);
 			setState(72);
+			inputStatement();
+			setState(73);
+			match(T__1);
+			setState(74);
 			match(T__2);
 			}
 		}
@@ -256,25 +257,25 @@ public class CSVScriptParser extends Parser {
 		InputStatementContext _localctx = new InputStatementContext(_ctx, getState());
 		enterRule(_localctx, 4, RULE_inputStatement);
 		try {
-			setState(83);
+			setState(85);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__3:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(74);
-				match(T__3);
-				setState(75);
-				filename();
 				setState(76);
-				match(T__4);
+				match(T__3);
 				setState(77);
-				match(ID);
+				filename();
 				setState(78);
-				inputFlags();
+				match(T__4);
 				setState(79);
-				match(T__2);
+				match(ID);
 				setState(80);
+				inputFlags();
+				setState(81);
+				match(T__2);
+				setState(82);
 				inputStatement();
 				}
 				break;
@@ -325,17 +326,17 @@ public class CSVScriptParser extends Parser {
 		InputFlagsContext _localctx = new InputFlagsContext(_ctx, getState());
 		enterRule(_localctx, 6, RULE_inputFlags);
 		try {
-			setState(90);
+			setState(92);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case T__5:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(85);
-				match(T__5);
-				setState(86);
-				inputFlag();
 				setState(87);
+				match(T__5);
+				setState(88);
+				inputFlag();
+				setState(89);
 				match(T__6);
 				}
 				break;
@@ -383,42 +384,42 @@ public class CSVScriptParser extends Parser {
 		InputFlagContext _localctx = new InputFlagContext(_ctx, getState());
 		enterRule(_localctx, 8, RULE_inputFlag);
 		try {
-			setState(100);
+			setState(102);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,2,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(92);
+				setState(94);
 				match(T__7);
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(93);
+				setState(95);
 				match(T__8);
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(94);
-				match(T__7);
-				setState(95);
-				match(T__9);
 				setState(96);
+				match(T__7);
+				setState(97);
+				match(T__9);
+				setState(98);
 				match(T__8);
 				}
 				break;
 			case 4:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(97);
-				match(T__8);
-				setState(98);
-				match(T__9);
 				setState(99);
+				match(T__8);
+				setState(100);
+				match(T__9);
+				setState(101);
 				match(T__7);
 				}
 				break;
@@ -464,13 +465,13 @@ public class CSVScriptParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(102);
-			match(T__10);
-			setState(103);
-			actionBlock();
 			setState(104);
-			match(T__11);
+			match(T__10);
 			setState(105);
+			actionBlock();
+			setState(106);
+			match(T__11);
+			setState(107);
 			match(T__2);
 			}
 		}
@@ -515,28 +516,28 @@ public class CSVScriptParser extends Parser {
 		ActionBlockContext _localctx = new ActionBlockContext(_ctx, getState());
 		enterRule(_localctx, 12, RULE_actionBlock);
 		try {
-			setState(112);
+			setState(114);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
-			case T__20:
-			case T__21:
-			case T__30:
+			case T__17:
+			case T__19:
+			case T__28:
+			case T__29:
 			case T__31:
-			case T__33:
 			case ID:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(107);
-				action();
-				setState(108);
-				match(T__2);
 				setState(109);
+				action();
+				setState(110);
+				match(T__2);
+				setState(111);
 				actionBlock();
 				}
 				break;
 			case T__11:
-			case T__32:
-			case T__35:
+			case T__30:
+			case T__33:
 				enterOuterAlt(_localctx, 2);
 				{
 				}
@@ -598,48 +599,48 @@ public class CSVScriptParser extends Parser {
 		ActionContext _localctx = new ActionContext(_ctx, getState());
 		enterRule(_localctx, 14, RULE_action);
 		try {
-			setState(120);
+			setState(122);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
-			case T__31:
+			case T__29:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(114);
+				setState(116);
 				ifStatement();
 				}
 				break;
-			case T__33:
+			case T__31:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(115);
+				setState(117);
 				forStatement();
 				}
 				break;
 			case ID:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(116);
+				setState(118);
 				subsetAssignment();
 				}
 				break;
-			case T__20:
+			case T__17:
 				enterOuterAlt(_localctx, 4);
 				{
-				setState(117);
+				setState(119);
 				cellAssignment();
 				}
 				break;
-			case T__21:
+			case T__19:
 				enterOuterAlt(_localctx, 5);
 				{
-				setState(118);
+				setState(120);
 				schemeAssignment();
 				}
 				break;
-			case T__30:
+			case T__28:
 				enterOuterAlt(_localctx, 6);
 				{
-				setState(119);
+				setState(121);
 				functionAssignment();
 				}
 				break;
@@ -691,15 +692,15 @@ public class CSVScriptParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(122);
-			match(ID);
-			setState(123);
-			match(T__12);
 			setState(124);
 			match(ID);
 			setState(125);
-			match(T__13);
+			match(T__12);
 			setState(126);
+			match(ID);
+			setState(127);
+			match(T__13);
+			setState(128);
 			set();
 			}
 		}
@@ -743,11 +744,11 @@ public class CSVScriptParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(128);
-			match(T__14);
-			setState(129);
-			references();
 			setState(130);
+			match(T__14);
+			setState(131);
+			references();
+			setState(132);
 			match(T__15);
 			}
 		}
@@ -792,24 +793,24 @@ public class CSVScriptParser extends Parser {
 		ReferencesContext _localctx = new ReferencesContext(_ctx, getState());
 		enterRule(_localctx, 20, RULE_references);
 		try {
-			setState(138);
+			setState(140);
 			_errHandler.sync(this);
 			switch ( getInterpreter().adaptivePredict(_input,5,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(132);
+				setState(134);
 				reference(0);
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(133);
-				reference(0);
-				setState(134);
-				match(T__9);
 				setState(135);
+				reference(0);
+				setState(136);
+				match(T__9);
+				setState(137);
 				references();
 				}
 				break;
@@ -832,9 +833,9 @@ public class CSVScriptParser extends Parser {
 	}
 
 	public static class ReferenceContext extends ParserRuleContext {
-		public List<TerminalNode> ID() { return getTokens(CSVScriptParser.ID); }
-		public TerminalNode ID(int i) {
-			return getToken(CSVScriptParser.ID, i);
+		public TerminalNode ID() { return getToken(CSVScriptParser.ID, 0); }
+		public CellReferenceContext cellReference() {
+			return getRuleContext(CellReferenceContext.class,0);
 		}
 		public List<ReferenceContext> reference() {
 			return getRuleContexts(ReferenceContext.class);
@@ -876,40 +877,24 @@ public class CSVScriptParser extends Parser {
 			int _alt;
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(148);
+			setState(145);
 			_errHandler.sync(this);
-			switch (_input.LA(1)) {
-			case T__16:
-				{
-				setState(141);
-				match(T__16);
-				setState(142);
-				match(ID);
-				}
-				break;
-			case T__17:
+			switch ( getInterpreter().adaptivePredict(_input,6,_ctx) ) {
+			case 1:
 				{
 				setState(143);
-				match(T__17);
-				setState(144);
 				match(ID);
 				}
 				break;
-			case ID:
+			case 2:
 				{
-				setState(145);
-				match(ID);
-				setState(146);
-				match(T__18);
-				setState(147);
-				match(ID);
+				setState(144);
+				cellReference();
 				}
 				break;
-			default:
-				throw new NoViableAltException(this);
 			}
 			_ctx.stop = _input.LT(-1);
-			setState(155);
+			setState(152);
 			_errHandler.sync(this);
 			_alt = getInterpreter().adaptivePredict(_input,7,_ctx);
 			while ( _alt!=2 && _alt!=org.antlr.v4.runtime.atn.ATN.INVALID_ALT_NUMBER ) {
@@ -920,16 +905,16 @@ public class CSVScriptParser extends Parser {
 					{
 					_localctx = new ReferenceContext(_parentctx, _parentState);
 					pushNewRecursionContext(_localctx, _startState, RULE_reference);
-					setState(150);
+					setState(147);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
-					setState(151);
-					match(T__19);
-					setState(152);
+					setState(148);
+					match(T__16);
+					setState(149);
 					reference(2);
 					}
 					} 
 				}
-				setState(157);
+				setState(154);
 				_errHandler.sync(this);
 				_alt = getInterpreter().adaptivePredict(_input,7,_ctx);
 			}
@@ -948,8 +933,8 @@ public class CSVScriptParser extends Parser {
 
 	public static class CellAssignmentContext extends ParserRuleContext {
 		public TerminalNode ID() { return getToken(CSVScriptParser.ID, 0); }
-		public ReferenceContext reference() {
-			return getRuleContext(ReferenceContext.class,0);
+		public CellReferenceContext cellReference() {
+			return getRuleContext(CellReferenceContext.class,0);
 		}
 		public CellAssignmentContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -976,14 +961,76 @@ public class CSVScriptParser extends Parser {
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(158);
-			match(T__20);
-			setState(159);
+			setState(155);
+			match(T__17);
+			setState(156);
 			match(ID);
-			setState(160);
+			setState(157);
 			match(T__13);
-			setState(161);
-			reference(0);
+			setState(158);
+			cellReference();
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.reportError(this, re);
+			_errHandler.recover(this, re);
+		}
+		finally {
+			exitRule();
+		}
+		return _localctx;
+	}
+
+	public static class CellReferenceContext extends ParserRuleContext {
+		public List<TerminalNode> ID() { return getTokens(CSVScriptParser.ID); }
+		public TerminalNode ID(int i) {
+			return getToken(CSVScriptParser.ID, i);
+		}
+		public CellReferenceContext(ParserRuleContext parent, int invokingState) {
+			super(parent, invokingState);
+		}
+		@Override public int getRuleIndex() { return RULE_cellReference; }
+		@Override
+		public void enterRule(ParseTreeListener listener) {
+			if ( listener instanceof CSVScriptListener ) ((CSVScriptListener)listener).enterCellReference(this);
+		}
+		@Override
+		public void exitRule(ParseTreeListener listener) {
+			if ( listener instanceof CSVScriptListener ) ((CSVScriptListener)listener).exitCellReference(this);
+		}
+		@Override
+		public <T> T accept(ParseTreeVisitor<? extends T> visitor) {
+			if ( visitor instanceof CSVScriptVisitor ) return ((CSVScriptVisitor<? extends T>)visitor).visitCellReference(this);
+			else return visitor.visitChildren(this);
+		}
+	}
+
+	public final CellReferenceContext cellReference() throws RecognitionException {
+		CellReferenceContext _localctx = new CellReferenceContext(_ctx, getState());
+		enterRule(_localctx, 26, RULE_cellReference);
+		try {
+			setState(164);
+			_errHandler.sync(this);
+			switch ( getInterpreter().adaptivePredict(_input,8,_ctx) ) {
+			case 1:
+				enterOuterAlt(_localctx, 1);
+				{
+				setState(160);
+				match(ID);
+				setState(161);
+				match(T__18);
+				setState(162);
+				match(ID);
+				}
+				break;
+			case 2:
+				enterOuterAlt(_localctx, 2);
+				{
+				setState(163);
+				match(ID);
+				}
+				break;
 			}
 		}
 		catch (RecognitionException re) {
@@ -1023,22 +1070,22 @@ public class CSVScriptParser extends Parser {
 
 	public final SchemeAssignmentContext schemeAssignment() throws RecognitionException {
 		SchemeAssignmentContext _localctx = new SchemeAssignmentContext(_ctx, getState());
-		enterRule(_localctx, 26, RULE_schemeAssignment);
+		enterRule(_localctx, 28, RULE_schemeAssignment);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(163);
-			match(T__21);
-			setState(164);
-			match(ID);
-			setState(165);
-			match(T__13);
 			setState(166);
-			match(T__22);
+			match(T__19);
 			setState(167);
-			r();
+			match(ID);
 			setState(168);
-			match(T__23);
+			match(T__13);
+			setState(169);
+			match(T__20);
+			setState(170);
+			r();
+			setState(171);
+			match(T__21);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1081,17 +1128,17 @@ public class CSVScriptParser extends Parser {
 
 	public final RContext r() throws RecognitionException {
 		RContext _localctx = new RContext(_ctx, getState());
-		enterRule(_localctx, 28, RULE_r);
+		enterRule(_localctx, 30, RULE_r);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(170);
-			match(ID);
-			setState(171);
-			match(T__24);
-			setState(172);
-			expr();
 			setState(173);
+			match(ID);
+			setState(174);
+			match(T__22);
+			setState(175);
+			expr();
+			setState(176);
 			rules();
 			}
 		}
@@ -1134,19 +1181,19 @@ public class CSVScriptParser extends Parser {
 
 	public final RulesContext rules() throws RecognitionException {
 		RulesContext _localctx = new RulesContext(_ctx, getState());
-		enterRule(_localctx, 30, RULE_rules);
+		enterRule(_localctx, 32, RULE_rules);
 		try {
-			setState(180);
+			setState(183);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,8,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,9,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(175);
+				setState(178);
 				match(T__9);
-				setState(176);
+				setState(179);
 				r();
-				setState(177);
+				setState(180);
 				rules();
 				}
 				break;
@@ -1196,13 +1243,13 @@ public class CSVScriptParser extends Parser {
 
 	public final ExprContext expr() throws RecognitionException {
 		ExprContext _localctx = new ExprContext(_ctx, getState());
-		enterRule(_localctx, 32, RULE_expr);
+		enterRule(_localctx, 34, RULE_expr);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(182);
+			setState(185);
 			term();
-			setState(183);
+			setState(186);
 			terms();
 			}
 		}
@@ -1245,37 +1292,37 @@ public class CSVScriptParser extends Parser {
 
 	public final TermsContext terms() throws RecognitionException {
 		TermsContext _localctx = new TermsContext(_ctx, getState());
-		enterRule(_localctx, 34, RULE_terms);
+		enterRule(_localctx, 36, RULE_terms);
 		try {
-			setState(194);
+			setState(197);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
-			case T__25:
+			case T__23:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(185);
-				match(T__25);
-				setState(186);
+				setState(188);
+				match(T__23);
+				setState(189);
 				term();
-				setState(187);
+				setState(190);
 				terms();
 				}
 				break;
-			case T__26:
+			case T__24:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(189);
-				match(T__26);
-				setState(190);
+				setState(192);
+				match(T__24);
+				setState(193);
 				term();
-				setState(191);
+				setState(194);
 				terms();
 				}
 				break;
 			case T__2:
 			case T__6:
 			case T__9:
-			case T__23:
+			case T__21:
 				enterOuterAlt(_localctx, 3);
 				{
 				}
@@ -1323,13 +1370,13 @@ public class CSVScriptParser extends Parser {
 
 	public final TermContext term() throws RecognitionException {
 		TermContext _localctx = new TermContext(_ctx, getState());
-		enterRule(_localctx, 36, RULE_term);
+		enterRule(_localctx, 38, RULE_term);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(196);
+			setState(199);
 			factor();
-			setState(197);
+			setState(200);
 			factors();
 			}
 		}
@@ -1372,50 +1419,50 @@ public class CSVScriptParser extends Parser {
 
 	public final FactorsContext factors() throws RecognitionException {
 		FactorsContext _localctx = new FactorsContext(_ctx, getState());
-		enterRule(_localctx, 38, RULE_factors);
+		enterRule(_localctx, 40, RULE_factors);
 		try {
-			setState(212);
+			setState(215);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
-			case T__27:
+			case T__25:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(199);
-				match(T__27);
-				setState(200);
+				setState(202);
+				match(T__25);
+				setState(203);
 				factor();
-				setState(201);
+				setState(204);
 				factors();
 				}
 				break;
-			case T__28:
+			case T__26:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(203);
-				match(T__28);
-				setState(204);
+				setState(206);
+				match(T__26);
+				setState(207);
 				factor();
-				setState(205);
+				setState(208);
 				factors();
 				}
 				break;
-			case T__29:
+			case T__27:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(207);
-				match(T__29);
-				setState(208);
+				setState(210);
+				match(T__27);
+				setState(211);
 				factor();
-				setState(209);
+				setState(212);
 				factors();
 				}
 				break;
 			case T__2:
 			case T__6:
 			case T__9:
+			case T__21:
 			case T__23:
-			case T__25:
-			case T__26:
+			case T__24:
 				enterOuterAlt(_localctx, 4);
 				{
 				}
@@ -1467,37 +1514,37 @@ public class CSVScriptParser extends Parser {
 
 	public final FactorContext factor() throws RecognitionException {
 		FactorContext _localctx = new FactorContext(_ctx, getState());
-		enterRule(_localctx, 40, RULE_factor);
+		enterRule(_localctx, 42, RULE_factor);
 		try {
-			setState(222);
+			setState(225);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,11,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,12,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(214);
+				setState(217);
 				match(T__5);
-				setState(215);
+				setState(218);
 				expr();
-				setState(216);
+				setState(219);
 				match(T__6);
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(218);
+				setState(221);
 				value();
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(219);
+				setState(222);
 				match(ID);
-				setState(220);
+				setState(223);
 				match(T__18);
-				setState(221);
+				setState(224);
 				match(ID);
 				}
 				break;
@@ -1540,17 +1587,17 @@ public class CSVScriptParser extends Parser {
 
 	public final FunctionAssignmentContext functionAssignment() throws RecognitionException {
 		FunctionAssignmentContext _localctx = new FunctionAssignmentContext(_ctx, getState());
-		enterRule(_localctx, 42, RULE_functionAssignment);
+		enterRule(_localctx, 44, RULE_functionAssignment);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(224);
-			match(T__30);
-			setState(225);
-			match(ID);
-			setState(226);
-			match(T__13);
 			setState(227);
+			match(T__28);
+			setState(228);
+			match(ID);
+			setState(229);
+			match(T__13);
+			setState(230);
 			expr();
 			}
 		}
@@ -1593,22 +1640,22 @@ public class CSVScriptParser extends Parser {
 
 	public final IfStatementContext ifStatement() throws RecognitionException {
 		IfStatementContext _localctx = new IfStatementContext(_ctx, getState());
-		enterRule(_localctx, 44, RULE_ifStatement);
+		enterRule(_localctx, 46, RULE_ifStatement);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(229);
-			match(T__31);
-			setState(230);
-			match(T__5);
-			setState(231);
-			conditional();
 			setState(232);
-			match(T__6);
+			match(T__29);
 			setState(233);
-			actionBlock();
+			match(T__5);
 			setState(234);
-			match(T__32);
+			conditional();
+			setState(235);
+			match(T__6);
+			setState(236);
+			actionBlock();
+			setState(237);
+			match(T__30);
 			}
 		}
 		catch (RecognitionException re) {
@@ -1654,43 +1701,43 @@ public class CSVScriptParser extends Parser {
 
 	public final ForStatementContext forStatement() throws RecognitionException {
 		ForStatementContext _localctx = new ForStatementContext(_ctx, getState());
-		enterRule(_localctx, 46, RULE_forStatement);
+		enterRule(_localctx, 48, RULE_forStatement);
 		try {
-			setState(250);
+			setState(253);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,12,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,13,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(236);
-				match(T__33);
-				setState(237);
-				match(ID);
-				setState(238);
-				match(T__34);
 				setState(239);
-				match(ID);
+				match(T__31);
 				setState(240);
-				actionBlock();
+				match(ID);
 				setState(241);
-				match(T__35);
+				match(T__32);
+				setState(242);
+				match(ID);
+				setState(243);
+				actionBlock();
+				setState(244);
+				match(T__33);
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(243);
-				match(T__33);
-				setState(244);
-				match(ID);
-				setState(245);
-				match(T__34);
 				setState(246);
-				set();
+				match(T__31);
 				setState(247);
-				actionBlock();
+				match(ID);
 				setState(248);
-				match(T__35);
+				match(T__32);
+				setState(249);
+				set();
+				setState(250);
+				actionBlock();
+				setState(251);
+				match(T__33);
 				}
 				break;
 			}
@@ -1720,6 +1767,8 @@ public class CSVScriptParser extends Parser {
 		public ConditionalContext conditional(int i) {
 			return getRuleContext(ConditionalContext.class,i);
 		}
+		public TerminalNode AND() { return getToken(CSVScriptParser.AND, 0); }
+		public TerminalNode OR() { return getToken(CSVScriptParser.OR, 0); }
 		public ConditionalContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -1741,57 +1790,57 @@ public class CSVScriptParser extends Parser {
 
 	public final ConditionalContext conditional() throws RecognitionException {
 		ConditionalContext _localctx = new ConditionalContext(_ctx, getState());
-		enterRule(_localctx, 48, RULE_conditional);
+		enterRule(_localctx, 50, RULE_conditional);
 		try {
-			setState(272);
+			setState(275);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,13,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,14,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(252);
+				setState(255);
 				value();
-				setState(253);
+				setState(256);
 				match(OPERATOR);
-				setState(254);
+				setState(257);
 				value();
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(256);
-				match(T__5);
-				setState(257);
-				conditional();
-				setState(258);
-				match(T__6);
 				setState(259);
-				match(T__36);
-				setState(260);
 				match(T__5);
-				setState(261);
+				setState(260);
 				conditional();
+				setState(261);
+				match(T__6);
 				setState(262);
+				match(AND);
+				setState(263);
+				match(T__5);
+				setState(264);
+				conditional();
+				setState(265);
 				match(T__6);
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(264);
-				match(T__5);
-				setState(265);
-				conditional();
-				setState(266);
-				match(T__6);
 				setState(267);
-				match(T__37);
-				setState(268);
 				match(T__5);
-				setState(269);
+				setState(268);
 				conditional();
+				setState(269);
+				match(T__6);
 				setState(270);
+				match(OR);
+				setState(271);
+				match(T__5);
+				setState(272);
+				conditional();
+				setState(273);
 				match(T__6);
 				}
 				break;
@@ -1835,29 +1884,29 @@ public class CSVScriptParser extends Parser {
 
 	public final ValueContext value() throws RecognitionException {
 		ValueContext _localctx = new ValueContext(_ctx, getState());
-		enterRule(_localctx, 50, RULE_value);
+		enterRule(_localctx, 52, RULE_value);
 		try {
-			setState(277);
+			setState(280);
 			_errHandler.sync(this);
-			switch ( getInterpreter().adaptivePredict(_input,14,_ctx) ) {
+			switch ( getInterpreter().adaptivePredict(_input,15,_ctx) ) {
 			case 1:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(274);
+				setState(277);
 				match(INT);
 				}
 				break;
 			case 2:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(275);
+				setState(278);
 				match(ID);
 				}
 				break;
 			case 3:
 				enterOuterAlt(_localctx, 3);
 				{
-				setState(276);
+				setState(279);
 				realNumber();
 				}
 				break;
@@ -1899,17 +1948,17 @@ public class CSVScriptParser extends Parser {
 
 	public final OutputContext output() throws RecognitionException {
 		OutputContext _localctx = new OutputContext(_ctx, getState());
-		enterRule(_localctx, 52, RULE_output);
+		enterRule(_localctx, 54, RULE_output);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(279);
-			match(T__38);
-			setState(280);
-			outputStatement();
-			setState(281);
-			match(T__39);
 			setState(282);
+			match(T__34);
+			setState(283);
+			outputStatement();
+			setState(284);
+			match(T__35);
+			setState(285);
 			match(T__2);
 			}
 		}
@@ -1952,13 +2001,13 @@ public class CSVScriptParser extends Parser {
 
 	public final OutputStatementContext outputStatement() throws RecognitionException {
 		OutputStatementContext _localctx = new OutputStatementContext(_ctx, getState());
-		enterRule(_localctx, 54, RULE_outputStatement);
+		enterRule(_localctx, 56, RULE_outputStatement);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(284);
+			setState(287);
 			outputRule();
-			setState(285);
+			setState(288);
 			outputWrite();
 			}
 		}
@@ -2002,29 +2051,29 @@ public class CSVScriptParser extends Parser {
 
 	public final OutputRuleContext outputRule() throws RecognitionException {
 		OutputRuleContext _localctx = new OutputRuleContext(_ctx, getState());
-		enterRule(_localctx, 56, RULE_outputRule);
+		enterRule(_localctx, 58, RULE_outputRule);
 		try {
-			setState(295);
+			setState(298);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
-			case T__40:
+			case T__36:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(287);
-				match(T__40);
-				setState(288);
-				match(ID);
-				setState(289);
-				match(T__41);
 				setState(290);
-				reference(0);
+				match(T__36);
 				setState(291);
-				match(T__2);
+				match(ID);
 				setState(292);
+				match(T__37);
+				setState(293);
+				reference(0);
+				setState(294);
+				match(T__2);
+				setState(295);
 				outputRule();
 				}
 				break;
-			case T__42:
+			case T__38:
 				enterOuterAlt(_localctx, 2);
 				{
 				}
@@ -2070,17 +2119,17 @@ public class CSVScriptParser extends Parser {
 
 	public final OutputWriteContext outputWrite() throws RecognitionException {
 		OutputWriteContext _localctx = new OutputWriteContext(_ctx, getState());
-		enterRule(_localctx, 58, RULE_outputWrite);
+		enterRule(_localctx, 60, RULE_outputWrite);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(297);
-			match(T__42);
-			setState(298);
-			match(ID);
-			setState(299);
-			filename();
 			setState(300);
+			match(T__38);
+			setState(301);
+			match(ID);
+			setState(302);
+			filename();
+			setState(303);
 			match(T__2);
 			}
 		}
@@ -2119,27 +2168,27 @@ public class CSVScriptParser extends Parser {
 
 	public final FilenameContext filename() throws RecognitionException {
 		FilenameContext _localctx = new FilenameContext(_ctx, getState());
-		enterRule(_localctx, 60, RULE_filename);
+		enterRule(_localctx, 62, RULE_filename);
 		try {
-			setState(306);
+			setState(309);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
 			case ID:
 				enterOuterAlt(_localctx, 1);
 				{
-				setState(302);
+				setState(305);
 				match(ID);
-				setState(303);
-				match(T__43);
+				setState(306);
+				match(T__39);
 				}
 				break;
 			case ALPHANUM:
 				enterOuterAlt(_localctx, 2);
 				{
-				setState(304);
+				setState(307);
 				match(ALPHANUM);
-				setState(305);
-				match(T__43);
+				setState(308);
+				match(T__39);
 				}
 				break;
 			default:
@@ -2183,15 +2232,15 @@ public class CSVScriptParser extends Parser {
 
 	public final RealNumberContext realNumber() throws RecognitionException {
 		RealNumberContext _localctx = new RealNumberContext(_ctx, getState());
-		enterRule(_localctx, 62, RULE_realNumber);
+		enterRule(_localctx, 64, RULE_realNumber);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
-			setState(308);
+			setState(311);
 			match(INT);
-			setState(309);
+			setState(312);
 			match(T__18);
-			setState(310);
+			setState(313);
 			match(INT);
 			}
 		}
@@ -2222,107 +2271,107 @@ public class CSVScriptParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\64\u013b\4\2\t\2"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\62\u013e\4\2\t\2"+
 		"\4\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13"+
 		"\t\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
 		"\4\32\t\32\4\33\t\33\4\34\t\34\4\35\t\35\4\36\t\36\4\37\t\37\4 \t \4!"+
-		"\t!\3\2\3\2\3\2\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\4\3\4\3\4\3\4\3\4\3\4\3"+
-		"\4\3\4\3\4\5\4V\n\4\3\5\3\5\3\5\3\5\3\5\5\5]\n\5\3\6\3\6\3\6\3\6\3\6\3"+
-		"\6\3\6\3\6\5\6g\n\6\3\7\3\7\3\7\3\7\3\7\3\b\3\b\3\b\3\b\3\b\5\bs\n\b\3"+
-		"\t\3\t\3\t\3\t\3\t\3\t\5\t{\n\t\3\n\3\n\3\n\3\n\3\n\3\n\3\13\3\13\3\13"+
-		"\3\13\3\f\3\f\3\f\3\f\3\f\3\f\5\f\u008d\n\f\3\r\3\r\3\r\3\r\3\r\3\r\3"+
-		"\r\3\r\5\r\u0097\n\r\3\r\3\r\3\r\7\r\u009c\n\r\f\r\16\r\u009f\13\r\3\16"+
-		"\3\16\3\16\3\16\3\16\3\17\3\17\3\17\3\17\3\17\3\17\3\17\3\20\3\20\3\20"+
-		"\3\20\3\20\3\21\3\21\3\21\3\21\3\21\5\21\u00b7\n\21\3\22\3\22\3\22\3\23"+
-		"\3\23\3\23\3\23\3\23\3\23\3\23\3\23\3\23\5\23\u00c5\n\23\3\24\3\24\3\24"+
-		"\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\3\25\5\25"+
-		"\u00d7\n\25\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26\5\26\u00e1\n\26\3"+
-		"\27\3\27\3\27\3\27\3\27\3\30\3\30\3\30\3\30\3\30\3\30\3\30\3\31\3\31\3"+
-		"\31\3\31\3\31\3\31\3\31\3\31\3\31\3\31\3\31\3\31\3\31\3\31\5\31\u00fd"+
-		"\n\31\3\32\3\32\3\32\3\32\3\32\3\32\3\32\3\32\3\32\3\32\3\32\3\32\3\32"+
-		"\3\32\3\32\3\32\3\32\3\32\3\32\3\32\5\32\u0113\n\32\3\33\3\33\3\33\5\33"+
-		"\u0118\n\33\3\34\3\34\3\34\3\34\3\34\3\35\3\35\3\35\3\36\3\36\3\36\3\36"+
-		"\3\36\3\36\3\36\3\36\5\36\u012a\n\36\3\37\3\37\3\37\3\37\3\37\3 \3 \3"+
-		" \3 \5 \u0135\n \3!\3!\3!\3!\3!\2\3\30\"\2\4\6\b\n\f\16\20\22\24\26\30"+
-		"\32\34\36 \"$&(*,.\60\62\64\668:<>@\2\2\2\u0139\2B\3\2\2\2\4G\3\2\2\2"+
-		"\6U\3\2\2\2\b\\\3\2\2\2\nf\3\2\2\2\fh\3\2\2\2\16r\3\2\2\2\20z\3\2\2\2"+
-		"\22|\3\2\2\2\24\u0082\3\2\2\2\26\u008c\3\2\2\2\30\u0096\3\2\2\2\32\u00a0"+
-		"\3\2\2\2\34\u00a5\3\2\2\2\36\u00ac\3\2\2\2 \u00b6\3\2\2\2\"\u00b8\3\2"+
-		"\2\2$\u00c4\3\2\2\2&\u00c6\3\2\2\2(\u00d6\3\2\2\2*\u00e0\3\2\2\2,\u00e2"+
-		"\3\2\2\2.\u00e7\3\2\2\2\60\u00fc\3\2\2\2\62\u0112\3\2\2\2\64\u0117\3\2"+
-		"\2\2\66\u0119\3\2\2\28\u011e\3\2\2\2:\u0129\3\2\2\2<\u012b\3\2\2\2>\u0134"+
-		"\3\2\2\2@\u0136\3\2\2\2BC\5\4\3\2CD\5\f\7\2DE\5\66\34\2EF\7\2\2\3F\3\3"+
-		"\2\2\2GH\7\3\2\2HI\5\6\4\2IJ\7\4\2\2JK\7\5\2\2K\5\3\2\2\2LM\7\6\2\2MN"+
-		"\5> \2NO\7\7\2\2OP\7\60\2\2PQ\5\b\5\2QR\7\5\2\2RS\5\6\4\2SV\3\2\2\2TV"+
-		"\3\2\2\2UL\3\2\2\2UT\3\2\2\2V\7\3\2\2\2WX\7\b\2\2XY\5\n\6\2YZ\7\t\2\2"+
-		"Z]\3\2\2\2[]\3\2\2\2\\W\3\2\2\2\\[\3\2\2\2]\t\3\2\2\2^g\7\n\2\2_g\7\13"+
-		"\2\2`a\7\n\2\2ab\7\f\2\2bg\7\13\2\2cd\7\13\2\2de\7\f\2\2eg\7\n\2\2f^\3"+
-		"\2\2\2f_\3\2\2\2f`\3\2\2\2fc\3\2\2\2g\13\3\2\2\2hi\7\r\2\2ij\5\16\b\2"+
-		"jk\7\16\2\2kl\7\5\2\2l\r\3\2\2\2mn\5\20\t\2no\7\5\2\2op\5\16\b\2ps\3\2"+
-		"\2\2qs\3\2\2\2rm\3\2\2\2rq\3\2\2\2s\17\3\2\2\2t{\5.\30\2u{\5\60\31\2v"+
-		"{\5\22\n\2w{\5\32\16\2x{\5\34\17\2y{\5,\27\2zt\3\2\2\2zu\3\2\2\2zv\3\2"+
-		"\2\2zw\3\2\2\2zx\3\2\2\2zy\3\2\2\2{\21\3\2\2\2|}\7\60\2\2}~\7\17\2\2~"+
-		"\177\7\60\2\2\177\u0080\7\20\2\2\u0080\u0081\5\24\13\2\u0081\23\3\2\2"+
-		"\2\u0082\u0083\7\21\2\2\u0083\u0084\5\26\f\2\u0084\u0085\7\22\2\2\u0085"+
-		"\25\3\2\2\2\u0086\u008d\5\30\r\2\u0087\u0088\5\30\r\2\u0088\u0089\7\f"+
-		"\2\2\u0089\u008a\5\26\f\2\u008a\u008d\3\2\2\2\u008b\u008d\3\2\2\2\u008c"+
-		"\u0086\3\2\2\2\u008c\u0087\3\2\2\2\u008c\u008b\3\2\2\2\u008d\27\3\2\2"+
-		"\2\u008e\u008f\b\r\1\2\u008f\u0090\7\23\2\2\u0090\u0097\7\60\2\2\u0091"+
-		"\u0092\7\24\2\2\u0092\u0097\7\60\2\2\u0093\u0094\7\60\2\2\u0094\u0095"+
-		"\7\25\2\2\u0095\u0097\7\60\2\2\u0096\u008e\3\2\2\2\u0096\u0091\3\2\2\2"+
-		"\u0096\u0093\3\2\2\2\u0097\u009d\3\2\2\2\u0098\u0099\f\3\2\2\u0099\u009a"+
-		"\7\26\2\2\u009a\u009c\5\30\r\4\u009b\u0098\3\2\2\2\u009c\u009f\3\2\2\2"+
-		"\u009d\u009b\3\2\2\2\u009d\u009e\3\2\2\2\u009e\31\3\2\2\2\u009f\u009d"+
-		"\3\2\2\2\u00a0\u00a1\7\27\2\2\u00a1\u00a2\7\60\2\2\u00a2\u00a3\7\20\2"+
-		"\2\u00a3\u00a4\5\30\r\2\u00a4\33\3\2\2\2\u00a5\u00a6\7\30\2\2\u00a6\u00a7"+
-		"\7\60\2\2\u00a7\u00a8\7\20\2\2\u00a8\u00a9\7\31\2\2\u00a9\u00aa\5\36\20"+
-		"\2\u00aa\u00ab\7\32\2\2\u00ab\35\3\2\2\2\u00ac\u00ad\7\60\2\2\u00ad\u00ae"+
-		"\7\33\2\2\u00ae\u00af\5\"\22\2\u00af\u00b0\5 \21\2\u00b0\37\3\2\2\2\u00b1"+
-		"\u00b2\7\f\2\2\u00b2\u00b3\5\36\20\2\u00b3\u00b4\5 \21\2\u00b4\u00b7\3"+
-		"\2\2\2\u00b5\u00b7\3\2\2\2\u00b6\u00b1\3\2\2\2\u00b6\u00b5\3\2\2\2\u00b7"+
-		"!\3\2\2\2\u00b8\u00b9\5&\24\2\u00b9\u00ba\5$\23\2\u00ba#\3\2\2\2\u00bb"+
-		"\u00bc\7\34\2\2\u00bc\u00bd\5&\24\2\u00bd\u00be\5$\23\2\u00be\u00c5\3"+
-		"\2\2\2\u00bf\u00c0\7\35\2\2\u00c0\u00c1\5&\24\2\u00c1\u00c2\5$\23\2\u00c2"+
-		"\u00c5\3\2\2\2\u00c3\u00c5\3\2\2\2\u00c4\u00bb\3\2\2\2\u00c4\u00bf\3\2"+
-		"\2\2\u00c4\u00c3\3\2\2\2\u00c5%\3\2\2\2\u00c6\u00c7\5*\26\2\u00c7\u00c8"+
-		"\5(\25\2\u00c8\'\3\2\2\2\u00c9\u00ca\7\36\2\2\u00ca\u00cb\5*\26\2\u00cb"+
-		"\u00cc\5(\25\2\u00cc\u00d7\3\2\2\2\u00cd\u00ce\7\37\2\2\u00ce\u00cf\5"+
-		"*\26\2\u00cf\u00d0\5(\25\2\u00d0\u00d7\3\2\2\2\u00d1\u00d2\7 \2\2\u00d2"+
-		"\u00d3\5*\26\2\u00d3\u00d4\5(\25\2\u00d4\u00d7\3\2\2\2\u00d5\u00d7\3\2"+
-		"\2\2\u00d6\u00c9\3\2\2\2\u00d6\u00cd\3\2\2\2\u00d6\u00d1\3\2\2\2\u00d6"+
-		"\u00d5\3\2\2\2\u00d7)\3\2\2\2\u00d8\u00d9\7\b\2\2\u00d9\u00da\5\"\22\2"+
-		"\u00da\u00db\7\t\2\2\u00db\u00e1\3\2\2\2\u00dc\u00e1\5\64\33\2\u00dd\u00de"+
-		"\7\60\2\2\u00de\u00df\7\25\2\2\u00df\u00e1\7\60\2\2\u00e0\u00d8\3\2\2"+
-		"\2\u00e0\u00dc\3\2\2\2\u00e0\u00dd\3\2\2\2\u00e1+\3\2\2\2\u00e2\u00e3"+
-		"\7!\2\2\u00e3\u00e4\7\60\2\2\u00e4\u00e5\7\20\2\2\u00e5\u00e6\5\"\22\2"+
-		"\u00e6-\3\2\2\2\u00e7\u00e8\7\"\2\2\u00e8\u00e9\7\b\2\2\u00e9\u00ea\5"+
-		"\62\32\2\u00ea\u00eb\7\t\2\2\u00eb\u00ec\5\16\b\2\u00ec\u00ed\7#\2\2\u00ed"+
-		"/\3\2\2\2\u00ee\u00ef\7$\2\2\u00ef\u00f0\7\60\2\2\u00f0\u00f1\7%\2\2\u00f1"+
-		"\u00f2\7\60\2\2\u00f2\u00f3\5\16\b\2\u00f3\u00f4\7&\2\2\u00f4\u00fd\3"+
-		"\2\2\2\u00f5\u00f6\7$\2\2\u00f6\u00f7\7\60\2\2\u00f7\u00f8\7%\2\2\u00f8"+
-		"\u00f9\5\24\13\2\u00f9\u00fa\5\16\b\2\u00fa\u00fb\7&\2\2\u00fb\u00fd\3"+
-		"\2\2\2\u00fc\u00ee\3\2\2\2\u00fc\u00f5\3\2\2\2\u00fd\61\3\2\2\2\u00fe"+
-		"\u00ff\5\64\33\2\u00ff\u0100\7\63\2\2\u0100\u0101\5\64\33\2\u0101\u0113"+
-		"\3\2\2\2\u0102\u0103\7\b\2\2\u0103\u0104\5\62\32\2\u0104\u0105\7\t\2\2"+
-		"\u0105\u0106\7\'\2\2\u0106\u0107\7\b\2\2\u0107\u0108\5\62\32\2\u0108\u0109"+
-		"\7\t\2\2\u0109\u0113\3\2\2\2\u010a\u010b\7\b\2\2\u010b\u010c\5\62\32\2"+
-		"\u010c\u010d\7\t\2\2\u010d\u010e\7(\2\2\u010e\u010f\7\b\2\2\u010f\u0110"+
-		"\5\62\32\2\u0110\u0111\7\t\2\2\u0111\u0113\3\2\2\2\u0112\u00fe\3\2\2\2"+
-		"\u0112\u0102\3\2\2\2\u0112\u010a\3\2\2\2\u0113\63\3\2\2\2\u0114\u0118"+
-		"\7/\2\2\u0115\u0118\7\60\2\2\u0116\u0118\5@!\2\u0117\u0114\3\2\2\2\u0117"+
-		"\u0115\3\2\2\2\u0117\u0116\3\2\2\2\u0118\65\3\2\2\2\u0119\u011a\7)\2\2"+
-		"\u011a\u011b\58\35\2\u011b\u011c\7*\2\2\u011c\u011d\7\5\2\2\u011d\67\3"+
-		"\2\2\2\u011e\u011f\5:\36\2\u011f\u0120\5<\37\2\u01209\3\2\2\2\u0121\u0122"+
-		"\7+\2\2\u0122\u0123\7\60\2\2\u0123\u0124\7,\2\2\u0124\u0125\5\30\r\2\u0125"+
-		"\u0126\7\5\2\2\u0126\u0127\5:\36\2\u0127\u012a\3\2\2\2\u0128\u012a\3\2"+
-		"\2\2\u0129\u0121\3\2\2\2\u0129\u0128\3\2\2\2\u012a;\3\2\2\2\u012b\u012c"+
-		"\7-\2\2\u012c\u012d\7\60\2\2\u012d\u012e\5> \2\u012e\u012f\7\5\2\2\u012f"+
-		"=\3\2\2\2\u0130\u0131\7\60\2\2\u0131\u0135\7.\2\2\u0132\u0133\7\64\2\2"+
-		"\u0133\u0135\7.\2\2\u0134\u0130\3\2\2\2\u0134\u0132\3\2\2\2\u0135?\3\2"+
-		"\2\2\u0136\u0137\7/\2\2\u0137\u0138\7\25\2\2\u0138\u0139\7/\2\2\u0139"+
-		"A\3\2\2\2\23U\\frz\u008c\u0096\u009d\u00b6\u00c4\u00d6\u00e0\u00fc\u0112"+
-		"\u0117\u0129\u0134";
+		"\t!\4\"\t\"\3\2\3\2\3\2\3\2\3\2\3\3\3\3\3\3\3\3\3\3\3\4\3\4\3\4\3\4\3"+
+		"\4\3\4\3\4\3\4\3\4\5\4X\n\4\3\5\3\5\3\5\3\5\3\5\5\5_\n\5\3\6\3\6\3\6\3"+
+		"\6\3\6\3\6\3\6\3\6\5\6i\n\6\3\7\3\7\3\7\3\7\3\7\3\b\3\b\3\b\3\b\3\b\5"+
+		"\bu\n\b\3\t\3\t\3\t\3\t\3\t\3\t\5\t}\n\t\3\n\3\n\3\n\3\n\3\n\3\n\3\13"+
+		"\3\13\3\13\3\13\3\f\3\f\3\f\3\f\3\f\3\f\5\f\u008f\n\f\3\r\3\r\3\r\5\r"+
+		"\u0094\n\r\3\r\3\r\3\r\7\r\u0099\n\r\f\r\16\r\u009c\13\r\3\16\3\16\3\16"+
+		"\3\16\3\16\3\17\3\17\3\17\3\17\5\17\u00a7\n\17\3\20\3\20\3\20\3\20\3\20"+
+		"\3\20\3\20\3\21\3\21\3\21\3\21\3\21\3\22\3\22\3\22\3\22\3\22\5\22\u00ba"+
+		"\n\22\3\23\3\23\3\23\3\24\3\24\3\24\3\24\3\24\3\24\3\24\3\24\3\24\5\24"+
+		"\u00c8\n\24\3\25\3\25\3\25\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26\3\26"+
+		"\3\26\3\26\3\26\3\26\5\26\u00da\n\26\3\27\3\27\3\27\3\27\3\27\3\27\3\27"+
+		"\3\27\5\27\u00e4\n\27\3\30\3\30\3\30\3\30\3\30\3\31\3\31\3\31\3\31\3\31"+
+		"\3\31\3\31\3\32\3\32\3\32\3\32\3\32\3\32\3\32\3\32\3\32\3\32\3\32\3\32"+
+		"\3\32\3\32\5\32\u0100\n\32\3\33\3\33\3\33\3\33\3\33\3\33\3\33\3\33\3\33"+
+		"\3\33\3\33\3\33\3\33\3\33\3\33\3\33\3\33\3\33\3\33\3\33\5\33\u0116\n\33"+
+		"\3\34\3\34\3\34\5\34\u011b\n\34\3\35\3\35\3\35\3\35\3\35\3\36\3\36\3\36"+
+		"\3\37\3\37\3\37\3\37\3\37\3\37\3\37\3\37\5\37\u012d\n\37\3 \3 \3 \3 \3"+
+		" \3!\3!\3!\3!\5!\u0138\n!\3\"\3\"\3\"\3\"\3\"\2\3\30#\2\4\6\b\n\f\16\20"+
+		"\22\24\26\30\32\34\36 \"$&(*,.\60\62\64\668:<>@B\2\2\2\u013b\2D\3\2\2"+
+		"\2\4I\3\2\2\2\6W\3\2\2\2\b^\3\2\2\2\nh\3\2\2\2\fj\3\2\2\2\16t\3\2\2\2"+
+		"\20|\3\2\2\2\22~\3\2\2\2\24\u0084\3\2\2\2\26\u008e\3\2\2\2\30\u0093\3"+
+		"\2\2\2\32\u009d\3\2\2\2\34\u00a6\3\2\2\2\36\u00a8\3\2\2\2 \u00af\3\2\2"+
+		"\2\"\u00b9\3\2\2\2$\u00bb\3\2\2\2&\u00c7\3\2\2\2(\u00c9\3\2\2\2*\u00d9"+
+		"\3\2\2\2,\u00e3\3\2\2\2.\u00e5\3\2\2\2\60\u00ea\3\2\2\2\62\u00ff\3\2\2"+
+		"\2\64\u0115\3\2\2\2\66\u011a\3\2\2\28\u011c\3\2\2\2:\u0121\3\2\2\2<\u012c"+
+		"\3\2\2\2>\u012e\3\2\2\2@\u0137\3\2\2\2B\u0139\3\2\2\2DE\5\4\3\2EF\5\f"+
+		"\7\2FG\58\35\2GH\7\2\2\3H\3\3\2\2\2IJ\7\3\2\2JK\5\6\4\2KL\7\4\2\2LM\7"+
+		"\5\2\2M\5\3\2\2\2NO\7\6\2\2OP\5@!\2PQ\7\7\2\2QR\7/\2\2RS\5\b\5\2ST\7\5"+
+		"\2\2TU\5\6\4\2UX\3\2\2\2VX\3\2\2\2WN\3\2\2\2WV\3\2\2\2X\7\3\2\2\2YZ\7"+
+		"\b\2\2Z[\5\n\6\2[\\\7\t\2\2\\_\3\2\2\2]_\3\2\2\2^Y\3\2\2\2^]\3\2\2\2_"+
+		"\t\3\2\2\2`i\7\n\2\2ai\7\13\2\2bc\7\n\2\2cd\7\f\2\2di\7\13\2\2ef\7\13"+
+		"\2\2fg\7\f\2\2gi\7\n\2\2h`\3\2\2\2ha\3\2\2\2hb\3\2\2\2he\3\2\2\2i\13\3"+
+		"\2\2\2jk\7\r\2\2kl\5\16\b\2lm\7\16\2\2mn\7\5\2\2n\r\3\2\2\2op\5\20\t\2"+
+		"pq\7\5\2\2qr\5\16\b\2ru\3\2\2\2su\3\2\2\2to\3\2\2\2ts\3\2\2\2u\17\3\2"+
+		"\2\2v}\5\60\31\2w}\5\62\32\2x}\5\22\n\2y}\5\32\16\2z}\5\36\20\2{}\5.\30"+
+		"\2|v\3\2\2\2|w\3\2\2\2|x\3\2\2\2|y\3\2\2\2|z\3\2\2\2|{\3\2\2\2}\21\3\2"+
+		"\2\2~\177\7/\2\2\177\u0080\7\17\2\2\u0080\u0081\7/\2\2\u0081\u0082\7\20"+
+		"\2\2\u0082\u0083\5\24\13\2\u0083\23\3\2\2\2\u0084\u0085\7\21\2\2\u0085"+
+		"\u0086\5\26\f\2\u0086\u0087\7\22\2\2\u0087\25\3\2\2\2\u0088\u008f\5\30"+
+		"\r\2\u0089\u008a\5\30\r\2\u008a\u008b\7\f\2\2\u008b\u008c\5\26\f\2\u008c"+
+		"\u008f\3\2\2\2\u008d\u008f\3\2\2\2\u008e\u0088\3\2\2\2\u008e\u0089\3\2"+
+		"\2\2\u008e\u008d\3\2\2\2\u008f\27\3\2\2\2\u0090\u0091\b\r\1\2\u0091\u0094"+
+		"\7/\2\2\u0092\u0094\5\34\17\2\u0093\u0090\3\2\2\2\u0093\u0092\3\2\2\2"+
+		"\u0094\u009a\3\2\2\2\u0095\u0096\f\3\2\2\u0096\u0097\7\23\2\2\u0097\u0099"+
+		"\5\30\r\4\u0098\u0095\3\2\2\2\u0099\u009c\3\2\2\2\u009a\u0098\3\2\2\2"+
+		"\u009a\u009b\3\2\2\2\u009b\31\3\2\2\2\u009c\u009a\3\2\2\2\u009d\u009e"+
+		"\7\24\2\2\u009e\u009f\7/\2\2\u009f\u00a0\7\20\2\2\u00a0\u00a1\5\34\17"+
+		"\2\u00a1\33\3\2\2\2\u00a2\u00a3\7/\2\2\u00a3\u00a4\7\25\2\2\u00a4\u00a7"+
+		"\7/\2\2\u00a5\u00a7\7/\2\2\u00a6\u00a2\3\2\2\2\u00a6\u00a5\3\2\2\2\u00a7"+
+		"\35\3\2\2\2\u00a8\u00a9\7\26\2\2\u00a9\u00aa\7/\2\2\u00aa\u00ab\7\20\2"+
+		"\2\u00ab\u00ac\7\27\2\2\u00ac\u00ad\5 \21\2\u00ad\u00ae\7\30\2\2\u00ae"+
+		"\37\3\2\2\2\u00af\u00b0\7/\2\2\u00b0\u00b1\7\31\2\2\u00b1\u00b2\5$\23"+
+		"\2\u00b2\u00b3\5\"\22\2\u00b3!\3\2\2\2\u00b4\u00b5\7\f\2\2\u00b5\u00b6"+
+		"\5 \21\2\u00b6\u00b7\5\"\22\2\u00b7\u00ba\3\2\2\2\u00b8\u00ba\3\2\2\2"+
+		"\u00b9\u00b4\3\2\2\2\u00b9\u00b8\3\2\2\2\u00ba#\3\2\2\2\u00bb\u00bc\5"+
+		"(\25\2\u00bc\u00bd\5&\24\2\u00bd%\3\2\2\2\u00be\u00bf\7\32\2\2\u00bf\u00c0"+
+		"\5(\25\2\u00c0\u00c1\5&\24\2\u00c1\u00c8\3\2\2\2\u00c2\u00c3\7\33\2\2"+
+		"\u00c3\u00c4\5(\25\2\u00c4\u00c5\5&\24\2\u00c5\u00c8\3\2\2\2\u00c6\u00c8"+
+		"\3\2\2\2\u00c7\u00be\3\2\2\2\u00c7\u00c2\3\2\2\2\u00c7\u00c6\3\2\2\2\u00c8"+
+		"\'\3\2\2\2\u00c9\u00ca\5,\27\2\u00ca\u00cb\5*\26\2\u00cb)\3\2\2\2\u00cc"+
+		"\u00cd\7\34\2\2\u00cd\u00ce\5,\27\2\u00ce\u00cf\5*\26\2\u00cf\u00da\3"+
+		"\2\2\2\u00d0\u00d1\7\35\2\2\u00d1\u00d2\5,\27\2\u00d2\u00d3\5*\26\2\u00d3"+
+		"\u00da\3\2\2\2\u00d4\u00d5\7\36\2\2\u00d5\u00d6\5,\27\2\u00d6\u00d7\5"+
+		"*\26\2\u00d7\u00da\3\2\2\2\u00d8\u00da\3\2\2\2\u00d9\u00cc\3\2\2\2\u00d9"+
+		"\u00d0\3\2\2\2\u00d9\u00d4\3\2\2\2\u00d9\u00d8\3\2\2\2\u00da+\3\2\2\2"+
+		"\u00db\u00dc\7\b\2\2\u00dc\u00dd\5$\23\2\u00dd\u00de\7\t\2\2\u00de\u00e4"+
+		"\3\2\2\2\u00df\u00e4\5\66\34\2\u00e0\u00e1\7/\2\2\u00e1\u00e2\7\25\2\2"+
+		"\u00e2\u00e4\7/\2\2\u00e3\u00db\3\2\2\2\u00e3\u00df\3\2\2\2\u00e3\u00e0"+
+		"\3\2\2\2\u00e4-\3\2\2\2\u00e5\u00e6\7\37\2\2\u00e6\u00e7\7/\2\2\u00e7"+
+		"\u00e8\7\20\2\2\u00e8\u00e9\5$\23\2\u00e9/\3\2\2\2\u00ea\u00eb\7 \2\2"+
+		"\u00eb\u00ec\7\b\2\2\u00ec\u00ed\5\64\33\2\u00ed\u00ee\7\t\2\2\u00ee\u00ef"+
+		"\5\16\b\2\u00ef\u00f0\7!\2\2\u00f0\61\3\2\2\2\u00f1\u00f2\7\"\2\2\u00f2"+
+		"\u00f3\7/\2\2\u00f3\u00f4\7#\2\2\u00f4\u00f5\7/\2\2\u00f5\u00f6\5\16\b"+
+		"\2\u00f6\u00f7\7$\2\2\u00f7\u0100\3\2\2\2\u00f8\u00f9\7\"\2\2\u00f9\u00fa"+
+		"\7/\2\2\u00fa\u00fb\7#\2\2\u00fb\u00fc\5\24\13\2\u00fc\u00fd\5\16\b\2"+
+		"\u00fd\u00fe\7$\2\2\u00fe\u0100\3\2\2\2\u00ff\u00f1\3\2\2\2\u00ff\u00f8"+
+		"\3\2\2\2\u0100\63\3\2\2\2\u0101\u0102\5\66\34\2\u0102\u0103\7.\2\2\u0103"+
+		"\u0104\5\66\34\2\u0104\u0116\3\2\2\2\u0105\u0106\7\b\2\2\u0106\u0107\5"+
+		"\64\33\2\u0107\u0108\7\t\2\2\u0108\u0109\7,\2\2\u0109\u010a\7\b\2\2\u010a"+
+		"\u010b\5\64\33\2\u010b\u010c\7\t\2\2\u010c\u0116\3\2\2\2\u010d\u010e\7"+
+		"\b\2\2\u010e\u010f\5\64\33\2\u010f\u0110\7\t\2\2\u0110\u0111\7-\2\2\u0111"+
+		"\u0112\7\b\2\2\u0112\u0113\5\64\33\2\u0113\u0114\7\t\2\2\u0114\u0116\3"+
+		"\2\2\2\u0115\u0101\3\2\2\2\u0115\u0105\3\2\2\2\u0115\u010d\3\2\2\2\u0116"+
+		"\65\3\2\2\2\u0117\u011b\7+\2\2\u0118\u011b\7/\2\2\u0119\u011b\5B\"\2\u011a"+
+		"\u0117\3\2\2\2\u011a\u0118\3\2\2\2\u011a\u0119\3\2\2\2\u011b\67\3\2\2"+
+		"\2\u011c\u011d\7%\2\2\u011d\u011e\5:\36\2\u011e\u011f\7&\2\2\u011f\u0120"+
+		"\7\5\2\2\u01209\3\2\2\2\u0121\u0122\5<\37\2\u0122\u0123\5> \2\u0123;\3"+
+		"\2\2\2\u0124\u0125\7\'\2\2\u0125\u0126\7/\2\2\u0126\u0127\7(\2\2\u0127"+
+		"\u0128\5\30\r\2\u0128\u0129\7\5\2\2\u0129\u012a\5<\37\2\u012a\u012d\3"+
+		"\2\2\2\u012b\u012d\3\2\2\2\u012c\u0124\3\2\2\2\u012c\u012b\3\2\2\2\u012d"+
+		"=\3\2\2\2\u012e\u012f\7)\2\2\u012f\u0130\7/\2\2\u0130\u0131\5@!\2\u0131"+
+		"\u0132\7\5\2\2\u0132?\3\2\2\2\u0133\u0134\7/\2\2\u0134\u0138\7*\2\2\u0135"+
+		"\u0136\7\60\2\2\u0136\u0138\7*\2\2\u0137\u0133\3\2\2\2\u0137\u0135\3\2"+
+		"\2\2\u0138A\3\2\2\2\u0139\u013a\7+\2\2\u013a\u013b\7\25\2\2\u013b\u013c"+
+		"\7+\2\2\u013cC\3\2\2\2\24W^ht|\u008e\u0093\u009a\u00a6\u00b9\u00c7\u00d9"+
+		"\u00e3\u00ff\u0115\u011a\u012c\u0137";
 	public static final ATN _ATN =
 		new ATNDeserializer().deserialize(_serializedATN.toCharArray());
 	static {
