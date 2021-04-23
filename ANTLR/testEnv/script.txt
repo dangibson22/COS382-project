@@ -1,13 +1,13 @@
 input:
 
-read testEnv/gradebook.csv as gradesTable (noRowHeader);
+read testEnv/gradebook.csv as gradesTable;
 
 end input;
 
 
 actions:
 
-gradesTable subset q2 = [col quiz2];
+gradesTable subset q2 = [quiz1.Eve to test1.Bob];
 
 end actions;
 

@@ -27,6 +27,9 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
             int[] locations = {row, col};
             cellLocations.add(locations);
         }
+        public void setList(LinkedList<int[]> list) {
+            cellLocations = list;
+        }
     }
     private class Cell {
         public String fileVar;
@@ -122,7 +125,12 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
             while (myReader.hasNextLine()) {
                 String line = myReader.nextLine();
                 String[] data = line.split(",");
-                // Skip over null rows such as: ",,,,,"
+                if (data.length == 0) { //Fills empty row with empty strings
+                    data = new String[rowColSize[1]];
+                    for (int i=0; i<rowColSize[1]; i++) {
+                        data[i] = "";
+                    }
+                }
                 // if (data.length > 0) {
                 if (inputflags == null || !inputflags[0]) { //row headers exist
                     String header;
@@ -178,16 +186,17 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
         String file = ctx.ID(0).toString();
         currentInFile = file;
         Subset temp = new Subset(file);
-        visitSet(ctx.set());
-
+        temp.setList( (LinkedList<int[]>) visitSet(ctx.set()) );
+        subsetVars.put(ctx.ID(1).getText(), temp);
         return null;
     }
 
     @Override
     public T visitSet(CSVScriptParser.SetContext ctx) {
         LinkedList<int[]> cellLocs = (LinkedList<int[]>) visitReferences(ctx.references()); //Set a value to this
-        System.out.println(cellLocs.toString());
-        return null;
+        printCellLocContents(cellLocs, currentInFile);
+
+        return (T) cellLocs;
     }
 
     @Override
@@ -197,6 +206,14 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
         for (int[] loc : currentCells) {
             if (!alreadyInList(cellLocs, loc)) {
                 cellLocs.add(loc);
+            }
+        }
+        if(ctx.references() != null) {
+            currentCells = (LinkedList<int[]>) visitReferences(ctx.references());
+            for (int[] loc : currentCells) {
+                if (!alreadyInList(cellLocs, loc)) {
+                    cellLocs.add(loc);
+                }
             }
         }
         return (T) cellLocs;
@@ -231,12 +248,53 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
         else {
             LinkedList<int[]> list1 = (LinkedList<int[]>) visitReference(ctx.reference(0));
             LinkedList<int[]> list2 = (LinkedList<int[]>) visitReference(ctx.reference(1));
+
+            if (list1.size() != list2.size()) throw new ParseCancellationException("Ranges must be same type");
+            //Add exception for range of row to col
+
             for (int i=0; i<list2.size(); i++) {
                 int[] firstLoc = list1.get(i);
                 int[] secondLoc = list2.get(i);
-                    for (int row = firstLoc[0]; row < secondLoc[0]; row++) { //case first list row < second list row
-                        //Do stuff
+                int colStart = firstLoc[1];
+                int colEnd = secondLoc[1]+1;
+                int rowStart = firstLoc[0];
+                int rowEnd = secondLoc[0]+1;
+                if(firstLoc[0] == secondLoc[0]) {//row are the same
+                    if(firstLoc[1] > secondLoc[1]) {
+                        colStart = secondLoc[1];
+                        colEnd = firstLoc[1]+1;
                     }
+                    for (int col=colStart; col<colEnd; col++) {
+                        int[] rowCol = {firstLoc[0], col};
+                        cellLocs.add(rowCol);
+                    }
+                }
+                else if(firstLoc[1] == secondLoc[1]) { //cols are the same
+                    if(firstLoc[0] > secondLoc[0]) {
+                        rowStart = secondLoc[1];
+                        rowEnd = firstLoc[1]+1;
+                    }
+                    for (int row = rowStart; row<rowEnd; row++) {
+                        int[] rowCol = {row, firstLoc[1]};
+                        cellLocs.add(rowCol);
+                    }
+                }
+                else {
+                    if(firstLoc[1] > secondLoc[1]) {
+                        colStart = secondLoc[1];
+                        colEnd = firstLoc[1]+1;
+                    }
+                    if(firstLoc[0] > secondLoc[0]) {
+                        rowStart = secondLoc[1];
+                        rowEnd = firstLoc[1]+1;
+                    }
+                    for (int row=rowStart; row<rowEnd; row++) {
+                        for (int col=colStart; col<colEnd; col++) {
+                            int[] rowCol = {row, col};
+                            cellLocs.add(rowCol);
+                        }
+                    }
+                }
             }
 
         }
@@ -246,15 +304,15 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
 
     @Override
     public T visitCellReference(CSVScriptParser.CellReferenceContext ctx) {
-        if(ctx.ID(1) != null) { // 2 IDs, therefore col.row
+        if(ctx.ID(1) == null) {
+            Cell loc = cellVars.get(ctx.ID(0).getText());
+            int[] rowCol = loc.rowCol;
+            return (T) rowCol;
+        }
+        else { // 2 IDs, therefore col.row
             int row = rowHeaders.get(ctx.ID(1).getText());
             int col = colHeaders.get(ctx.ID(0).getText());
             int[] rowCol = {row, col};
-            return (T) rowCol;
-        }
-        else {
-            Cell loc = cellVars.get(ctx.ID(0).getText());
-            int[] rowCol = loc.rowCol;
             return (T) rowCol;
         }
     }
@@ -288,6 +346,7 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
         return null;
     }
 
+    @Override
     public T visitConditional(CSVScriptParser.ConditionalContext ctx) {
         if(!ctx.value().isEmpty()) {
             if (ctx.OPERATOR().getText().equals(">=") ) {
@@ -328,4 +387,13 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
         return null;
     }
 
+
+    private void printCellLocContents(LinkedList<int[]> list, String file) {
+        int fileidx = fileVarListIdx.get(file);
+        System.out.println(Arrays.deepToString(inFiles.get(fileidx)));
+        for (int[] i : list) {
+            String s = inFiles.get(fileidx)[i[0]][i[1]];
+            System.out.printf("%d, %d, %s\n", i[0], i[1], s);
+        }
+    }
 }

@@ -96,7 +96,7 @@ value			: INT
 output          : 'output:' outputStatement 'end output' ';' ;
 outputStatement : outputRule outputWrite ;
 
-outputRule      : 'use' ID 'on' reference ';' outputRule //first ID corresponds to rule. Second ID corresponds to set.
+outputRule      : 'use' ID 'on' ID ';' outputRule //first ID corresponds to rule. Second ID corresponds to set.
                 | /* epsilon */
                 ;
 
