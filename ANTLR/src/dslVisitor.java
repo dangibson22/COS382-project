@@ -10,9 +10,33 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
     private Hashtable<String, Integer> rowHeaders = new Hashtable<>();
     private Hashtable<String, Integer> colHeaders = new Hashtable<>();
 
+    private Hashtable<String, Subset> subsetVars = new Hashtable<>();
+    private Hashtable<String, Cell> cellVars = new Hashtable<>();
+
+    private String currentInFile;
+
     private class Subset {
-        LinkedList<int[]> cellLocations;
-        String fileVar;
+        private LinkedList<int[]> cellLocations;
+        public String fileVar;
+
+        Subset(String file) {
+            fileVar = file;
+        }
+
+        public void addCell(int row, int col) {
+            int[] locations = {row, col};
+            cellLocations.add(locations);
+        }
+    }
+    private class Cell {
+        public String fileVar;
+        public int[] rowCol = new int[2];
+
+        Cell(String file, int row, int col) {
+            fileVar = file;
+            rowCol[0] = row;
+            rowCol[1] = col;
+        }
     }
 
     private int[] getRowColSize(File spreadsheet) throws FileNotFoundException {
@@ -56,6 +80,15 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
             header = header + "_" + suffix;
         }
         return header;
+    }
+
+    private Boolean alreadyInList(LinkedList<int[]> list, int[] rowCol) {
+        for (int[] i : list) {
+            if (i[0] == rowCol[0] & i[1] == rowCol[1]) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -127,7 +160,8 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
 
     @Override
     public T visitInputFlags(CSVScriptParser.InputFlagsContext ctx) {
-        if (ctx.getChildCount() == 0) return null;
+        boolean[] inputflags = {false, false};
+        if (ctx.getChildCount() == 0) return (T) inputflags;
         return visit(ctx.inputFlag());
     }
 
@@ -142,9 +176,87 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
     @Override
     public T visitSubsetAssignment(CSVScriptParser.SubsetAssignmentContext ctx) {
         String file = ctx.ID(0).toString();
-        String subsetToken = ctx.ID(1).toString();
+        currentInFile = file;
+        Subset temp = new Subset(file);
+        visitSet(ctx.set());
 
         return null;
+    }
+
+    @Override
+    public T visitSet(CSVScriptParser.SetContext ctx) {
+        LinkedList<int[]> cellLocs = (LinkedList<int[]>) visitReferences(ctx.references()); //Set a value to this
+        System.out.println(cellLocs.toString());
+        return null;
+    }
+
+    @Override
+    public T visitReferences(CSVScriptParser.ReferencesContext ctx) {
+        LinkedList<int[]> cellLocs = new LinkedList<>();
+        LinkedList<int[]> currentCells = (LinkedList<int[]>) visitReference(ctx.reference()); //Set this to a variable
+        for (int[] loc : currentCells) {
+            if (!alreadyInList(cellLocs, loc)) {
+                cellLocs.add(loc);
+            }
+        }
+        return (T) cellLocs;
+    }
+
+    @Override
+    public T visitReference(CSVScriptParser.ReferenceContext ctx) {
+        LinkedList<int[]> cellLocs = new LinkedList<>();
+        int fileIdx = fileVarListIdx.get(currentInFile);
+        boolean isRange = ctx.getToken(19, 0) != null;
+        if (!isRange) {
+            if (ctx.getToken(17, 0) != null) { //row reference
+                int row = rowHeaders.get(ctx.ID().getText());
+                int maxCols = inFiles.get(fileIdx)[row].length;
+                int maxRow = row;
+                for (int col = 0; col < maxCols; col++) {
+                    int[] rowCol = {row, col};
+                    cellLocs.add(rowCol);
+                }
+            } else if (ctx.getToken(18, 0) != null) { //col reference
+                int col = colHeaders.get(ctx.ID().getText());
+                int maxRows = inFiles.get(fileIdx).length;
+                for (int row = 0; row < maxRows; row++) {
+                    int[] rowCol = {row, col};
+                    cellLocs.add(rowCol);
+                }
+            } else { //cell reference
+                int[] rowCol = (int[]) visit(ctx.cellReference());
+                cellLocs.add(rowCol);
+            }
+        }
+        else {
+            LinkedList<int[]> list1 = (LinkedList<int[]>) visitReference(ctx.reference(0));
+            LinkedList<int[]> list2 = (LinkedList<int[]>) visitReference(ctx.reference(1));
+            for (int i=0; i<list2.size(); i++) {
+                int[] firstLoc = list1.get(i);
+                int[] secondLoc = list2.get(i);
+                    for (int row = firstLoc[0]; row < secondLoc[0]; row++) { //case first list row < second list row
+                        //Do stuff
+                    }
+            }
+
+        }
+
+        return (T) cellLocs;
+    }
+
+    @Override
+    public T visitCellReference(CSVScriptParser.CellReferenceContext ctx) {
+        if(ctx.ID(1) != null) { // 2 IDs, therefore col.row
+            int row = rowHeaders.get(ctx.ID(1).getText());
+            int col = colHeaders.get(ctx.ID(0).getText());
+            int[] rowCol = {row, col};
+            return (T) rowCol;
+        }
+        else {
+            Cell loc = cellVars.get(ctx.ID(0).getText());
+            int[] rowCol = loc.rowCol;
+            return (T) rowCol;
+        }
     }
 
     @Override

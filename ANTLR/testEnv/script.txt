@@ -7,16 +7,14 @@ end input;
 
 actions:
 
-if ( (3.2 >= 3) or (25<4) )
-    function add2ExtraCredit = value + 2;
-end if;
+gradesTable subset q2 = [col quiz2];
 
 end actions;
 
 
 output:
 
-use add2ExtraCredit on groupA.quiz2;
+use add2ExtraCredit on q2;
 write inFile out.csv;
 
 end output;

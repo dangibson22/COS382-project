@@ -33,9 +33,10 @@ subsetAssignment: ID 'subset' ID '=' set; // First ID is fileVar, second is subs
 set				: '[' references ']';
 references		: reference
 				| reference ',' references
-				| /* epsilon */
 				;
-reference		: ID //subset reference
+
+reference		: 'row' ID //subset reference
+                | 'col' ID
 				| cellReference // colName.rowName
 				| reference 'to' reference
 				;
