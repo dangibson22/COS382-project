@@ -43,7 +43,7 @@ reference		: 'row' ID //subset reference
 
 cellAssignment	: 'cell' ID '=' cellReference;
 
-cellReference   : ID '.' ID // colName.rowName
+cellReference   : ID '.' ID '.' ID // colName.rowName
                 | ID // Cell variable name
                 ;
 
@@ -55,22 +55,30 @@ rules			: ',' r rules //ID corresponds to a subset or cell
 				|
 				;
 
-expr			: term terms ;
-/*The below code was ripped from A02 to register mathematical expressions*/
-terms			: '+' term terms
-				| '-' term terms
-				| ;
+/*Math portion*/
+expr			: term
+                | terms '+' term
+                | terms '-' term
+                ;
 
-term			: factor factors;
+terms			: term
+				| terms '+' term
+				| terms '-' term;
 
-factors			: '*' factor factors
-				| '/' factor factors
-				| 'mod' factor factors
-				| ;
+term			: factor
+                | factors '*' factor
+                | factors '/' factor
+                ;
+
+factors			: factor
+                | factors '*' factor
+                | factors '/' factor
+                /*Maybe a mod function*/
+                ;
 
 factor			: '(' expr ')'
 				| value
-				| ID '.' ID //This ID should be a reference to a column or row
+				| cellReference
 				;
 /*End Math portion*/
 
@@ -88,7 +96,7 @@ conditional		: value OPERATOR value
 				;
 
 value			: INT
-				| ID
+				/*| ID*/
 				| realNumber
 				;
 /*End actions phase*/

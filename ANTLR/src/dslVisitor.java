@@ -3,17 +3,17 @@ import java.io.*;
 import java.util.*;
 
 public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
-    private ArrayList<String[][]> inFiles = new ArrayList<>(); //List of all our inFiles
-    private int inFilesSize = 0;
-    private Hashtable<String, Integer> fileVarListIdx = new Hashtable<>(); //Maps each file's variable name to one of our array tables
+    private final HashMap<String, String[][]> inFiles = new HashMap<>(); //List of all our inFiles
 
-    private Hashtable<String, Integer> rowHeaders = new Hashtable<>();
-    private Hashtable<String, Integer> colHeaders = new Hashtable<>();
+    private final HashMap<String, Integer> rowHeaders = new HashMap<>();
+    private final HashMap<String, Integer> colHeaders = new HashMap<>();
 
-    private Hashtable<String, Subset> subsetVars = new Hashtable<>();
-    private Hashtable<String, Cell> cellVars = new Hashtable<>();
+    private final HashMap<String, Subset> subsetVars = new HashMap<>();
+    private final HashMap<String, Cell> cellVars = new HashMap<>();
+    private final HashMap<String, CSVScriptParser.ExprContext> functionContexts = new HashMap();
 
     private String currentInFile;
+    private Cell currentCell;
 
     private class Subset {
         private LinkedList<int[]> cellLocations;
@@ -39,6 +39,10 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
             fileVar = file;
             rowCol[0] = row;
             rowCol[1] = col;
+        }
+
+        public float getVal() {
+            return Float.parseFloat(inFiles.get(fileVar)[rowCol[0]][rowCol[1]]);
         }
     }
 
@@ -73,7 +77,7 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
         }
         return fixingString.toString();
     }
-    private String indexHeader(String oldHeader, Hashtable<String, Integer> headerTable) {
+    private String indexHeader(String oldHeader, HashMap<String, Integer> headerTable) {
         String header=oldHeader;
         if ( headerTable.get(header) != null ) { //Indexes headers of the same name.
             int suffix = 2;
@@ -148,17 +152,13 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
             }
             //Add array to stored data
             String fileVarName = ctx.ID().toString();
-            inFiles.add(spreadsheet);
-            fileVarListIdx.put(fileVarName, inFilesSize);
-            inFilesSize ++;
-
+            inFiles.put(fileVarName, spreadsheet);
             myReader.close();
         } catch (FileNotFoundException e) {
             throw new ParseCancellationException(e);
             //Figure out how to tell people which line error is on
         }
-
-        return visit(ctx.inputStatement());
+        return null;
     }
 
     @Override
@@ -194,7 +194,7 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
     @Override
     public T visitSet(CSVScriptParser.SetContext ctx) {
         LinkedList<int[]> cellLocs = (LinkedList<int[]>) visitReferences(ctx.references()); //Set a value to this
-        printCellLocContents(cellLocs, currentInFile);
+        //printCellLocContents(cellLocs, currentInFile);
 
         return (T) cellLocs;
     }
@@ -222,12 +222,12 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
     @Override
     public T visitReference(CSVScriptParser.ReferenceContext ctx) {
         LinkedList<int[]> cellLocs = new LinkedList<>();
-        int fileIdx = fileVarListIdx.get(currentInFile);
+        //int fileIdx = fileVarListIdx.get(currentInFile);
         boolean isRange = ctx.getToken(19, 0) != null;
         if (!isRange) {
             if (ctx.getToken(17, 0) != null) { //row reference
                 int row = rowHeaders.get(ctx.ID().getText());
-                int maxCols = inFiles.get(fileIdx)[row].length;
+                int maxCols = inFiles.get(currentInFile)[row].length;
                 int maxRow = row;
                 for (int col = 0; col < maxCols; col++) {
                     int[] rowCol = {row, col};
@@ -235,12 +235,13 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
                 }
             } else if (ctx.getToken(18, 0) != null) { //col reference
                 int col = colHeaders.get(ctx.ID().getText());
-                int maxRows = inFiles.get(fileIdx).length;
+                int maxRows = inFiles.get(currentInFile).length;
                 for (int row = 0; row < maxRows; row++) {
                     int[] rowCol = {row, col};
                     cellLocs.add(rowCol);
                 }
             } else { //cell reference
+                visit(ctx.cellReference());
                 int[] rowCol = (int[]) visit(ctx.cellReference());
                 cellLocs.add(rowCol);
             }
@@ -303,28 +304,40 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
     }
 
     @Override
-    public T visitCellReference(CSVScriptParser.CellReferenceContext ctx) {
+    public T visitCellReference(CSVScriptParser.CellReferenceContext ctx) { //Sets the current cell and returns location
         if(ctx.ID(1) == null) {
             Cell loc = cellVars.get(ctx.ID(0).getText());
+            currentCell = loc;
             int[] rowCol = loc.rowCol;
             return (T) rowCol;
         }
-        else { // 2 IDs, therefore col.row
-            int row = rowHeaders.get(ctx.ID(1).getText());
-            int col = colHeaders.get(ctx.ID(0).getText());
+        else { // 3 IDs, therefore file.col.row
+            int row = rowHeaders.get(ctx.ID(2).getText());
+            int col = colHeaders.get(ctx.ID(1).getText());
+            String file = ctx.ID(0).getText();
+            currentCell = new Cell(file, row, col);
             int[] rowCol = {row, col};
             return (T) rowCol;
         }
     }
 
     @Override
+    public T visitCellAssignment(CSVScriptParser.CellAssignmentContext ctx) {
+        String cellName = ctx.ID().getText();
+        visit(ctx.cellReference());
+        cellVars.put(cellName, currentCell);
+        return null;
+    }
+
+    @Override
     public T visitValue(CSVScriptParser.ValueContext ctx) {
         if (ctx.INT() != null) {
-            return (T) ctx.INT().getText();
+            return (T) (Float) Float.parseFloat(ctx.INT().getText());
         }
         if (ctx.realNumber() != null) {
-            return (T) ctx.realNumber().getText();
+            return (T) (Float) Float.parseFloat(ctx.realNumber().getText());
         }
+        /*
         if (ctx.ID() != null) {
             if (ctx.ID().getText().equals("value")) {
                 //Lookup key for current cell which will be set elsewhere
@@ -335,6 +348,7 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
             }
             return null;
         }
+        */
         return null;
     }
 
@@ -387,12 +401,108 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
         return null;
     }
 
+    @Override
+    public T visitFunctionAssignment(CSVScriptParser.FunctionAssignmentContext ctx) {
+        String functionId = ctx.ID().getText();
+        functionContexts.put(functionId, ctx.expr());
+        visit(ctx.expr());
+        return null;
+    }
+
+    @Override
+    public T visitExpr(CSVScriptParser.ExprContext ctx) {
+        Float term = (Float) visit(ctx.term());
+        if (ctx.terms() == null) {
+            return (T) term;
+        }
+        Float retVal;
+        String addOp = ctx.getChild(1).getText();
+        if (addOp.equals("+")) {
+            retVal = term + (Float) visit(ctx.terms());
+        }
+        else if (addOp.equals("-")) {
+            retVal = term - (Float) visit(ctx.terms());
+        }
+        else {
+            throw new ParseCancellationException();
+        }
+        return (T) retVal;
+    }
+
+    @Override
+    public T visitTerms(CSVScriptParser.TermsContext ctx) {
+        Float term = (Float) visit(ctx.term());
+        if (ctx.terms() == null) {
+            return (T) term;
+        }
+        Float retVal;
+        String addOp = ctx.getChild(1).getText();
+        if (addOp.equals("+")) {
+            retVal = term + ( (Float) visit(ctx.terms()) );
+        }
+        else if (addOp.equals("-")) {
+            retVal = term - (Float) visit(ctx.terms());
+        }
+        else {
+            throw new ParseCancellationException();
+        }
+        return (T) retVal;
+    }
+
+    @Override
+    public T visitTerm(CSVScriptParser.TermContext ctx) {
+        Float retVal = (Float) visit(ctx.factor());
+        if (ctx.factors() == null) {
+            return (T) retVal;
+        }
+        String multOp = ctx.getChild(1).getText();
+        if (multOp.equals("*")) {
+            retVal = retVal * (Float) visit(ctx.factors());
+        }
+        else if (multOp.equals("/")) {
+            retVal = retVal / (Float) visit(ctx.factors());
+        }
+        return (T) retVal;
+    }
+
+    @Override
+    public T visitFactors(CSVScriptParser.FactorsContext ctx) {
+        Float retVal = (Float) visit(ctx.factor());
+        if (ctx.factors() == null) {
+            return (T) retVal;
+        }
+        String multOp = ctx.getChild(1).getText();
+        if (multOp.equals("*")) {
+            retVal = retVal * (Float) visit(ctx.factors());
+        }
+        else if (multOp.equals("/")) {
+            retVal = retVal / (Float) visit(ctx.factors());
+        }
+        return (T) retVal;
+    }
+
+    @Override
+    public T visitFactor(CSVScriptParser.FactorContext ctx) {
+        if (ctx.expr() != null) {
+            return visit(ctx.expr());
+        }
+        else if (ctx.value() != null) {
+            return visit(ctx.value());
+        }
+        else {
+            visit(ctx.cellReference());
+            int row = currentCell.rowCol[0];
+            int col = currentCell.rowCol[1];
+            Float retVal = Float.parseFloat(inFiles.get(currentCell.fileVar)[row][col]);
+            //System.out.println(retVal);
+            return (T) retVal;
+        }
+    }
 
     private void printCellLocContents(LinkedList<int[]> list, String file) {
-        int fileidx = fileVarListIdx.get(file);
-        System.out.println(Arrays.deepToString(inFiles.get(fileidx)));
+        System.out.println(Arrays.deepToString(inFiles.get(file)));
         for (int[] i : list) {
-            String s = inFiles.get(fileidx)[i[0]][i[1]];
+            String s = inFiles.get(file)[i[0]][i[1]];
             System.out.printf("%d, %d, %s\n", i[0], i[1], s);
         }
     }

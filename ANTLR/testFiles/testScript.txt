@@ -1,7 +1,7 @@
 input:
 
 read filepath.csv as inFile;
-read folder/fsecondFile.csv as alternate (noRowHeader);
+read folder/secondFile.csv as alternate (noRowHeader);
 
 end input;
 

@@ -7,7 +7,9 @@ end input;
 
 actions:
 
-gradesTable subset q2 = [quiz1.Eve to test1.Bob];
+cell eveq1 = gradesTable.quiz1.Eve;
+gradesTable subset q2 = [eveq1 to gradesTable.test1.Bob];
+function add2 = gradesTable.quiz1.Eve;
 
 end actions;
 

@@ -37,13 +37,13 @@ Script Overview
 Input
 ----------------
 
-Given a csv file, the language will convert it to a subset variable with the column headers and rows as their respective objects.
+Given a csv file, the language will create variables for the 2d array of data, the column headers, and the row headers.
 
 **Invalid characters**: If a column header contains invalid characters, such as '&'' or '$', they will be removed from the column reference.
 Spaces in column headers will be replaced with underscores.
 
 **Conflicting names**: If 2 columns contain the same name, the second one will have the number 1 appended to the end, and the next 2, and so on.
-If a column and row share the same name, '_col' will be appended to the column version, and '_row' to the row version.
+If a column and row share the same name, '_row' will be appended to the row version.
 
 Actions
 ---------------
@@ -129,119 +129,32 @@ Grammar
 The following grammar is defined for the program:
 
 ~~~
-grammar CSVScript;
-
-start   : input actions output EOF ;
-
-input   : 'input:' inputStatement 'end input' ';' ;
-inputStatement  : 'read' filename 'as' ID inputFlags ';' inputStatement
-| /* epsilon */
-;
-inputFlags      : '(' inputFlag ')'
-| /* epsilon */
-;
-inputFlag       : 'noRowHeader'
-| 'noColHeader'
-| 'noRowHeader' ',' 'noColHeader'
-| 'noColHeader' ',' 'noRowHeader'
-;
-/*End input phase*/
-
-actions			: 'actions:' actionBlock 'end actions' ';' ;
-actionBlock		: action ';' actionBlock
-| /* epsilon */
-;
-action			: ifStatement
-| forStatement
-| subsetAssignment
-| cellAssignment
-| schemeAssignment
-| functionAssignment
-;
-
-subsetAssignment: 'subset' ID '=' set;
-set				: '[' references ']';
-references		: reference
-| reference ',' references
-| /* epsilon */
-;
-reference		: ID // row or column name
-| ID '.' ID // colName.rowName
-| reference 'to' reference
-;
-
-cellAssignment	: 'cell' ID '=' reference;
-
-schemeAssignment: 'scheme' ID '=' '{' r '}';
-
-r				: ID ':' expr rules;
-
-rules			: ',' r rules //ID corresponds to a subset or cell
-|
-;
-expr			: term terms ;
-/*The below code was ripped from A02 to register mathematical expressions*/
-terms			: '+' term terms
-| '-' term terms
-| ;
-
-term			: factor factors;
-
-factors			: '*' factor factors
-| '/' factor factors
-| 'mod' factor factors
-| ;
-
-factor			: '(' expr ')'
-| value
-| ID '.' ID //This ID should be a reference to a column or row
-;
-/*End Math portion*/
-
-functionAssignment: 'function' ID '=' expr ; //A rule is a mathematical operation to apply to the value of a cell or subset
-
-ifStatement		: 'if' '(' conditional ')' actionBlock 'end if';
-
-forStatement	: 'for' ID 'in' ID actionBlock 'end for'
-| 'for' ID 'in' set actionBlock 'end for'
-;
-
-conditional		: value OPERATOR value
-| '('conditional')' 'and' '('conditional')'
-| '('conditional')' 'or' '('conditional')'
-;
-
-value			: INT
-| ID
-| realNumber
-;
-/*End actions phase*/
-
-output          : 'output:' outputStatement 'end output' ';' ;
-outputStatement : outputRule outputWrite ;
-
-outputRule      : 'use' ID 'on' reference ';' outputRule //first ID corresponds to rule. Second ID corresponds to set.
-| /* epsilon */
-;
-
-outputWrite     : 'write' ID filename ';' ; //ID corresponds to a subsection
-
-filename		: ID '.csv'
-| ALPHANUM '.csv';
-
-realNumber		: INT '.' INT ;
-
-INT     : [0-9]+ ;
-ID      : [a-zA-Z_] [0-9a-zA-Z_]+ ;
-NEWLINE : '\r'? '\n' -> skip;
-WS      : [ \t]+ -> skip ;  // tells ANTLR to ignore these
-OPERATOR: ('>=' | '<=' | '>' | '<' | '==' | '!=');
-ALPHANUM: [0-9a-zA-Z_]+ ;
+INSERT FINAL GRAMMAR HERE
 ~~~
 
 The grammar matches the program as expected and is 
 able to handle all the functionality we have currently 
 designed the program with.
+
+
+Translation Behind-The-Scenes
+=======================
+Variables
+--------
+All input files are read in as 2d arrays of strings. Those strings are then stored in a HashMap data type with the
+key being the variable name the user assigned to that input file.
+
+**Headers:** There are 2 separate HashMaps. One for column headers and the other for row headers. The key is the
+header name and the value is the index of that row/column in the corresponding file's 2d array
+
+**Subsets:** Subsets are a class that contain the string of the in-file name and a linked list of cell locations. Subset
+variables are stored in a HashTable.
+
+**Cells:** Cells can be referenced by the format fileVar.colHeader.rowHeader or by variable name if previously declared
+using `cell foo = inFile.col.row`. It can be used to access the value at that cell or to define a range or location in
+a subset. Visiting a cellReference returns the location of the cell and sets the currentCell value to the proper cell
+object, which contains the in-file variable name and the cell location within that file, as well as a getVal function.
+
 
 Testing
 ====================
