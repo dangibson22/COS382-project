@@ -1,0 +1,26 @@
+input:
+
+read testEnv/gradebook.csv as gradesTable;
+
+end input;
+
+
+actions:
+
+gradesTable subset quiz = [col quiz1];
+function minusTen = value - 10;
+
+num val1 = 4;
+num m_score = max quiz;
+num min_score = min quiz;
+num a_score = avg quiz max 100;
+
+end actions;
+
+
+output:
+
+
+write inFile out.csv;
+
+end output;

@@ -11,6 +11,11 @@ cell eveq1 = gradesTable.quiz1.Eve;
 gradesTable subset q2 = [eveq1 to gradesTable.test1.Bob];
 function add2 = gradesTable.quiz1.Eve;
 
+num val1 = 4
+num val2 = 5.12
+num val3 = 6.18
+num val4 = 2000
+
 end actions;
 
 

@@ -1,4 +1,4 @@
-// Generated from /home/trevor/cos382/PXX-DSL/ANTLR/CSVScript.g4 by ANTLR 4.9.1
+// Generated from /home/CS/users/dgibson/.linux/Documents/COS382/project/COS382-project/ANTLR/CSVScript.g4 by ANTLR 4.9.1
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -88,6 +88,18 @@ public interface CSVScriptVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCellAssignment(CSVScriptParser.CellAssignmentContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link CSVScriptParser#numAssignment}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNumAssignment(CSVScriptParser.NumAssignmentContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link CSVScriptParser#opFunc}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOpFunc(CSVScriptParser.OpFuncContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link CSVScriptParser#cellReference}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -160,6 +172,18 @@ public interface CSVScriptVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitForStatement(CSVScriptParser.ForStatementContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link CSVScriptParser#forAction}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitForAction(CSVScriptParser.ForActionContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link CSVScriptParser#forIf}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitForIf(CSVScriptParser.ForIfContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link CSVScriptParser#conditional}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -189,6 +213,12 @@ public interface CSVScriptVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitOutputRule(CSVScriptParser.OutputRuleContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link CSVScriptParser#outputTarget}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOutputTarget(CSVScriptParser.OutputTargetContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link CSVScriptParser#outputWrite}.
 	 * @param ctx the parse tree

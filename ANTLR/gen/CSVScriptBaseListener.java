@@ -1,4 +1,4 @@
-// Generated from /home/trevor/cos382/PXX-DSL/ANTLR/CSVScript.g4 by ANTLR 4.9.1
+// Generated from /home/CS/users/dgibson/.linux/Documents/COS382/project/COS382-project/ANTLR/CSVScript.g4 by ANTLR 4.9.1
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -171,6 +171,30 @@ public class CSVScriptBaseListener implements CSVScriptListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterNumAssignment(CSVScriptParser.NumAssignmentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNumAssignment(CSVScriptParser.NumAssignmentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterOpFunc(CSVScriptParser.OpFuncContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitOpFunc(CSVScriptParser.OpFuncContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterCellReference(CSVScriptParser.CellReferenceContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -315,6 +339,30 @@ public class CSVScriptBaseListener implements CSVScriptListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterForAction(CSVScriptParser.ForActionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitForAction(CSVScriptParser.ForActionContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterForIf(CSVScriptParser.ForIfContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitForIf(CSVScriptParser.ForIfContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterConditional(CSVScriptParser.ConditionalContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -370,6 +418,18 @@ public class CSVScriptBaseListener implements CSVScriptListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitOutputRule(CSVScriptParser.OutputRuleContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterOutputTarget(CSVScriptParser.OutputTargetContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitOutputTarget(CSVScriptParser.OutputTargetContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

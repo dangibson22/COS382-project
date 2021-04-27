@@ -1,4 +1,4 @@
-// Generated from /home/trevor/cos382/PXX-DSL/ANTLR/CSVScript.g4 by ANTLR 4.9.1
+// Generated from /home/CS/users/dgibson/.linux/Documents/COS382/project/COS382-project/ANTLR/CSVScript.g4 by ANTLR 4.9.1
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -137,6 +137,26 @@ public interface CSVScriptListener extends ParseTreeListener {
 	 */
 	void exitCellAssignment(CSVScriptParser.CellAssignmentContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link CSVScriptParser#numAssignment}.
+	 * @param ctx the parse tree
+	 */
+	void enterNumAssignment(CSVScriptParser.NumAssignmentContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CSVScriptParser#numAssignment}.
+	 * @param ctx the parse tree
+	 */
+	void exitNumAssignment(CSVScriptParser.NumAssignmentContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CSVScriptParser#opFunc}.
+	 * @param ctx the parse tree
+	 */
+	void enterOpFunc(CSVScriptParser.OpFuncContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CSVScriptParser#opFunc}.
+	 * @param ctx the parse tree
+	 */
+	void exitOpFunc(CSVScriptParser.OpFuncContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link CSVScriptParser#cellReference}.
 	 * @param ctx the parse tree
 	 */
@@ -257,6 +277,26 @@ public interface CSVScriptListener extends ParseTreeListener {
 	 */
 	void exitForStatement(CSVScriptParser.ForStatementContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link CSVScriptParser#forAction}.
+	 * @param ctx the parse tree
+	 */
+	void enterForAction(CSVScriptParser.ForActionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CSVScriptParser#forAction}.
+	 * @param ctx the parse tree
+	 */
+	void exitForAction(CSVScriptParser.ForActionContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CSVScriptParser#forIf}.
+	 * @param ctx the parse tree
+	 */
+	void enterForIf(CSVScriptParser.ForIfContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CSVScriptParser#forIf}.
+	 * @param ctx the parse tree
+	 */
+	void exitForIf(CSVScriptParser.ForIfContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link CSVScriptParser#conditional}.
 	 * @param ctx the parse tree
 	 */
@@ -306,6 +346,16 @@ public interface CSVScriptListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitOutputRule(CSVScriptParser.OutputRuleContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CSVScriptParser#outputTarget}.
+	 * @param ctx the parse tree
+	 */
+	void enterOutputTarget(CSVScriptParser.OutputTargetContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CSVScriptParser#outputTarget}.
+	 * @param ctx the parse tree
+	 */
+	void exitOutputTarget(CSVScriptParser.OutputTargetContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link CSVScriptParser#outputWrite}.
 	 * @param ctx the parse tree

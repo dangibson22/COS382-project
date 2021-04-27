@@ -10,10 +10,18 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
 
     private final HashMap<String, Subset> subsetVars = new HashMap<>();
     private final HashMap<String, Cell> cellVars = new HashMap<>();
+    private final HashMap<String, Float> numVars = new HashMap<>();
     private final HashMap<String, CSVScriptParser.ExprContext> functionContexts = new HashMap();
+    private final HashMap<String, CSVScriptParser.RContext> schemeContexts = new HashMap();
+
+
+    //private final HashMap<String, Scheme> schemeVars = new HashMap<>();
 
     private String currentInFile;
+    private String loopControlVar;
+    private int[] loopLoc;
     private Cell currentCell;
+    private Float funcExprVal;
 
     private class Subset {
         private LinkedList<int[]> cellLocations;
@@ -30,6 +38,9 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
         public void setList(LinkedList<int[]> list) {
             cellLocations = list;
         }
+        public LinkedList<int[]> getCellLocations() {
+            return this.cellLocations;
+        }
     }
     private class Cell {
         public String fileVar;
@@ -45,6 +56,41 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
             return Float.parseFloat(inFiles.get(fileVar)[rowCol[0]][rowCol[1]]);
         }
     }
+
+    /*
+    private class Scheme {
+        private HashMap<String, Float> schemeValues;
+        private HashMap<String, String> schemeOps;
+
+        public Scheme() {
+            schemeValues = new HashMap<>();
+            schemeOps = new HashMap<>();
+        }
+
+        public void addSubset(String subset, Float value, String op) {
+            schemeValues.put(subset, value);
+            schemeOps.put(subset, op);
+        }
+
+        public Float getValue(String subset) {
+            return schemeValues.get(subset);
+        }
+
+        public String getOp(String subset) {
+            return schemeOps.get(subset);
+        }
+
+        public LinkedList<String> getSubsets() {
+            LinkedList<String> subsetNames = new LinkedList<>();
+            for (String name : schemeValues.keySet()) {
+                subsetNames.push(name);
+            }
+            return subsetNames;
+        }
+
+    }
+
+     */
 
     private int[] getRowColSize(File spreadsheet) throws FileNotFoundException {
         int[] rowColSize = {1, 1}; //[rowSize, colSize]
@@ -324,10 +370,110 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
     @Override
     public T visitCellAssignment(CSVScriptParser.CellAssignmentContext ctx) {
         String cellName = ctx.ID().getText();
+        if (numVars.containsKey(cellName)) throw new ParseCancellationException();
         visit(ctx.cellReference());
         cellVars.put(cellName, currentCell);
         return null;
     }
+
+    @Override
+    public T visitNumAssignment(CSVScriptParser.NumAssignmentContext ctx) {
+        String numName = ctx.ID().getText();
+
+        if (cellVars.containsKey(numName)) throw new ParseCancellationException();
+
+        if (ctx.opFunc() != null) {
+            float val = (float) visitOpFunc(ctx.opFunc());
+            numVars.put(numName, val);
+        }
+        else if (ctx.INT() != null) {
+            float val = Float.parseFloat(ctx.INT().getText());
+            numVars.put(numName, val);
+        } else {
+            float val = Float.parseFloat(ctx.realNumber().getText());
+            numVars.put(numName, val);
+        }
+        for (String s : numVars.keySet()) {
+            System.out.println("key: " + s + " val: " + numVars.get(s));
+        }
+        return null;
+    }
+
+    @Override
+    public T visitOpFunc(CSVScriptParser.OpFuncContext ctx) {
+        Float returnVal = 0.0f;
+        if (ctx.getToken(24, 0) != null) {
+            // avg
+            String subsetName = ctx.ID().toString();
+            if (!subsetVars.containsKey(subsetName)) throw new ParseCancellationException();
+
+            Subset s = subsetVars.get(subsetName);
+            Float maxVal = (Float) visitValue(ctx.value());
+            Float sum = 0.0f;
+            int count = 0;
+            String[][] file = inFiles.get(currentInFile);
+            for (int[] loc : s.getCellLocations()) {
+                try {
+                    String val = file[loc[0]][loc[1]];
+                    Float curr = Float.parseFloat(val);
+                    sum += curr / maxVal;
+                    count++;
+                } catch (NumberFormatException e) {
+                    // in case string isn't a float val
+                }
+            }
+            Float finalVal = sum / (float) count;
+            returnVal = finalVal;
+        }
+        else if (ctx.getToken(22, 0) != null) {
+            // max
+            String subsetName = ctx.ID().toString();
+            if (!subsetVars.containsKey(subsetName)) throw new ParseCancellationException();
+
+            Float max = 0.0f;
+            Subset s = subsetVars.get(subsetName);
+            String[][] file = inFiles.get(currentInFile);
+            for (int[] loc : s.getCellLocations()) {
+                // 0 = row, 1 = col
+                try {
+                    String val = file[loc[0]][loc[1]];
+                    Float curr = Float.parseFloat(val);
+                    if (curr > max) {
+                        max = curr;
+                    }
+                } catch (NumberFormatException e) {
+                    // in case string isn't a float val
+                }
+            }
+            returnVal = max;
+        }
+        else if (ctx.getToken(23, 0) != null) {
+            // min
+            String subsetName = ctx.ID().toString();
+            if (!subsetVars.containsKey(subsetName)) throw new ParseCancellationException();
+
+            Float min = Float.MAX_VALUE;
+            Subset s = subsetVars.get(subsetName);
+            String[][] file = inFiles.get(currentInFile);
+            for (int[] loc : s.getCellLocations()) {
+                // 0 = row, 1 = col
+                try {
+                    String val = file[loc[0]][loc[1]];
+                    Float curr = Float.parseFloat(val);
+                    if (curr < min) {
+                        min = curr;
+                    }
+                } catch (NumberFormatException e) {
+                    // in case string isn't a float val
+                }
+            }
+            returnVal = min;
+        } else throw new ParseCancellationException();
+
+        return (T) returnVal;
+    }
+
+
 
     @Override
     public T visitValue(CSVScriptParser.ValueContext ctx) {
@@ -412,6 +558,10 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
     @Override
     public T visitExpr(CSVScriptParser.ExprContext ctx) {
         Float term = (Float) visit(ctx.term());
+        CSVScriptParser.FunctionAssignmentContext c = null;
+        if (ctx.getParent() instanceof CSVScriptParser.FunctionAssignmentContext) {
+            term = funcExprVal;
+        }
         if (ctx.terms() == null) {
             return (T) term;
         }
@@ -497,6 +647,30 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
             //System.out.println(retVal);
             return (T) retVal;
         }
+    }
+
+    @Override
+    public T visitOutputRule(CSVScriptParser.OutputRuleContext ctx) {
+        String rule = ctx.ID(0).toString();
+        String subsetName = ctx.ID(1).toString();
+        if (!functionContexts.containsKey(rule)) throw new ParseCancellationException();
+        if (!subsetVars.containsKey(subsetName)) throw new ParseCancellationException();
+        CSVScriptParser.ExprContext rule_ctx = functionContexts.get(rule);
+        Subset set = subsetVars.get(subsetName);
+        for (int[] loc : set.getCellLocations()) {
+            try {
+                String[][] file = inFiles.get(currentInFile);
+                String valStr = file[loc[0]][loc[1]];
+                funcExprVal = Float.parseFloat(valStr);
+                Float newVal = (Float) visitExpr(rule_ctx);
+                file[loc[0]][loc[1]] = newVal.toString();
+            } catch (NumberFormatException e) {
+                // pass
+            }
+
+        }
+
+        return null;
     }
 
     private void printCellLocContents(LinkedList<int[]> list, String file) {

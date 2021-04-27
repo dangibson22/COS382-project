@@ -382,3 +382,374 @@ InitTree:
 /ANTLR.iml
 /CSVScript.g4
 
+--[ 2021.04.26.16.45.47.803.0 ]--
+NewLogger: ANTLR
+Version: 1.3
+--[ 2021.04.26.16.45.47.951.0 ]--
+InitTree:
+/gen/CSVScript.interp
+/gen/CSVScript.tokens
+/gen/CSVScriptLexer.java
+/gen/CSVScriptParser.java
+/gen/CSVScriptLexer.interp
+/gen/CSVScriptLexer.tokens
+/gen/CSVScriptVisitor.java
+/gen/CSVScriptListener.java
+/gen/CSVScriptBaseVisitor.java
+/gen/CSVScriptBaseListener.java
+/out/test/ANTLR/noInFileOK.txt
+/out/test/ANTLR/subsetTest.txt
+/out/test/ANTLR/testScript.txt
+/out/test/ANTLR/intAsIDError.txt
+/out/test/ANTLR/noOutFileError.txt
+/out/test/ANTLR/noInputBlockError.txt
+/out/test/ANTLR/NotEnoughCodeError.txt
+/out/test/ANTLR/actionsInOutputError.txt
+/out/production/ANTLR/Subset.class
+/out/production/ANTLR/CSVScript.interp
+/out/production/ANTLR/CSVScript.tokens
+/out/production/ANTLR/dslVisitor.class
+/out/production/ANTLR/CSVScriptLexer.class
+/out/production/ANTLR/CSVScriptLexer.interp
+/out/production/ANTLR/CSVScriptLexer.tokens
+/out/production/ANTLR/CSVScriptParser.class
+/out/production/ANTLR/startTranslator.class
+/out/production/ANTLR/CSVScriptVisitor.class
+/out/production/ANTLR/CSVScriptListener.class
+/out/production/ANTLR/dslVisitor$Subset.class
+/out/production/ANTLR/CSVScriptBaseVisitor.class
+/out/production/ANTLR/CSVScriptBaseListener.class
+/out/production/ANTLR/CSVScriptParser$RContext.class
+/out/production/ANTLR/CSVScriptParser$SetContext.class
+/out/production/ANTLR/CSVScriptParser$ExprContext.class
+/out/production/ANTLR/CSVScriptParser$TermContext.class
+/out/production/ANTLR/CSVScriptParser$InputContext.class
+/out/production/ANTLR/CSVScriptParser$RulesContext.class
+/out/production/ANTLR/CSVScriptParser$StartContext.class
+/out/production/ANTLR/CSVScriptParser$TermsContext.class
+/out/production/ANTLR/CSVScriptParser$ValueContext.class
+/out/production/ANTLR/CSVScriptParser$ActionContext.class
+/out/production/ANTLR/CSVScriptParser$FactorContext.class
+/out/production/ANTLR/CSVScriptParser$OutputContext.class
+/out/production/ANTLR/CSVScriptParser$ActionsContext.class
+/out/production/ANTLR/CSVScriptParser$FactorsContext.class
+/out/production/ANTLR/CSVScriptParser$FilenameContext.class
+/out/production/ANTLR/CSVScriptParser$InputFlagContext.class
+/out/production/ANTLR/CSVScriptParser$ReferenceContext.class
+/out/production/ANTLR/CSVScriptParser$InputFlagsContext.class
+/out/production/ANTLR/CSVScriptParser$OutputRuleContext.class
+/out/production/ANTLR/CSVScriptParser$RealNumberContext.class
+/out/production/ANTLR/CSVScriptParser$ReferencesContext.class
+/out/production/ANTLR/CSVScriptParser$ActionBlockContext.class
+/out/production/ANTLR/CSVScriptParser$ConditionalContext.class
+/out/production/ANTLR/CSVScriptParser$IfStatementContext.class
+/out/production/ANTLR/CSVScriptParser$OutputWriteContext.class
+/out/production/ANTLR/CSVScriptParser$ForStatementContext.class
+/out/production/ANTLR/CSVScriptParser$CellAssignmentContext.class
+/out/production/ANTLR/CSVScriptParser$InputStatementContext.class
+/out/production/ANTLR/CSVScriptParser$OutputStatementContext.class
+/out/production/ANTLR/CSVScriptParser$SchemeAssignmentContext.class
+/out/production/ANTLR/CSVScriptParser$SubsetAssignmentContext.class
+/out/production/ANTLR/CSVScriptParser$FunctionAssignmentContext.class
+/src/Subset.java
+/src/testCode.java
+/src/testClass.java
+/src/dslVisitor.java
+/src/startTranslator.java
+/.log/history.log
+/.idea/idea/libraries/antlr_runtime_4_9_1.xml
+/.idea/idea/vcs.xml
+/.idea/idea/misc.xml
+/.idea/idea/.gitignore
+/.idea/idea/modules.xml
+/.idea/idea/workspace.xml
+/.idea/libraries/antlr_runtime_4_9_1.xml
+/.idea/misc.xml
+/.idea/ANTLR.iml
+/.idea/modules.xml
+/.idea/workspace.xml
+/testEnv/script.txt
+/testEnv/oneLine.csv
+/testEnv/gradebook.csv
+/testFiles/noInFileOK.txt
+/testFiles/subsetTest.txt
+/testFiles/testScript.txt
+/testFiles/intAsIDError.txt
+/testFiles/noOutFileError.txt
+/testFiles/noInputBlockError.txt
+/testFiles/NotEnoughCodeError.txt
+/testFiles/actionsInOutputError.txt
+/ANTLR.iml
+/CSVScript.g4
+
+--[ 2021.04.26.16.46.57.851.0 ]--
+UpdateTree (AD): 1 0
++ /.idea/vcs.xml
+
+--[ 2021.04.26.17.02.25.161.0 ]--
+DisposeComponent
+--[ 2021.04.26.18.11.48.063.0 ]--
+NewLogger: ANTLR
+Version: 1.3
+--[ 2021.04.26.18.11.48.097.0 ]--
+InitTree:
+/gen/CSVScript.interp
+/gen/CSVScript.tokens
+/gen/CSVScriptLexer.java
+/gen/CSVScriptParser.java
+/gen/CSVScriptLexer.interp
+/gen/CSVScriptLexer.tokens
+/gen/CSVScriptVisitor.java
+/gen/CSVScriptListener.java
+/gen/CSVScriptBaseVisitor.java
+/gen/CSVScriptBaseListener.java
+/out/test/ANTLR/noInFileOK.txt
+/out/test/ANTLR/subsetTest.txt
+/out/test/ANTLR/testScript.txt
+/out/test/ANTLR/intAsIDError.txt
+/out/test/ANTLR/noOutFileError.txt
+/out/test/ANTLR/noInputBlockError.txt
+/out/test/ANTLR/NotEnoughCodeError.txt
+/out/test/ANTLR/actionsInOutputError.txt
+/out/production/ANTLR/Subset.class
+/out/production/ANTLR/CSVScript.interp
+/out/production/ANTLR/CSVScript.tokens
+/out/production/ANTLR/dslVisitor.class
+/out/production/ANTLR/CSVScriptLexer.class
+/out/production/ANTLR/CSVScriptLexer.interp
+/out/production/ANTLR/CSVScriptLexer.tokens
+/out/production/ANTLR/CSVScriptParser.class
+/out/production/ANTLR/startTranslator.class
+/out/production/ANTLR/CSVScriptVisitor.class
+/out/production/ANTLR/CSVScriptListener.class
+/out/production/ANTLR/dslVisitor$Subset.class
+/out/production/ANTLR/CSVScriptBaseVisitor.class
+/out/production/ANTLR/CSVScriptBaseListener.class
+/out/production/ANTLR/CSVScriptParser$RContext.class
+/out/production/ANTLR/CSVScriptParser$SetContext.class
+/out/production/ANTLR/CSVScriptParser$ExprContext.class
+/out/production/ANTLR/CSVScriptParser$TermContext.class
+/out/production/ANTLR/CSVScriptParser$InputContext.class
+/out/production/ANTLR/CSVScriptParser$RulesContext.class
+/out/production/ANTLR/CSVScriptParser$StartContext.class
+/out/production/ANTLR/CSVScriptParser$TermsContext.class
+/out/production/ANTLR/CSVScriptParser$ValueContext.class
+/out/production/ANTLR/CSVScriptParser$ActionContext.class
+/out/production/ANTLR/CSVScriptParser$FactorContext.class
+/out/production/ANTLR/CSVScriptParser$OutputContext.class
+/out/production/ANTLR/CSVScriptParser$ActionsContext.class
+/out/production/ANTLR/CSVScriptParser$FactorsContext.class
+/out/production/ANTLR/CSVScriptParser$FilenameContext.class
+/out/production/ANTLR/CSVScriptParser$InputFlagContext.class
+/out/production/ANTLR/CSVScriptParser$ReferenceContext.class
+/out/production/ANTLR/CSVScriptParser$InputFlagsContext.class
+/out/production/ANTLR/CSVScriptParser$OutputRuleContext.class
+/out/production/ANTLR/CSVScriptParser$RealNumberContext.class
+/out/production/ANTLR/CSVScriptParser$ReferencesContext.class
+/out/production/ANTLR/CSVScriptParser$ActionBlockContext.class
+/out/production/ANTLR/CSVScriptParser$ConditionalContext.class
+/out/production/ANTLR/CSVScriptParser$IfStatementContext.class
+/out/production/ANTLR/CSVScriptParser$OutputWriteContext.class
+/out/production/ANTLR/CSVScriptParser$ForStatementContext.class
+/out/production/ANTLR/CSVScriptParser$CellAssignmentContext.class
+/out/production/ANTLR/CSVScriptParser$InputStatementContext.class
+/out/production/ANTLR/CSVScriptParser$OutputStatementContext.class
+/out/production/ANTLR/CSVScriptParser$SchemeAssignmentContext.class
+/out/production/ANTLR/CSVScriptParser$SubsetAssignmentContext.class
+/out/production/ANTLR/CSVScriptParser$FunctionAssignmentContext.class
+/src/Subset.java
+/src/testCode.java
+/src/testClass.java
+/src/dslVisitor.java
+/src/startTranslator.java
+/.log/history.log
+/.idea/idea/libraries/antlr_runtime_4_9_1.xml
+/.idea/idea/vcs.xml
+/.idea/idea/misc.xml
+/.idea/idea/.gitignore
+/.idea/idea/modules.xml
+/.idea/idea/workspace.xml
+/.idea/libraries/antlr_runtime_4_9_1.xml
+/.idea/vcs.xml
+/.idea/misc.xml
+/.idea/ANTLR.iml
+/.idea/modules.xml
+/.idea/workspace.xml
+/testEnv/script.txt
+/testEnv/oneLine.csv
+/testEnv/gradebook.csv
+/testFiles/noInFileOK.txt
+/testFiles/subsetTest.txt
+/testFiles/testScript.txt
+/testFiles/intAsIDError.txt
+/testFiles/noOutFileError.txt
+/testFiles/noInputBlockError.txt
+/testFiles/NotEnoughCodeError.txt
+/testFiles/actionsInOutputError.txt
+/ANTLR.iml
+/CSVScript.g4
+
+--[ 2021.04.26.18.32.22.110.0 ]--
+UpdateTree (AD): 0 1
+- /src/Subset.java
+
+--[ 2021.04.26.20.25.23.565.0 ]--
+UpdateTree (AD): 0 42
+- /out/production/ANTLR/Subset.class
+- /out/production/ANTLR/CSVScriptLexer.class
+- /out/production/ANTLR/CSVScriptParser$FilenameContext.class
+- /out/production/ANTLR/CSVScriptParser$InputContext.class
+- /out/production/ANTLR/CSVScriptParser$OutputWriteContext.class
+- /out/production/ANTLR/startTranslator.class
+- /out/production/ANTLR/CSVScriptParser$ConditionalContext.class
+- /out/production/ANTLR/CSVScriptParser$OutputContext.class
+- /out/production/ANTLR/CSVScriptParser$InputFlagsContext.class
+- /out/production/ANTLR/CSVScriptParser$FactorsContext.class
+- /out/production/ANTLR/CSVScriptParser$RContext.class
+- /out/production/ANTLR/CSVScriptBaseListener.class
+- /out/production/ANTLR/CSVScriptParser$ActionBlockContext.class
+- /out/production/ANTLR/CSVScriptParser$SubsetAssignmentContext.class
+- /out/production/ANTLR/CSVScriptParser$StartContext.class
+- /out/production/ANTLR/CSVScriptParser$FunctionAssignmentContext.class
+- /out/production/ANTLR/CSVScriptParser$OutputRuleContext.class
+- /out/production/ANTLR/CSVScriptParser$InputFlagContext.class
+- /out/production/ANTLR/CSVScriptListener.class
+- /out/production/ANTLR/CSVScriptParser$TermContext.class
+- /out/production/ANTLR/dslVisitor$Subset.class
+- /out/production/ANTLR/CSVScriptParser$TermsContext.class
+- /out/production/ANTLR/CSVScriptParser$ReferenceContext.class
+- /out/production/ANTLR/CSVScriptParser$ForStatementContext.class
+- /out/production/ANTLR/CSVScriptParser$ExprContext.class
+- /out/production/ANTLR/CSVScriptParser$InputStatementContext.class
+- /out/production/ANTLR/dslVisitor.class
+- /out/production/ANTLR/CSVScriptParser$ValueContext.class
+- /out/production/ANTLR/CSVScriptParser$ReferencesContext.class
+- /out/production/ANTLR/CSVScriptParser$IfStatementContext.class
+- /out/production/ANTLR/CSVScriptParser$SchemeAssignmentContext.class
+- /out/production/ANTLR/CSVScriptBaseVisitor.class
+- /out/production/ANTLR/CSVScriptParser$ActionContext.class
+- /out/production/ANTLR/CSVScriptParser$SetContext.class
+- /out/production/ANTLR/CSVScriptParser$FactorContext.class
+- /out/production/ANTLR/CSVScriptParser$RealNumberContext.class
+- /out/production/ANTLR/CSVScriptParser$CellAssignmentContext.class
+- /out/production/ANTLR/CSVScriptParser$ActionsContext.class
+- /out/production/ANTLR/CSVScriptVisitor.class
+- /out/production/ANTLR/CSVScriptParser$OutputStatementContext.class
+- /out/production/ANTLR/CSVScriptParser.class
+- /out/production/ANTLR/CSVScriptParser$RulesContext.class
+
+--[ 2021.04.26.20.25.23.569.0 ]--
+CompilationStatus (AEW): 0 1 0
+[Ljava.lang.String;@2ccec029
+--[ 2021.04.26.20.25.34.443.0 ]--
+UpdateTree (AD): 3 0
++ /out/test/ANTLR/script.txt
++ /out/test/ANTLR/oneLine.csv
++ /out/test/ANTLR/gradebook.csv
+
+--[ 2021.04.26.20.25.52.506.0 ]--
+CompilationStatus (AEW): 0 0 0
+--[ 2021.04.26.20.25.53.395.0 ]--
+UpdateTree (AD): 48 0
++ /out/production/ANTLR/testCode.class
++ /out/production/ANTLR/testClass.class
++ /out/production/ANTLR/dslVisitor.class
++ /out/production/ANTLR/CSVScriptLexer.class
++ /out/production/ANTLR/testClass$Cell.class
++ /out/production/ANTLR/CSVScriptParser.class
++ /out/production/ANTLR/dslVisitor$Cell.class
++ /out/production/ANTLR/startTranslator.class
++ /out/production/ANTLR/CSVScriptVisitor.class
++ /out/production/ANTLR/CSVScriptListener.class
++ /out/production/ANTLR/dslVisitor$Subset.class
++ /out/production/ANTLR/CSVScriptBaseVisitor.class
++ /out/production/ANTLR/CSVScriptBaseListener.class
++ /out/production/ANTLR/CSVScriptParser$RContext.class
++ /out/production/ANTLR/CSVScriptParser$SetContext.class
++ /out/production/ANTLR/CSVScriptParser$ExprContext.class
++ /out/production/ANTLR/CSVScriptParser$TermContext.class
++ /out/production/ANTLR/CSVScriptParser$InputContext.class
++ /out/production/ANTLR/CSVScriptParser$RulesContext.class
++ /out/production/ANTLR/CSVScriptParser$StartContext.class
++ /out/production/ANTLR/CSVScriptParser$TermsContext.class
++ /out/production/ANTLR/CSVScriptParser$ValueContext.class
++ /out/production/ANTLR/CSVScriptParser$ActionContext.class
++ /out/production/ANTLR/CSVScriptParser$FactorContext.class
++ /out/production/ANTLR/CSVScriptParser$OutputContext.class
++ /out/production/ANTLR/CSVScriptParser$ActionsContext.class
++ /out/production/ANTLR/CSVScriptParser$FactorsContext.class
++ /out/production/ANTLR/CSVScriptParser$FilenameContext.class
++ /out/production/ANTLR/CSVScriptParser$InputFlagContext.class
++ /out/production/ANTLR/CSVScriptParser$ReferenceContext.class
++ /out/production/ANTLR/CSVScriptParser$InputFlagsContext.class
++ /out/production/ANTLR/CSVScriptParser$OutputRuleContext.class
++ /out/production/ANTLR/CSVScriptParser$RealNumberContext.class
++ /out/production/ANTLR/CSVScriptParser$ReferencesContext.class
++ /out/production/ANTLR/CSVScriptParser$ActionBlockContext.class
++ /out/production/ANTLR/CSVScriptParser$ConditionalContext.class
++ /out/production/ANTLR/CSVScriptParser$IfStatementContext.class
++ /out/production/ANTLR/CSVScriptParser$OutputWriteContext.class
++ /out/production/ANTLR/CSVScriptParser$ForStatementContext.class
++ /out/production/ANTLR/CSVScriptParser$OutputTargetContext.class
++ /out/production/ANTLR/CSVScriptParser$CellReferenceContext.class
++ /out/production/ANTLR/CSVScriptParser$NumAssignmentContext.class
++ /out/production/ANTLR/CSVScriptParser$CellAssignmentContext.class
++ /out/production/ANTLR/CSVScriptParser$InputStatementContext.class
++ /out/production/ANTLR/CSVScriptParser$OutputStatementContext.class
++ /out/production/ANTLR/CSVScriptParser$SchemeAssignmentContext.class
++ /out/production/ANTLR/CSVScriptParser$SubsetAssignmentContext.class
++ /out/production/ANTLR/CSVScriptParser$FunctionAssignmentContext.class
+
+--[ 2021.04.26.20.28.34.997.0 ]--
+UpdateTree (AD): 1 0
++ /testFiles/numVarTest.txt
+
+--[ 2021.04.26.20.29.15.582.0 ]--
+CompilationStatus (AEW): 0 0 0
+--[ 2021.04.26.20.29.16.565.0 ]--
+UpdateTree (AD): 1 0
++ /out/test/ANTLR/numVarTest.txt
+
+--[ 2021.04.26.20.30.22.338.0 ]--
+CompilationStatus (AEW): 0 0 0
+--[ 2021.04.26.22.56.07.884.0 ]--
+CompilationStatus (AEW): 0 0 0
+--[ 2021.04.26.22.56.08.796.0 ]--
+UpdateTree (AD): 4 0
++ /out/production/ANTLR/CSVScriptParser$ForIfContext.class
++ /out/production/ANTLR/CSVScriptParser$NumValContext.class
++ /out/production/ANTLR/CSVScriptParser$OpFuncContext.class
++ /out/production/ANTLR/CSVScriptParser$ForActionContext.class
+
+--[ 2021.04.26.22.57.00.598.0 ]--
+CompilationStatus (AEW): 0 0 0
+--[ 2021.04.26.22.57.57.344.0 ]--
+CompilationStatus (AEW): 0 0 0
+--[ 2021.04.26.22.58.30.656.0 ]--
+CompilationStatus (AEW): 0 0 0
+--[ 2021.04.26.22.58.58.342.0 ]--
+CompilationStatus (AEW): 0 0 0
+--[ 2021.04.26.22.59.00.229.0 ]--
+CompilationStatus (AEW): 0 0 0
+--[ 2021.04.26.23.01.36.057.0 ]--
+CompilationStatus (AEW): 0 0 0
+--[ 2021.04.26.23.02.00.832.0 ]--
+CompilationStatus (AEW): 0 0 0
+--[ 2021.04.26.23.03.11.257.0 ]--
+UpdateTree (AD): 0 1
+- /out/production/ANTLR/CSVScriptParser$NumValContext.class
+
+--[ 2021.04.26.23.03.11.261.0 ]--
+CompilationStatus (AEW): 0 0 0
+--[ 2021.04.26.23.05.14.752.0 ]--
+CompilationStatus (AEW): 0 0 0
+--[ 2021.04.26.23.05.15.972.0 ]--
+CompilationStatus (AEW): 0 0 0
+--[ 2021.04.26.23.06.12.073.0 ]--
+CompilationStatus (AEW): 0 0 0
+--[ 2021.04.26.23.06.45.982.0 ]--
+CompilationStatus (AEW): 0 0 0
+--[ 2021.04.26.23.07.21.969.0 ]--
+CompilationStatus (AEW): 0 0 0
+--[ 2021.04.26.23.42.26.252.0 ]--
+CompilationStatus (AEW): 0 0 0

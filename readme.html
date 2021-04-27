@@ -139,8 +139,10 @@ designed the program with.
 
 Translation Behind-The-Scenes
 =======================
+
 Variables
 --------
+
 All input files are read in as 2d arrays of strings. Those strings are then stored in a HashMap data type with the
 key being the variable name the user assigned to that input file.
 
@@ -158,6 +160,7 @@ object, which contains the in-file variable name and the cell location within th
 
 Testing
 ====================
+
 A whole suite of test files were used to check against isolated issues, such as no output file, an integer being used
 as a variable id, actions in the output block, and no input block. We also tested against a larger script that should
 utilize most, if not all of the grammar rules.
@@ -167,6 +170,7 @@ Reflection
 
 P01
 -------------
+
 This grammar is not exhaustive, but it covers most cases
 fairly well. It is possible that we will add more functionality
 to the language in the future, in which case we would
@@ -179,9 +183,35 @@ developing the language.
 
 P02
 ---------------
+
 At this point, the grammar should be fully functional. Perhaps some adjustments will be made to simplify parser
 implementation. The grammar has displayed expected behavior for various syntax errors and valid inputs.
 
+P03
+--------------
+
+We made some adjustments to the grammar based on what we thought would 
+be useful for the user.
+We decided that for loops were unnecessarily complicated - both 
+for the user and for the implementation - so we replaced them with 
+a number variable assignment that can also implement an 
+minimum, maximum, and average operation of a subset. 
+We did this because the number of contexts where for loops 
+would be used was quite slim, so we removed them while also 
+maintaining and simplifying their most common use case.
+We also decided to remove schemes, as we didn't have time to fully 
+define what their use would be and to get a good understanding of 
+how they would be implemented. They only provided a minor part 
+of functionality, so that wasn't too concerning.
+
+However, we saw some promising results with subsets and functions! 
+The subset/rule functionality should give some powerful options for 
+the user to analyze and manipulate data. In addition, the min/max/avg 
+operators were a nice addition to the language.
+
+We still need to put some finishing touches on the output phase 
+of the program, but overall we're pretty encouraged by the progress 
+we've seen!
 
 
 

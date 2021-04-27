@@ -24,6 +24,7 @@ action			: ifStatement
 				| forStatement
 				| subsetAssignment
 				| cellAssignment
+				| numAssignment
 				| schemeAssignment
 				| functionAssignment
 				;
@@ -43,7 +44,18 @@ reference		: 'row' ID //subset reference
 
 cellAssignment	: 'cell' ID '=' cellReference;
 
-cellReference   : ID '.' ID '.' ID // colName.rowName
+numAssignment   : 'num' ID '=' INT
+                | 'num' ID '=' realNumber
+                | 'num' ID '=' opFunc
+                ;
+
+opFunc          : 'max' ID
+                | 'min' ID
+                | 'avg' ID 'max' value
+                | /* epsilon */
+                ;
+
+cellReference   : ID '.' ID // colName.rowName
                 | ID // Cell variable name
                 ;
 
@@ -51,7 +63,7 @@ schemeAssignment: 'scheme' ID '=' '{' r '}';
 
 r				: ID ':' expr rules;
 
-rules			: ',' r rules //ID corresponds to a subset or cell
+rules			: ',' r //ID corresponds to a subset or cell
 				|
 				;
 
@@ -63,7 +75,8 @@ expr			: term
 
 terms			: term
 				| terms '+' term
-				| terms '-' term;
+				| terms '-' term
+				;
 
 term			: factor
                 | factors '*' factor
@@ -86,9 +99,13 @@ functionAssignment: 'function' ID '=' expr ; //A rule is a mathematical operatio
 
 ifStatement		: 'if' '(' conditional ')' actionBlock 'end if';
 
-forStatement	: 'for' ID 'in' ID actionBlock 'end for'
-				| 'for' ID 'in' set actionBlock 'end for'
-				;
+forStatement	: 'for' ID 'in' ID forAction 'end for' ;
+
+forAction       : forIf ;
+
+forIf           : ifStatement
+                | /* epsilon */
+                ;
 
 conditional		: value OPERATOR value
 				| '('conditional')' AND '('conditional')'
@@ -108,6 +125,9 @@ outputRule      : 'use' ID 'on' ID ';' outputRule //first ID corresponds to rule
                 | /* epsilon */
                 ;
 
+outputTarget    : ID
+                ;
+
 outputWrite     : 'write' ID filename ';' ; //ID corresponds to a subsection
 
 filename		: ID '.csv'
@@ -116,8 +136,8 @@ filename		: ID '.csv'
 realNumber		: INT '.' INT ;
 
 INT     : [0-9]+ ;
-AND     : 'and';
-OR      : 'or';
+AND     : 'and' | 'AND' ;
+OR      : 'or' | 'OR' ;
 OPERATOR: ('>=' | '<=' | '>' | '<' | '==' | '!=');
 ID      : [a-zA-Z_] [0-9a-zA-Z_]+ ;
 ALPHANUM: [0-9a-zA-Z_/]+ ;
