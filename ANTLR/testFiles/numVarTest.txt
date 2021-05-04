@@ -8,7 +8,6 @@ end input;
 actions:
 
 gradesTable subset quiz = [col quiz1];
-function minusTen = value - 10;
 
 num val1 = 4;
 num m_score = max quiz;
@@ -20,7 +19,6 @@ end actions;
 
 output:
 
-
-write inFile out.csv;
+write gradesTable out.csv;
 
 end output;

@@ -14,7 +14,6 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
     private final HashMap<String, CSVScriptParser.ExprContext> functionContexts = new HashMap();
     private final HashMap<String, CSVScriptParser.RContext> schemeContexts = new HashMap();
 
-
     //private final HashMap<String, Scheme> schemeVars = new HashMap<>();
 
     private String currentInFile;
@@ -651,6 +650,7 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
 
     @Override
     public T visitOutputRule(CSVScriptParser.OutputRuleContext ctx) {
+        if (ctx.getChildCount() == 0) return null;
         String rule = ctx.ID(0).toString();
         String subsetName = ctx.ID(1).toString();
         if (!functionContexts.containsKey(rule)) throw new ParseCancellationException();
@@ -669,6 +669,47 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
             }
 
         }
+
+        return null;
+    }
+
+    @Override
+    public T visitOutputWrite(CSVScriptParser.OutputWriteContext ctx) {
+        String out_file = (String) visit(ctx.filename());
+        String in_file = ctx.ID().toString();
+        FileWriter csvOut;
+        try {
+            csvOut = new FileWriter(out_file);
+        } catch(IOException e) {
+            System.out.print("output attempt failed");
+            e.printStackTrace();
+            return null;
+        }
+
+        String[][] arr = inFiles.get(in_file);
+        for (int i = 0; i < arr.length; i++) {
+            String[] rowData = new String[arr[i].length];
+            System.out.println("New row: " + arr.length + " items long");
+            for (int j = 0; j < arr[i].length; j++) {
+                System.out.println("testing: i = " + i + ", j = " + j + ", val = " + arr[i][j]);
+                rowData[j] = arr[i][j];
+            }
+            try {
+                csvOut.append(String.join(",", rowData));
+                csvOut.append("\n");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        try {
+            csvOut.flush();
+            csvOut.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // TODO - implement min/max/avg vals
 
         return null;
     }
