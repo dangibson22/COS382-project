@@ -1,0 +1,22 @@
+input:
+
+read evenMoreTests/SectionGradeBook.csv as gradesTable;
+
+end input;
+
+
+actions:
+
+gradesTable subset q1 = [col quiz1];
+function q1ToPercent = value / gradesTable.quiz1.Total;
+
+end actions;
+
+
+output:
+
+use q1ToPercent on q1;
+
+write gradesTable evenMoreTests/SectionGradePercents.csv;
+
+end output;

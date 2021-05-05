@@ -20,6 +20,7 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
     private String loopControlVar;
     private int[] loopLoc;
     private Cell currentCell;
+    private Cell valCell;
     private Float funcExprVal;
     private boolean noRowHeader;
     private boolean noColHeader;
@@ -93,7 +94,7 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
      */
 
     private int[] getRowColSize(File spreadsheet) throws FileNotFoundException {
-        int[] rowColSize = {1, 1}; //[rowSize, colSize]
+        int[] rowColSize = {1, 1}; //[rowCount, colCount]
         Scanner reader = new Scanner(spreadsheet);
         String line = reader.nextLine();
         //Get the maximum number of columns
@@ -153,8 +154,8 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
         try {
             File inFile = new File(filename);
             Scanner myReader = new Scanner(inFile);
-            int[] rowColSize = getRowColSize(inFile);
-            String[][] spreadsheet = new String[rowColSize[0]][rowColSize[1]];
+            int[] rowColCount = getRowColSize(inFile);
+            String[][] spreadsheet = new String[rowColCount[0]][rowColCount[1]];
             //Initialize the array
             if (inputflags == null || !inputflags[1]) { //Col headers exist
                 String line = myReader.nextLine();
@@ -175,9 +176,10 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
             while (myReader.hasNextLine()) {
                 String line = myReader.nextLine();
                 String[] data = line.split(",");
-                if (data.length == 0) { //Fills empty row with empty strings
-                    data = new String[rowColSize[1]];
-                    for (int i=0; i<rowColSize[1]; i++) {
+                if (data.length < rowColCount[0]) { //Fills empty row with empty strings
+                    int oldLen = data.length;
+                    data = Arrays.copyOf(data, rowColCount[1]);
+                    for (int i=oldLen; i<rowColCount[1]; i++) {
                         data[i] = "";
                     }
                 }
@@ -577,13 +579,12 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
     public T visitFunctionAssignment(CSVScriptParser.FunctionAssignmentContext ctx) {
         String functionId = ctx.ID().getText();
         functionContexts.put(functionId, ctx.expr());
-        visit(ctx.expr());
         return null;
     }
 
     @Override
     public T visitExpr(CSVScriptParser.ExprContext ctx) {
-        Float term = (Float) visit(ctx.term());
+        Float retVal = (Float) visit(ctx.term());
         CSVScriptParser.FunctionAssignmentContext c = null;
         /*
         if (ctx.getParent() instanceof CSVScriptParser.FunctionAssignmentContext) {
@@ -591,15 +592,14 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
         }
         */
         if (ctx.expr() == null) {
-            return (T) term;
+            return (T) retVal;
         }
-        Float retVal;
         String addOp = ctx.getChild(1).getText();
         if (addOp.equals("+")) {
-            retVal = term + (Float) visit(ctx.expr());
+            retVal = (Float) visit(ctx.expr()) + retVal;
         }
         else if (addOp.equals("-")) {
-            retVal = term - (Float) visit(ctx.expr());
+            retVal = (Float) visit(ctx.expr()) - retVal;
         }
         else {
             throw new ParseCancellationException();
@@ -615,10 +615,10 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
         }
         String multOp = ctx.getChild(1).getText();
         if (multOp.equals("*")) {
-            retVal = retVal * (Float) visit(ctx.term());
+            retVal = (Float) visit(ctx.term()) * retVal;
         }
         else if (multOp.equals("/")) {
-            retVal = retVal / (Float) visit(ctx.term());
+            retVal = (Float) visit(ctx.term()) / retVal;
         }
         return (T) retVal;
     }
@@ -632,7 +632,7 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
             return visit(ctx.value());
         }
         else if (ctx.VAL() != null) {
-            String cellValStr = inFiles.get(currentCell.fileVar)[currentCell.rowCol[0]][currentCell.rowCol[1]];
+            String cellValStr = inFiles.get(valCell.fileVar)[valCell.rowCol[0]][valCell.rowCol[1]];
             return (T) (Float) Float.parseFloat(cellValStr);
         }
         else {
@@ -690,7 +690,7 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
         String[][] file = inFiles.get(set.fileVar);
         for (int[] loc : set.getCellLocations()) {
             try {
-                currentCell = new Cell(set.fileVar, loc[0], loc[1]); //Sets current cell to be used in rule with 'value' keyword
+                valCell = new Cell(set.fileVar, loc[0], loc[1]); //Sets current cell to be used in rule with 'value' keyword
                 CSVScriptParser.ExprContext exprCtx = functionContexts.get(rule);
                 Float newVal = (Float) visit(exprCtx);
                 file[loc[0]][loc[1]] = newVal.toString();
