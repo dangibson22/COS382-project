@@ -1,4 +1,4 @@
-// Generated from /home/CS/users/dgibson/.linux/Documents/COS382/project/COS382-project/ANTLR/CSVScript.g4 by ANTLR 4.9.1
+// Generated from /home/trevor/cos382/PXX-DSL/ANTLR/CSVScript.g4 by ANTLR 4.9.1
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -130,29 +130,23 @@ public interface CSVScriptVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExpr(CSVScriptParser.ExprContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link CSVScriptParser#terms}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitTerms(CSVScriptParser.TermsContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link CSVScriptParser#term}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitTerm(CSVScriptParser.TermContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link CSVScriptParser#factors}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitFactors(CSVScriptParser.FactorsContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link CSVScriptParser#factor}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
 	T visitFactor(CSVScriptParser.FactorContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link CSVScriptParser#variable}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitVariable(CSVScriptParser.VariableContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link CSVScriptParser#functionAssignment}.
 	 * @param ctx the parse tree

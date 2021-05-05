@@ -1,4 +1,4 @@
-// Generated from /home/CS/users/dgibson/.linux/Documents/COS382/project/COS382-project/ANTLR/CSVScript.g4 by ANTLR 4.9.1
+// Generated from /home/trevor/cos382/PXX-DSL/ANTLR/CSVScript.g4 by ANTLR 4.9.1
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -207,16 +207,6 @@ public interface CSVScriptListener extends ParseTreeListener {
 	 */
 	void exitExpr(CSVScriptParser.ExprContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link CSVScriptParser#terms}.
-	 * @param ctx the parse tree
-	 */
-	void enterTerms(CSVScriptParser.TermsContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CSVScriptParser#terms}.
-	 * @param ctx the parse tree
-	 */
-	void exitTerms(CSVScriptParser.TermsContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link CSVScriptParser#term}.
 	 * @param ctx the parse tree
 	 */
@@ -227,16 +217,6 @@ public interface CSVScriptListener extends ParseTreeListener {
 	 */
 	void exitTerm(CSVScriptParser.TermContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link CSVScriptParser#factors}.
-	 * @param ctx the parse tree
-	 */
-	void enterFactors(CSVScriptParser.FactorsContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CSVScriptParser#factors}.
-	 * @param ctx the parse tree
-	 */
-	void exitFactors(CSVScriptParser.FactorsContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link CSVScriptParser#factor}.
 	 * @param ctx the parse tree
 	 */
@@ -246,6 +226,16 @@ public interface CSVScriptListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitFactor(CSVScriptParser.FactorContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CSVScriptParser#variable}.
+	 * @param ctx the parse tree
+	 */
+	void enterVariable(CSVScriptParser.VariableContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CSVScriptParser#variable}.
+	 * @param ctx the parse tree
+	 */
+	void exitVariable(CSVScriptParser.VariableContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link CSVScriptParser#functionAssignment}.
 	 * @param ctx the parse tree

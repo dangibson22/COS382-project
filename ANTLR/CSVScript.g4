@@ -55,7 +55,7 @@ opFunc          : 'max' ID
                 | /* epsilon */
                 ;
 
-cellReference   : ID '.' ID // colName.rowName
+cellReference   : ID '.' ID '.' ID // colName.rowName
                 | ID // Cell variable name
                 ;
 
@@ -69,31 +69,25 @@ rules			: ',' r //ID corresponds to a subset or cell
 
 /*Math portion*/
 expr			: term
-                | terms '+' term
-                | terms '-' term
+                | expr '+' term
+                | expr '-' term
                 ;
-
-terms			: term
-				| terms '+' term
-				| terms '-' term
-				;
 
 term			: factor
-                | factors '*' factor
-                | factors '/' factor
-                ;
-
-factors			: factor
-                | factors '*' factor
-                | factors '/' factor
-                /*Maybe a mod function*/
+                | term '*' factor
+                | term '/' factor
                 ;
 
 factor			: '(' expr ')'
+                | VAL
 				| value
-				| cellReference
+				| variable
 				;
 /*End Math portion*/
+
+variable        : ID
+                | cellReference
+                ;
 
 functionAssignment: 'function' ID '=' expr ; //A rule is a mathematical operation to apply to the value of a cell or subset
 
@@ -113,7 +107,6 @@ conditional		: value OPERATOR value
 				;
 
 value			: INT
-				/*| ID*/
 				| realNumber
 				;
 /*End actions phase*/
@@ -138,6 +131,7 @@ realNumber		: INT '.' INT ;
 INT     : [0-9]+ ;
 AND     : 'and' | 'AND' ;
 OR      : 'or' | 'OR' ;
+VAL     : 'value';
 OPERATOR: ('>=' | '<=' | '>' | '<' | '==' | '!=');
 ID      : [a-zA-Z_] [0-9a-zA-Z_]+ ;
 ALPHANUM: [0-9a-zA-Z_/]+ ;

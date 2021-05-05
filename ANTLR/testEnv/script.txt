@@ -8,20 +8,25 @@ end input;
 actions:
 
 cell eveq1 = gradesTable.quiz1.Eve;
-gradesTable subset q2 = [eveq1 to gradesTable.test1.Bob];
-function add2 = gradesTable.quiz1.Eve;
+gradesTable subset set1 = [eveq1 to gradesTable.test1.Bob];
+gradesTable subset q2 = [col quiz2];
+function add2 = value + 2;
 
-num val1 = 4
-num val2 = 5.12
-num val3 = 6.18
-num val4 = 2000
+num val1 = 4;
+num val2 = 5.12;
+num val3 = 6.18;
+num ec = 1000;
+
+function addEC = value + ec;
 
 end actions;
 
 
 output:
 
-use add2ExtraCredit on q2;
-write inFile out.csv;
+use add2 on set1;
+use addEC on q2;
+
+write gradesTable out.csv;
 
 end output;

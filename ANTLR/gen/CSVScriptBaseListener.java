@@ -1,4 +1,4 @@
-// Generated from /home/CS/users/dgibson/.linux/Documents/COS382/project/COS382-project/ANTLR/CSVScript.g4 by ANTLR 4.9.1
+// Generated from /home/trevor/cos382/PXX-DSL/ANTLR/CSVScript.g4 by ANTLR 4.9.1
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -255,18 +255,6 @@ public class CSVScriptBaseListener implements CSVScriptListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterTerms(CSVScriptParser.TermsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitTerms(CSVScriptParser.TermsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterTerm(CSVScriptParser.TermContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -279,18 +267,6 @@ public class CSVScriptBaseListener implements CSVScriptListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterFactors(CSVScriptParser.FactorsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitFactors(CSVScriptParser.FactorsContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterFactor(CSVScriptParser.FactorContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -298,6 +274,18 @@ public class CSVScriptBaseListener implements CSVScriptListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitFactor(CSVScriptParser.FactorContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterVariable(CSVScriptParser.VariableContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitVariable(CSVScriptParser.VariableContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

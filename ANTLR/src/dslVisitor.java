@@ -11,8 +11,8 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
     private final HashMap<String, Subset> subsetVars = new HashMap<>();
     private final HashMap<String, Cell> cellVars = new HashMap<>();
     private final HashMap<String, Float> numVars = new HashMap<>();
-    private final HashMap<String, CSVScriptParser.ExprContext> functionContexts = new HashMap();
-    private final HashMap<String, CSVScriptParser.RContext> schemeContexts = new HashMap();
+    private final HashMap<String, CSVScriptParser.ExprContext> functionContexts = new HashMap<>();
+    //private final HashMap<String, CSVScriptParser.RContext> schemeContexts = new HashMap();
 
     //private final HashMap<String, Scheme> schemeVars = new HashMap<>();
 
@@ -21,6 +21,8 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
     private int[] loopLoc;
     private Cell currentCell;
     private Float funcExprVal;
+    private boolean noRowHeader;
+    private boolean noColHeader;
 
     private class Subset {
         private LinkedList<int[]> cellLocations;
@@ -51,7 +53,7 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
             rowCol[1] = col;
         }
 
-        public float getVal() {
+        public float getVal() throws NumberFormatException{
             return Float.parseFloat(inFiles.get(fileVar)[rowCol[0]][rowCol[1]]);
         }
     }
@@ -88,7 +90,6 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
         }
 
     }
-
      */
 
     private int[] getRowColSize(File spreadsheet) throws FileNotFoundException {
@@ -200,7 +201,8 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
             inFiles.put(fileVarName, spreadsheet);
             myReader.close();
         } catch (FileNotFoundException e) {
-            throw new ParseCancellationException(e);
+            System.err.printf("File '%s' not found on line %d\n", filename, ctx.start.getLine());
+            System.exit(1);
             //Figure out how to tell people which line error is on
         }
         return null;
@@ -221,8 +223,14 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
     @Override
     public T visitInputFlag(CSVScriptParser.InputFlagContext ctx) {
         boolean[] inputflags = {false, false};
-        if (! ctx.getTokens(8).isEmpty()) inputflags[0] = true; //Get noRowHeader flag
-        if (! ctx.getTokens(9).isEmpty()) inputflags[1] = true; //Get noColHeader flag
+        if (! ctx.getTokens(8).isEmpty()) {
+            inputflags[0] = true; //Get noRowHeader flag
+            noRowHeader = true;
+        }
+        if (! ctx.getTokens(9).isEmpty()) {
+            inputflags[1] = true; //Get noColHeader flag
+            noColHeader = true;
+        }
         return (T) inputflags;
     }
 
@@ -271,17 +279,29 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
         boolean isRange = ctx.getToken(19, 0) != null;
         if (!isRange) {
             if (ctx.getToken(17, 0) != null) { //row reference
+                if (rowHeaders.get(ctx.ID().getText()) == null) {
+                    System.err.printf("Row '%s' does not exist (line %d)\n", ctx.ID().getText(), ctx.start.getLine());
+                    System.exit(1);
+                }
                 int row = rowHeaders.get(ctx.ID().getText());
                 int maxCols = inFiles.get(currentInFile)[row].length;
                 int maxRow = row;
-                for (int col = 0; col < maxCols; col++) {
+                int colStart = 1;
+                if (noRowHeader) colStart = 0;
+                for (int col = colStart; col < maxCols; col++) {
                     int[] rowCol = {row, col};
                     cellLocs.add(rowCol);
                 }
             } else if (ctx.getToken(18, 0) != null) { //col reference
+                if (colHeaders.get(ctx.ID().getText()) == null) {
+                    System.err.printf("Col '%s' does not exist (line %d)\n", ctx.ID().getText(), ctx.start.getLine());
+                    System.exit(1);
+                }
                 int col = colHeaders.get(ctx.ID().getText());
                 int maxRows = inFiles.get(currentInFile).length;
-                for (int row = 0; row < maxRows; row++) {
+                int rowStart = 1;
+                if (noColHeader) rowStart = 0;
+                for (int row = rowStart; row < maxRows; row++) {
                     int[] rowCol = {row, col};
                     cellLocs.add(rowCol);
                 }
@@ -295,7 +315,10 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
             LinkedList<int[]> list1 = (LinkedList<int[]>) visitReference(ctx.reference(0));
             LinkedList<int[]> list2 = (LinkedList<int[]>) visitReference(ctx.reference(1));
 
-            if (list1.size() != list2.size()) throw new ParseCancellationException("Ranges must be same type");
+            if (list1.size() != list2.size()) {
+                System.err.printf("Ranges must be same type (line %d)", ctx.start.getLine());
+                System.exit(1);
+            }
             //Add exception for range of row to col
 
             for (int i=0; i<list2.size(); i++) {
@@ -369,7 +392,10 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
     @Override
     public T visitCellAssignment(CSVScriptParser.CellAssignmentContext ctx) {
         String cellName = ctx.ID().getText();
-        if (numVars.containsKey(cellName)) throw new ParseCancellationException();
+        if (numVars.containsKey(cellName)) {
+            System.err.printf("Variable '%s' already exists as a num (Line %d)", cellName, ctx.start.getLine());
+            System.exit(1);
+        }
         visit(ctx.cellReference());
         cellVars.put(cellName, currentCell);
         return null;
@@ -379,7 +405,10 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
     public T visitNumAssignment(CSVScriptParser.NumAssignmentContext ctx) {
         String numName = ctx.ID().getText();
 
-        if (cellVars.containsKey(numName)) throw new ParseCancellationException();
+        if (cellVars.containsKey(numName)) {
+            System.err.printf("Variable '%s' already exists as a cell (Line %d)", numName, ctx.start.getLine());
+            System.exit(1);
+        }
 
         if (ctx.opFunc() != null) {
             float val = (float) visitOpFunc(ctx.opFunc());
@@ -393,7 +422,7 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
             numVars.put(numName, val);
         }
         for (String s : numVars.keySet()) {
-            System.out.println("key: " + s + " val: " + numVars.get(s));
+            //System.out.println("key: " + s + " val: " + numVars.get(s));
         }
         return null;
     }
@@ -404,7 +433,10 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
         if (ctx.getToken(24, 0) != null) {
             // avg
             String subsetName = ctx.ID().toString();
-            if (!subsetVars.containsKey(subsetName)) throw new ParseCancellationException();
+            if (!subsetVars.containsKey(subsetName)) {
+                System.err.printf("subset '%s' does not exist (line %d)", subsetName, ctx.start.getLine());
+                System.exit(1);
+            };
 
             Subset s = subsetVars.get(subsetName);
             Float maxVal = (Float) visitValue(ctx.value());
@@ -427,7 +459,10 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
         else if (ctx.getToken(22, 0) != null) {
             // max
             String subsetName = ctx.ID().toString();
-            if (!subsetVars.containsKey(subsetName)) throw new ParseCancellationException();
+            if (!subsetVars.containsKey(subsetName)) {
+                System.err.printf("subset '%s' does not exist (line %d)", subsetName, ctx.start.getLine());
+                System.exit(1);
+            }
 
             Float max = 0.0f;
             Subset s = subsetVars.get(subsetName);
@@ -449,7 +484,10 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
         else if (ctx.getToken(23, 0) != null) {
             // min
             String subsetName = ctx.ID().toString();
-            if (!subsetVars.containsKey(subsetName)) throw new ParseCancellationException();
+            if (!subsetVars.containsKey(subsetName)) {
+                System.err.printf("subset '%s' does not exist (line %d)", subsetName, ctx.start.getLine());
+                System.exit(1);
+            }
 
             Float min = Float.MAX_VALUE;
             Subset s = subsetVars.get(subsetName);
@@ -482,18 +520,7 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
         if (ctx.realNumber() != null) {
             return (T) (Float) Float.parseFloat(ctx.realNumber().getText());
         }
-        /*
-        if (ctx.ID() != null) {
-            if (ctx.ID().getText().equals("value")) {
-                //Lookup key for current cell which will be set elsewhere
-                //get value in current cell
-            }
-            else {
-                //Lookup id in symbol table
-            }
-            return null;
-        }
-        */
+
         return null;
     }
 
@@ -558,39 +585,21 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
     public T visitExpr(CSVScriptParser.ExprContext ctx) {
         Float term = (Float) visit(ctx.term());
         CSVScriptParser.FunctionAssignmentContext c = null;
+        /*
         if (ctx.getParent() instanceof CSVScriptParser.FunctionAssignmentContext) {
             term = funcExprVal;
         }
-        if (ctx.terms() == null) {
+        */
+        if (ctx.expr() == null) {
             return (T) term;
         }
         Float retVal;
         String addOp = ctx.getChild(1).getText();
         if (addOp.equals("+")) {
-            retVal = term + (Float) visit(ctx.terms());
+            retVal = term + (Float) visit(ctx.expr());
         }
         else if (addOp.equals("-")) {
-            retVal = term - (Float) visit(ctx.terms());
-        }
-        else {
-            throw new ParseCancellationException();
-        }
-        return (T) retVal;
-    }
-
-    @Override
-    public T visitTerms(CSVScriptParser.TermsContext ctx) {
-        Float term = (Float) visit(ctx.term());
-        if (ctx.terms() == null) {
-            return (T) term;
-        }
-        Float retVal;
-        String addOp = ctx.getChild(1).getText();
-        if (addOp.equals("+")) {
-            retVal = term + ( (Float) visit(ctx.terms()) );
-        }
-        else if (addOp.equals("-")) {
-            retVal = term - (Float) visit(ctx.terms());
+            retVal = term - (Float) visit(ctx.expr());
         }
         else {
             throw new ParseCancellationException();
@@ -601,31 +610,15 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
     @Override
     public T visitTerm(CSVScriptParser.TermContext ctx) {
         Float retVal = (Float) visit(ctx.factor());
-        if (ctx.factors() == null) {
+        if (ctx.term() == null) {
             return (T) retVal;
         }
         String multOp = ctx.getChild(1).getText();
         if (multOp.equals("*")) {
-            retVal = retVal * (Float) visit(ctx.factors());
+            retVal = retVal * (Float) visit(ctx.term());
         }
         else if (multOp.equals("/")) {
-            retVal = retVal / (Float) visit(ctx.factors());
-        }
-        return (T) retVal;
-    }
-
-    @Override
-    public T visitFactors(CSVScriptParser.FactorsContext ctx) {
-        Float retVal = (Float) visit(ctx.factor());
-        if (ctx.factors() == null) {
-            return (T) retVal;
-        }
-        String multOp = ctx.getChild(1).getText();
-        if (multOp.equals("*")) {
-            retVal = retVal * (Float) visit(ctx.factors());
-        }
-        else if (multOp.equals("/")) {
-            retVal = retVal / (Float) visit(ctx.factors());
+            retVal = retVal / (Float) visit(ctx.term());
         }
         return (T) retVal;
     }
@@ -638,14 +631,45 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
         else if (ctx.value() != null) {
             return visit(ctx.value());
         }
+        else if (ctx.VAL() != null) {
+            String cellValStr = inFiles.get(currentCell.fileVar)[currentCell.rowCol[0]][currentCell.rowCol[1]];
+            return (T) (Float) Float.parseFloat(cellValStr);
+        }
         else {
+            return visit(ctx.variable());
+            /*
             visit(ctx.cellReference());
             int row = currentCell.rowCol[0];
             int col = currentCell.rowCol[1];
             Float retVal = Float.parseFloat(inFiles.get(currentCell.fileVar)[row][col]);
             //System.out.println(retVal);
             return (T) retVal;
+            */
         }
+    }
+
+    @Override
+    public T visitVariable(CSVScriptParser.VariableContext ctx) {
+        if (ctx.ID() != null) {
+            String varName = ctx.ID().getText();
+            if (subsetVars.get(varName) != null) {
+                System.err.printf("variable '%s' is invalid type: subset (line %d)", varName, ctx.start.getLine());
+                System.exit(1);
+            }
+            else if (numVars.get(varName) != null) {
+                return (T) numVars.get(varName);
+            }
+            else {
+                System.err.printf("Variable '%s' does not exist (line %d)", varName, ctx.start.getLine());
+                System.exit(0);
+            }
+        }
+        else {
+            visit(ctx.cellReference());
+            Float retVal = currentCell.getVal();
+            return (T) retVal;
+        }
+        throw new ParseCancellationException();
     }
 
     @Override
@@ -653,23 +677,29 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
         if (ctx.getChildCount() == 0) return null;
         String rule = ctx.ID(0).toString();
         String subsetName = ctx.ID(1).toString();
-        if (!functionContexts.containsKey(rule)) throw new ParseCancellationException();
-        if (!subsetVars.containsKey(subsetName)) throw new ParseCancellationException();
+        if (!functionContexts.containsKey(rule)) {
+            System.err.printf("function '%s' does not exist (line %d)", rule, ctx.start.getLine());
+            System.exit(1);
+        }
+        if (!subsetVars.containsKey(subsetName)) {
+            System.err.printf("subset '%s' does not exist (line %d)", subsetName, ctx.start.getLine());
+            System.exit(1);
+        }
         CSVScriptParser.ExprContext rule_ctx = functionContexts.get(rule);
         Subset set = subsetVars.get(subsetName);
+        String[][] file = inFiles.get(set.fileVar);
         for (int[] loc : set.getCellLocations()) {
             try {
-                String[][] file = inFiles.get(currentInFile);
-                String valStr = file[loc[0]][loc[1]];
-                funcExprVal = Float.parseFloat(valStr);
-                Float newVal = (Float) visitExpr(rule_ctx);
+                currentCell = new Cell(set.fileVar, loc[0], loc[1]); //Sets current cell to be used in rule with 'value' keyword
+                CSVScriptParser.ExprContext exprCtx = functionContexts.get(rule);
+                Float newVal = (Float) visit(exprCtx);
                 file[loc[0]][loc[1]] = newVal.toString();
             } catch (NumberFormatException e) {
                 // pass
             }
 
         }
-
+        visit(ctx.outputRule());
         return null;
     }
 
@@ -681,17 +711,21 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
         try {
             csvOut = new FileWriter(out_file);
         } catch(IOException e) {
-            System.out.print("output attempt failed");
+            System.err.print("output attempt failed");
             e.printStackTrace();
             return null;
         }
 
         String[][] arr = inFiles.get(in_file);
+        if (arr == null) {
+            System.err.printf("file variable '%s' does not exist on line %d\n", in_file, ctx.start.getLine());
+            System.exit(1);
+        }
         for (int i = 0; i < arr.length; i++) {
             String[] rowData = new String[arr[i].length];
-            System.out.println("New row: " + arr.length + " items long");
+            //System.out.println("New row: " + arr.length + " items long");
             for (int j = 0; j < arr[i].length; j++) {
-                System.out.println("testing: i = " + i + ", j = " + j + ", val = " + arr[i][j]);
+                //System.out.println("testing: i = " + i + ", j = " + j + ", val = " + arr[i][j]);
                 rowData[j] = arr[i][j];
             }
             try {
