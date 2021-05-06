@@ -114,7 +114,7 @@ value			: INT
 /*End actions phase*/
 
 output          : 'output:' outputStatement 'end output' ';' ;
-outputStatement : outputRule outputWrite ;
+outputStatement : outputRule outputAdd outputWrite ;
 
 outputRule      : 'use' ID 'on' ID ';' outputRule //first ID corresponds to rule. Second ID corresponds to set.
                 | /* epsilon */

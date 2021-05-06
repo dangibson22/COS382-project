@@ -22,7 +22,10 @@ end actions;
 output:
 
 use add2ExtraCredit on quiz1set;
-add
+add m_score to gradesTable;
+add a_score to gradesTable;
+add min_score to gradesTable;
+add val1 to gradesTable;
 write gradesTable out.csv;
 
 end output;

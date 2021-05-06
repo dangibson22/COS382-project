@@ -1,4 +1,4 @@
-// Generated from /home/trevor/cos382/PXX-DSL/ANTLR/CSVScript.g4 by ANTLR 4.9.1
+// Generated from /home/CS/users/dgibson/.linux/Documents/COS382/project/COS382-project/ANTLR/CSVScript.g4 by ANTLR 4.9.1
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -336,6 +336,16 @@ public interface CSVScriptListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitOutputRule(CSVScriptParser.OutputRuleContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CSVScriptParser#outputAdd}.
+	 * @param ctx the parse tree
+	 */
+	void enterOutputAdd(CSVScriptParser.OutputAddContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CSVScriptParser#outputAdd}.
+	 * @param ctx the parse tree
+	 */
+	void exitOutputAdd(CSVScriptParser.OutputAddContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link CSVScriptParser#outputWrite}.
 	 * @param ctx the parse tree
