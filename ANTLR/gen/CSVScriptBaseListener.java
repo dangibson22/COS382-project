@@ -411,18 +411,6 @@ public class CSVScriptBaseListener implements CSVScriptListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterOutputTarget(CSVScriptParser.OutputTargetContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitOutputTarget(CSVScriptParser.OutputTargetContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterOutputWrite(CSVScriptParser.OutputWriteContext ctx) { }
 	/**
 	 * {@inheritDoc}

@@ -55,7 +55,9 @@ opFunc          : 'max' ID
                 | /* epsilon */
                 ;
 
-cellReference   : ID '.' ID '.' ID // colName.rowName
+cellReference   : THIS '.' 'col' '.' ID
+                | THIS '.' ID '.' 'row'
+                | ID '.' ID '.' ID // colName.rowName
                 | ID // Cell variable name
                 ;
 
@@ -118,9 +120,6 @@ outputRule      : 'use' ID 'on' ID ';' outputRule //first ID corresponds to rule
                 | /* epsilon */
                 ;
 
-outputTarget    : ID
-                ;
-
 outputWrite     : 'write' ID filename ';' ; //ID corresponds to a subsection
 
 filename		: ID '.csv'
@@ -132,6 +131,7 @@ INT     : [0-9]+ ;
 AND     : 'and' | 'AND' ;
 OR      : 'or' | 'OR' ;
 VAL     : 'value';
+THIS    : 'this';
 OPERATOR: ('>=' | '<=' | '>' | '<' | '==' | '!=');
 ID      : [a-zA-Z_] [0-9a-zA-Z_]+ ;
 ALPHANUM: [0-9a-zA-Z_/]+ ;

@@ -208,12 +208,6 @@ public interface CSVScriptVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitOutputRule(CSVScriptParser.OutputRuleContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link CSVScriptParser#outputTarget}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitOutputTarget(CSVScriptParser.OutputTargetContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link CSVScriptParser#outputWrite}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

@@ -247,13 +247,6 @@ public class CSVScriptBaseVisitor<T> extends AbstractParseTreeVisitor<T> impleme
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitOutputTarget(CSVScriptParser.OutputTargetContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
 	@Override public T visitOutputWrite(CSVScriptParser.OutputWriteContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}

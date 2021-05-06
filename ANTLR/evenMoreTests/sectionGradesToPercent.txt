@@ -7,8 +7,8 @@ end input;
 
 actions:
 
-gradesTable subset q1 = [col quiz1];
-function q1ToPercent = value / gradesTable.quiz1.Total;
+gradesTable subset q1 = [col quiz1 to col test2];
+function q1ToPercent = value / this.col.Total;
 
 end actions;
 

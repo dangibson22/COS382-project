@@ -337,16 +337,6 @@ public interface CSVScriptListener extends ParseTreeListener {
 	 */
 	void exitOutputRule(CSVScriptParser.OutputRuleContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link CSVScriptParser#outputTarget}.
-	 * @param ctx the parse tree
-	 */
-	void enterOutputTarget(CSVScriptParser.OutputTargetContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CSVScriptParser#outputTarget}.
-	 * @param ctx the parse tree
-	 */
-	void exitOutputTarget(CSVScriptParser.OutputTargetContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link CSVScriptParser#outputWrite}.
 	 * @param ctx the parse tree
 	 */

@@ -47,15 +47,24 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
     private class Cell {
         public String fileVar;
         public int[] rowCol = new int[2];
+        public String rowHead;
+        public String colHead;
 
         Cell(String file, int row, int col) {
             fileVar = file;
             rowCol[0] = row;
             rowCol[1] = col;
+            if (!noRowHeader) rowHead = inFiles.get(file)[row][0];
+            if (!noColHeader) colHead = inFiles.get(file)[0][col];
         }
 
         public float getVal() throws NumberFormatException{
             return Float.parseFloat(inFiles.get(fileVar)[rowCol[0]][rowCol[1]]);
+        }
+
+        public void setHeaders(String rowHead, String colHead) {
+            this.rowHead = rowHead;
+            this.colHead = colHead;
         }
     }
 
@@ -375,8 +384,25 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
 
     @Override
     public T visitCellReference(CSVScriptParser.CellReferenceContext ctx) { //Sets the current cell and returns location
-        if(ctx.ID(1) == null) {
+        if (ctx.THIS() != null) {
+            if (ctx.getToken(17, 0) != null) { //Row token found, use valCell's row.
+                int row = rowHeaders.get(valCell.rowHead);
+                int col = colHeaders.get(ctx.ID(0).getText());
+                currentCell = new Cell(valCell.fileVar, row, col);
+                int[] rowCol = {row, col};
+                return (T) rowCol;
+            }
+            else { //use valCell's col
+                int row = rowHeaders.get(ctx.ID(0).getText());
+                int col = colHeaders.get(valCell.colHead);
+                currentCell = new Cell(valCell.fileVar, row, col);
+                int[] rowCol = {row, col};
+                return (T) rowCol;
+            }
+        }
+        else if(ctx.ID(1) == null) {
             Cell loc = cellVars.get(ctx.ID(0).getText());
+            if (loc == null) System.err.printf("cell '%s' does not exist (line %d)", ctx.ID(0).getText(), ctx.start.getLine());
             currentCell = loc;
             int[] rowCol = loc.rowCol;
             return (T) rowCol;
@@ -586,11 +612,6 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
     public T visitExpr(CSVScriptParser.ExprContext ctx) {
         Float retVal = (Float) visit(ctx.term());
         CSVScriptParser.FunctionAssignmentContext c = null;
-        /*
-        if (ctx.getParent() instanceof CSVScriptParser.FunctionAssignmentContext) {
-            term = funcExprVal;
-        }
-        */
         if (ctx.expr() == null) {
             return (T) retVal;
         }
@@ -637,14 +658,6 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
         }
         else {
             return visit(ctx.variable());
-            /*
-            visit(ctx.cellReference());
-            int row = currentCell.rowCol[0];
-            int col = currentCell.rowCol[1];
-            Float retVal = Float.parseFloat(inFiles.get(currentCell.fileVar)[row][col]);
-            //System.out.println(retVal);
-            return (T) retVal;
-            */
         }
     }
 
