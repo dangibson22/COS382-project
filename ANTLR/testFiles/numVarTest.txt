@@ -7,18 +7,22 @@ end input;
 
 actions:
 
-gradesTable subset quiz = [col quiz1];
+gradesTable subset quiz1set = [col quiz1];
+
+function add2ExtraCredit = value + 2;
 
 num val1 = 4;
-num m_score = max quiz;
-num min_score = min quiz;
-num a_score = avg quiz max 100;
+num m_score = max quiz1set;
+num min_score = min quiz1set;
+num a_score = avg quiz1set max 100;
 
 end actions;
 
 
 output:
 
+use add2ExtraCredit on quiz1set;
+add
 write gradesTable out.csv;
 
 end output;

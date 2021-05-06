@@ -120,7 +120,11 @@ outputRule      : 'use' ID 'on' ID ';' outputRule //first ID corresponds to rule
                 | /* epsilon */
                 ;
 
-outputWrite     : 'write' ID filename ';' ; //ID corresponds to a subsection
+outputAdd       : 'add' ID 'to' ID ';' outputAdd // first ID corresponds to num var, second ID corresponds to inFile
+                | /* epsilon */
+                ;
+
+outputWrite     : 'write' ID filename ';' ; //ID corresponds to a inFile
 
 filename		: ID '.csv'
 				| ALPHANUM '.csv';
