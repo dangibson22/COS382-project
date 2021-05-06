@@ -47,6 +47,7 @@ cellAssignment	: 'cell' ID '=' cellReference;
 numAssignment   : 'num' ID '=' INT
                 | 'num' ID '=' realNumber
                 | 'num' ID '=' opFunc
+                | 'num' ID '=' expr
                 ;
 
 opFunc          : 'max' ID

@@ -15,6 +15,7 @@ num val1 = 4;
 num m_score = max quiz1set;
 num min_score = min quiz1set;
 num a_score = avg quiz1set max 100;
+num expr_val = 5 + (9 * 3);
 
 end actions;
 

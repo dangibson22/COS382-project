@@ -442,7 +442,11 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
             System.exit(1);
         }
 
-        if (ctx.opFunc() != null) {
+        if (ctx.expr() != null) {
+            float val = (float) visitExpr(ctx.expr());
+            numVars.put(numName, val);
+        }
+        else if (ctx.opFunc() != null) {
             float val = (float) visitOpFunc(ctx.opFunc());
             numVars.put(numName, val);
         }
