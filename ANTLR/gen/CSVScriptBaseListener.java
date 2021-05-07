@@ -1,4 +1,4 @@
-// Generated from /home/CS/users/dgibson/.linux/Documents/COS382/project/COS382-project/ANTLR/CSVScript.g4 by ANTLR 4.9.1
+// Generated from X:/.linux/Documents/COS382/project/COS382-project/ANTLR\CSVScript.g4 by ANTLR 4.7.2
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -178,6 +178,18 @@ public class CSVScriptBaseListener implements CSVScriptListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitNumAssignment(CSVScriptParser.NumAssignmentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterNumVal(CSVScriptParser.NumValContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitNumVal(CSVScriptParser.NumValContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -418,6 +430,30 @@ public class CSVScriptBaseListener implements CSVScriptListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitOutputAdd(CSVScriptParser.OutputAddContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterOutputWriteSt(CSVScriptParser.OutputWriteStContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitOutputWriteSt(CSVScriptParser.OutputWriteStContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterOutputWriteCont(CSVScriptParser.OutputWriteContContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitOutputWriteCont(CSVScriptParser.OutputWriteContContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

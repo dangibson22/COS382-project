@@ -1,4 +1,4 @@
-// Generated from /home/CS/users/dgibson/.linux/Documents/COS382/project/COS382-project/ANTLR/CSVScript.g4 by ANTLR 4.9.1
+// Generated from X:/.linux/Documents/COS382/project/COS382-project/ANTLR\CSVScript.g4 by ANTLR 4.7.2
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -93,6 +93,12 @@ public interface CSVScriptVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitNumAssignment(CSVScriptParser.NumAssignmentContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link CSVScriptParser#numVal}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitNumVal(CSVScriptParser.NumValContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link CSVScriptParser#opFunc}.
 	 * @param ctx the parse tree
@@ -213,6 +219,18 @@ public interface CSVScriptVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitOutputAdd(CSVScriptParser.OutputAddContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link CSVScriptParser#outputWriteSt}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOutputWriteSt(CSVScriptParser.OutputWriteStContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link CSVScriptParser#outputWriteCont}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitOutputWriteCont(CSVScriptParser.OutputWriteContContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link CSVScriptParser#outputWrite}.
 	 * @param ctx the parse tree

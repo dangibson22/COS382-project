@@ -44,10 +44,12 @@ reference		: 'row' ID //subset reference
 
 cellAssignment	: 'cell' ID '=' cellReference;
 
-numAssignment   : 'num' ID '=' INT
-                | 'num' ID '=' realNumber
-                | 'num' ID '=' opFunc
-                | 'num' ID '=' expr
+numAssignment   : 'num' ID '=' numVal ;
+
+numVal          : INT
+                | realNumber
+                | opFunc
+                | expr
                 ;
 
 opFunc          : 'max' ID
@@ -114,20 +116,28 @@ value			: INT
 				;
 /*End actions phase*/
 
-output          : 'output:' outputStatement 'end output' ';' ;
-outputStatement : outputRule outputAdd outputWrite ;
-
-outputRule      : 'use' ID 'on' ID ';' outputRule //first ID corresponds to rule. Second ID corresponds to set.
-                | /* epsilon */
+output          : 'output:' outputStatement outputWriteSt 'end output' ';' ;
+//outputStatement : outputRule outputAdd outputWrite ;
+outputStatement : outputRule outputStatement
+                | outputAdd outputStatement
+                |
                 ;
 
-outputAdd       : 'add' ID 'to' ID ';' outputAdd // first ID corresponds to num var, second ID corresponds to inFile
+outputRule      : 'use' ID 'on' ID ';' ;//first ID corresponds to rule. Second ID corresponds to set.
+
+outputAdd       : 'add' ID 'to' ID ';' ; // first ID corresponds to num var, second ID corresponds to inFile
+
+outputWriteSt   : outputWrite outputWriteCont;
+outputWriteCont : outputWrite outputWriteCont
                 | /* epsilon */
                 ;
 
 outputWrite     : 'write' ID filename ';' ; //ID corresponds to a inFile
 
-filename		: ID '.csv'
+filename	    : './' filename
+                | '../' filename
+                | '/' filename
+                | ID '.csv'
 				| ALPHANUM '.csv';
 
 realNumber		: INT '.' INT ;
@@ -139,6 +149,6 @@ VAL     : 'value';
 THIS    : 'this';
 OPERATOR: ('>=' | '<=' | '>' | '<' | '==' | '!=');
 ID      : [a-zA-Z_] [0-9a-zA-Z_]+ ;
-ALPHANUM: [0-9a-zA-Z_/]+ ;
+ALPHANUM: [0-9a-zA-Z_/\-]+ ;
 NEWLINE : '\r'? '\n' -> skip;
 WS      : [ \t]+ -> skip ;  // tells ANTLR to ignore these

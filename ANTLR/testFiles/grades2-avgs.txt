@@ -1,0 +1,29 @@
+input:
+read testEnv/grades2.csv as gradeFile;
+end input;
+
+actions:
+gradeFile subset hw = [col hw1 to col hw5];
+gradeFile subset quizzes = [col quiz1 to col quiz5];
+gradeFile subset tests = [col test1, col test2];
+gradeFile subset finalSet = [col final];
+
+function get_percent = (value / 100);
+function add_extra_credit = value + 5;
+num hw_avg = avg hw max 100;
+num quiz_avg = avg quizzes max 100;
+num test_avg = avg tests max 100;
+num final_avg = avg finalSet max 100;
+
+end actions;
+
+output:
+add hw_avg to gradeFile;
+add quiz_avg to gradeFile;
+add test_avg to gradeFile;
+add final_avg to gradeFile;
+use add_extra_credit on hw;
+add hw_avg to gradeFile;
+
+write gradeFile ../outputs/hw-ec.csv;
+end output;

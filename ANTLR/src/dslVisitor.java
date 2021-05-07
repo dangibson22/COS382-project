@@ -10,7 +10,9 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
 
     private final HashMap<String, Subset> subsetVars = new HashMap<>();
     private final HashMap<String, Cell> cellVars = new HashMap<>();
-    private final HashMap<String, Float> numVars = new HashMap<>();
+    private final HashMap<String, CSVScriptParser.NumValContext> numVarContexts = new HashMap<>();
+    private final HashMap<String, Float> numVarVals = new HashMap<>();
+    private final HashMap<String, Integer> numVarOutCount = new HashMap<>();
     private final HashMap<String, CSVScriptParser.ExprContext> functionContexts = new HashMap<>();
     private final HashMap<String, LinkedList<String>> outputNumVars = new HashMap<>();
 
@@ -424,7 +426,7 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
     @Override
     public T visitCellAssignment(CSVScriptParser.CellAssignmentContext ctx) {
         String cellName = ctx.ID().getText();
-        if (numVars.containsKey(cellName)) {
+        if (numVarContexts.containsKey(cellName)) {
             System.err.printf("Variable '%s' already exists as a num (Line %d)", cellName, ctx.start.getLine());
             System.exit(1);
         }
@@ -442,25 +444,27 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
             System.exit(1);
         }
 
+        numVarContexts.put(numName, ctx.numVal());
+
+        return null;
+    }
+
+    @Override
+    public T visitNumVal(CSVScriptParser.NumValContext ctx) {
+        Float retVal;
         if (ctx.expr() != null) {
-            float val = (float) visitExpr(ctx.expr());
-            numVars.put(numName, val);
+            retVal = (float) visitExpr(ctx.expr());
         }
         else if (ctx.opFunc() != null) {
-            float val = (float) visitOpFunc(ctx.opFunc());
-            numVars.put(numName, val);
+            retVal = (float) visitOpFunc(ctx.opFunc());
         }
         else if (ctx.INT() != null) {
-            float val = Float.parseFloat(ctx.INT().getText());
-            numVars.put(numName, val);
+            retVal = Float.parseFloat(ctx.INT().getText());
         } else {
-            float val = Float.parseFloat(ctx.realNumber().getText());
-            numVars.put(numName, val);
+            retVal = Float.parseFloat(ctx.realNumber().getText());
         }
-        for (String s : numVars.keySet()) {
-            //System.out.println("key: " + s + " val: " + numVars.get(s));
-        }
-        return null;
+
+        return (T) retVal;
     }
 
     @Override
@@ -677,8 +681,8 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
                 System.err.printf("variable '%s' is invalid type: subset (line %d)", varName, ctx.start.getLine());
                 System.exit(1);
             }
-            else if (numVars.get(varName) != null) {
-                return (T) numVars.get(varName);
+            else if (numVarContexts.get(varName) != null) {
+                return (T) numVarContexts.get(varName);
             }
             else {
                 System.err.printf("Variable '%s' does not exist (line %d)", varName, ctx.start.getLine());
@@ -720,24 +724,35 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
             }
 
         }
-        visit(ctx.outputRule());
+        //visit(ctx.outputRule());
         return null;
     }
 
     @Override
     public T visitOutputAdd(CSVScriptParser.OutputAddContext ctx) {
         if (ctx.getChildCount() == 0) return null;
+
         String numVar = ctx.ID(0).toString();
         String inFile = ctx.ID(1).toString();
         if (!outputNumVars.containsKey(inFile)) {
             System.err.printf("infile '%s' does not exist! (line %d)\n", inFile, ctx.start.getLine());
         }
-        if (!numVars.containsKey(numVar)) {
+        if (!numVarContexts.containsKey(numVar)) {
             System.err.printf("num variable '%s' does not exist! (line %d)\n", numVar, ctx.start.getLine());
             System.exit(1);
         }
-        outputNumVars.get(inFile).add(numVar);
-        visit(ctx.outputAdd());
+        Float val = (float) visit(numVarContexts.get(numVar));
+        if (numVarOutCount.containsKey(numVar)) {
+            Integer i = numVarOutCount.get(numVar);
+            numVarOutCount.put(numVar, i + 1);
+            String newValStr = numVar + "_" + i.toString();
+            numVarVals.put(newValStr, val);
+            outputNumVars.get(inFile).add(newValStr);
+        } else {
+            numVarOutCount.put(numVar, 1);
+            numVarVals.put(numVar, val);
+            outputNumVars.get(inFile).add(numVar);
+        }
 
         return null;
     }
@@ -763,10 +778,8 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
         }
         for (int i = 0; i < arr.length; i++) {
             String[] rowData = new String[arr[i].length];
-            //System.out.println("New row: " + arr.length + " items long");
             if (row_size == 0) row_size = arr[i].length;
             for (int j = 0; j < arr[i].length; j++) {
-                //System.out.println("testing: i = " + i + ", j = " + j + ", val = " + arr[i][j]);
                 rowData[j] = arr[i][j];
             }
             try {
@@ -776,10 +789,6 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
                 e.printStackTrace();
             }
         }
-
-
-
-        // TODO - implement min/max/avg vals
 
         LinkedList<String> outNumVars = outputNumVars.get(in_file);
         if (outNumVars.size() == 0) {
@@ -799,14 +808,14 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        System.out.println("row size: " + row_size);
 
         for (String var : outNumVars) {
             try {
                 csvOut.append(var);
                 csvOut.append(",");
-                String val = numVars.get(var).toString();
-                csvOut.append(val);
+                //Float fVal = (float) visit(numVars.get(var));
+                //csvOut.append(fVal.toString());
+                csvOut.append(numVarVals.get(var).toString());
                 for (int i = 1; i < row_size; i++) csvOut.append(",");
                 csvOut.append("\n");
             } catch (IOException e) {

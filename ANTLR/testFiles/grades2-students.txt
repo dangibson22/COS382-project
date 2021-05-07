@@ -1,0 +1,41 @@
+input:
+read testEnv/grades2.csv as gradeFile;
+end input;
+
+actions:
+gradeFile subset danSet = [row Dan];
+gradeFile subset trevorSet = [row Trevor];
+
+cell danHW1 = gradeFile.hw1.Dan;
+cell danHW3 = gradeFile.hw3.Dan;
+
+gradeFile subset danHW = [danHW1, danHW3];
+
+num dan_min = min danSet;
+num dan_max = max danSet;
+num dan_avg = avg danSet max 100;
+num trevor_min = min trevorSet;
+num trevor_max = max trevorSet;
+num trevor_avg = avg trevorSet max 1;
+
+function add_ec = value + 3;
+function get_percent = value / 100;
+
+end actions;
+
+output:
+add dan_min to gradeFile;
+add dan_max to gradeFile;
+add dan_avg to gradeFile;
+use add_ec on danHW;
+add dan_min to gradeFile;
+add dan_max to gradeFile;
+add dan_avg to gradeFile;
+
+use get_percent on trevorSet;
+add trevor_min to gradeFile;
+add trevor_max to gradeFile;
+add trevor_avg to gradeFile;
+
+write gradeFile ../outputs/dan-trevor-info.csv;
+end output;

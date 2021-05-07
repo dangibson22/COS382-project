@@ -1,4 +1,4 @@
-// Generated from /home/CS/users/dgibson/.linux/Documents/COS382/project/COS382-project/ANTLR/CSVScript.g4 by ANTLR 4.9.1
+// Generated from X:/.linux/Documents/COS382/project/COS382-project/ANTLR\CSVScript.g4 by ANTLR 4.7.2
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -146,6 +146,16 @@ public interface CSVScriptListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitNumAssignment(CSVScriptParser.NumAssignmentContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CSVScriptParser#numVal}.
+	 * @param ctx the parse tree
+	 */
+	void enterNumVal(CSVScriptParser.NumValContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CSVScriptParser#numVal}.
+	 * @param ctx the parse tree
+	 */
+	void exitNumVal(CSVScriptParser.NumValContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link CSVScriptParser#opFunc}.
 	 * @param ctx the parse tree
@@ -346,6 +356,26 @@ public interface CSVScriptListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitOutputAdd(CSVScriptParser.OutputAddContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CSVScriptParser#outputWriteSt}.
+	 * @param ctx the parse tree
+	 */
+	void enterOutputWriteSt(CSVScriptParser.OutputWriteStContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CSVScriptParser#outputWriteSt}.
+	 * @param ctx the parse tree
+	 */
+	void exitOutputWriteSt(CSVScriptParser.OutputWriteStContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link CSVScriptParser#outputWriteCont}.
+	 * @param ctx the parse tree
+	 */
+	void enterOutputWriteCont(CSVScriptParser.OutputWriteContContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link CSVScriptParser#outputWriteCont}.
+	 * @param ctx the parse tree
+	 */
+	void exitOutputWriteCont(CSVScriptParser.OutputWriteContContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link CSVScriptParser#outputWrite}.
 	 * @param ctx the parse tree

@@ -7,7 +7,7 @@ end input;
 
 actions:
 
-subset 1 = [col1, col2];
+inFile subset 1 = [col1, col2];
 
 end actions;
 

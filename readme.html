@@ -134,7 +134,7 @@ Spaces in column headers will be replaced with underscores.
 **Conflicting names**: If 2 columns contain the same name, the second one will have the number 1 appended to the end, and the next 2, and so on.
 If a column and row share the same name, '_row' will be appended to the row version.
 
-To read in a file, utilize the following line:
+Files are read in using the following format:
 
 ~~~
 read filename.csv as fileVariable;
@@ -309,7 +309,42 @@ of the output CSV file, including a header with the text
 values are outputted to allow the user to track which 
 data they are outputting.
 
-**TODO** - add info about ordering here
+Something important to consider is the ordering of the usage 
+of function application and variable addition. Consider the 
+following code:
+
+~~~
+add quiz1_avg to gradeFile;
+use add_extra_credit on quiz1set;
+~~~
+
+Assuming `quiz1_avg` is pulled from the `quiz1set` subset, 
+this will take the average of quiz1 scores before the extra credit 
+is applied. However, the following code:
+
+~~~
+use add_extra_credit on quiz1set;
+add quiz1_avg to gradeFile;
+~~~
+
+will take the average of quiz1 scores after the extra credit 
+is applied. This ordering allows for powerful uses, including 
+the ability to view an average score before and after a 
+function is applied. For example, the following code
+
+~~~
+add quiz_avg to gradeFile;
+use add_extra_credit on quizzes;
+add quiz_avg to gradeFile;
+~~~
+
+will give the average quiz score before and after the extra 
+credit is applied. When one numerical variable is added to 
+an output file multiple times, a number is used to track 
+and differentiate the variables. For example, the above 
+code will result in the following output:
+
+![Quiz scores before and after extra credit](./screenshots/mult-num-vars.JPG)
 
 The **write** section allows the user to finally take all 
 their prepared actions and output them to a CSV file. This 
@@ -321,6 +356,14 @@ write fileVar to filename.csv;
 
 `fileVar` is the file variable the user wishes to output, 
 and `filename.csv` is the file the user wishes to write out to.
+
+Running a Program
+----------
+
+Running a program is quite simple. From the Intellij menu, 
+simply run a configuration for the `startTranslator` class and 
+pass the script text file as the program argument. Then 
+click run!
 
 
 Sample Program
@@ -371,20 +414,320 @@ end output;
 
 Once this script has run, this is the resulting output CSV file:
 
-(screenshot here)
+![Resulting CSV file](./screenshots/gradebookout-csv.JPG)
+
+Other Example Inputs and Outputs
+===============
+
+grades2-functions
+--------------
+
+Input CSV:
+
+![grades2.csv](./screenshots/grades2.JPG)
+
+Script:
+
+~~~
+input:
+read testEnv/grades2.csv as gradeFile;
+end input;
+
+actions:
+gradeFile subset hw = [col hw1 to col hw5];
+gradeFile subset quizzes = [col quiz1 to col quiz5];
+gradeFile subset tests = [col test1, col test2];
+gradeFile subset finalSet = [col final];
+
+function get_percent = (value / 100);
+function add_extra_credit = value + 5;
+num hw_avg = avg hw max 100;
+num quiz_avg = avg quizzes max 100;
+num test_avg = avg tests max 100;
+num final_avg = avg finalSet max 100;
+
+end actions;
+
+output:
+add quiz_avg to gradeFile;
+use add_extra_credit on quizzes;
+add quiz_avg to gradeFile;
+write gradeFile ../outputs/quiz-scores.csv;
+end output;
+~~~
+
+Output:
+
+![quiz-scores.csv](./screenshots/quiz-scores.JPG)
+
+grades2-avgs
+-------------
+
+Input:
+
+![grades2.csv](./screenshots/grades2.JPG)
+
+Script:
+
+~~~
+input:
+read testEnv/grades2.csv as gradeFile;
+end input;
+
+actions:
+gradeFile subset hw = [col hw1 to col hw5];
+gradeFile subset quizzes = [col quiz1 to col quiz5];
+gradeFile subset tests = [col test1, col test2];
+gradeFile subset finalSet = [col final];
+
+function get_percent = (value / 100);
+function add_extra_credit = value + 5;
+num hw_avg = avg hw max 100;
+num quiz_avg = avg quizzes max 100;
+num test_avg = avg tests max 100;
+num final_avg = avg finalSet max 100;
+
+end actions;
+
+output:
+add hw_avg to gradeFile;
+add quiz_avg to gradeFile;
+add test_avg to gradeFile;
+add final_avg to gradeFile;
+use add_extra_credit on hw;
+add hw_avg to gradeFile;
+
+write gradeFile ../outputs/hw-ec.csv;
+end output;
+~~~
+
+Output:
+
+![hw-ec.csv](./screenshots/hw-ec.JPG)
+
+grades2-students
+-------------
+
+Input:
+
+![grades2.csv](./screenshots/grades2.JPG)
+
+Script:
+
+~~~
+input:
+read testEnv/grades2.csv as gradeFile;
+end input;
+
+actions:
+gradeFile subset danSet = [row Dan];
+gradeFile subset trevorSet = [row Trevor];
+
+cell danHW1 = gradeFile.hw1.Dan;
+cell danHW3 = gradeFile.hw3.Dan;
+
+gradeFile subset danHW = [danHW1, danHW3];
+
+num dan_min = min danSet;
+num dan_max = max danSet;
+num dan_avg = avg danSet max 100;
+num trevor_min = min trevorSet;
+num trevor_max = max trevorSet;
+num trevor_avg = avg trevorSet max 1;
+
+function add_ec = value + 3;
+function get_percent = value / 100;
+
+end actions;
+
+output:
+add dan_min to gradeFile;
+add dan_max to gradeFile;
+add dan_avg to gradeFile;
+use add_ec on danHW;
+add dan_min to gradeFile;
+add dan_max to gradeFile;
+add dan_avg to gradeFile;
+
+use get_percent on trevorSet;
+add trevor_min to gradeFile;
+add trevor_max to gradeFile;
+add trevor_avg to gradeFile;
+
+write gradeFile ../outputs/dan-trevor-info.csv;
+end output;
+~~~
+
+Output:
+
+![dan-trevor-info.csv](./screenshots/dan-trevor-info.JPG)
+
 
 Grammar
 ===============
 
-The following grammar is defined for the program:
+The following grammar is defined for the language:
 
 ~~~
-INSERT FINAL GRAMMAR HERE
+grammar CSVScript;
+
+start   : input actions output EOF ;
+
+input   : 'input:' inputStatement 'end input' ';' ;
+inputStatement  : 'read' filename 'as' ID inputFlags ';' inputStatement
+                | /* epsilon */
+                ;
+inputFlags      : '(' inputFlag ')'
+                | /* epsilon */
+                ;
+inputFlag       : 'noRowHeader'
+                | 'noColHeader'
+                | 'noRowHeader' ',' 'noColHeader'
+                | 'noColHeader' ',' 'noRowHeader'
+                ;
+/*End input phase*/
+
+actions			: 'actions:' actionBlock 'end actions' ';' ;
+actionBlock		: action ';' actionBlock
+				| /* epsilon */
+				;
+action			: ifStatement
+				| forStatement
+				| subsetAssignment
+				| cellAssignment
+				| numAssignment
+				| schemeAssignment
+				| functionAssignment
+				;
+
+subsetAssignment: ID 'subset' ID '=' set; // First ID is fileVar, second is subsetVar
+
+set				: '[' references ']';
+references		: reference
+				| reference ',' references
+				;
+
+reference		: 'row' ID //subset reference
+                | 'col' ID
+				| cellReference // colName.rowName
+				| reference 'to' reference
+				;
+
+cellAssignment	: 'cell' ID '=' cellReference;
+
+numAssignment   : 'num' ID '=' numVal ;
+
+numVal          : INT
+                | realNumber
+                | opFunc
+                | expr
+                ;
+
+opFunc          : 'max' ID
+                | 'min' ID
+                | 'avg' ID 'max' value
+                | /* epsilon */
+                ;
+
+cellReference   : THIS '.' 'col' '.' ID
+                | THIS '.' ID '.' 'row'
+                | ID '.' ID '.' ID // colName.rowName
+                | ID // Cell variable name
+                ;
+
+schemeAssignment: 'scheme' ID '=' '{' r '}';
+
+r				: ID ':' expr rules;
+
+rules			: ',' r //ID corresponds to a subset or cell
+				|
+				;
+
+/*Math portion*/
+expr			: term
+                | expr '+' term
+                | expr '-' term
+                ;
+
+term			: factor
+                | term '*' factor
+                | term '/' factor
+                ;
+
+factor			: '(' expr ')'
+                | VAL
+				| value
+				| variable
+				;
+/*End Math portion*/
+
+variable        : ID
+                | cellReference
+                ;
+
+functionAssignment: 'function' ID '=' expr ; //A rule is a mathematical operation to apply to the value of a cell or subset
+
+ifStatement		: 'if' '(' conditional ')' actionBlock 'end if';
+
+forStatement	: 'for' ID 'in' ID forAction 'end for' ;
+
+forAction       : forIf ;
+
+forIf           : ifStatement
+                | /* epsilon */
+                ;
+
+conditional		: value OPERATOR value
+				| '('conditional')' AND '('conditional')'
+				| '('conditional')' OR '('conditional')'
+				;
+
+value			: INT
+				| realNumber
+				;
+/*End actions phase*/
+
+output          : 'output:' outputStatement outputWriteSt 'end output' ';' ;
+//outputStatement : outputRule outputAdd outputWrite ;
+outputStatement : outputRule outputStatement
+                | outputAdd outputStatement
+                |
+                ;
+
+outputRule      : 'use' ID 'on' ID ';' ;//first ID corresponds to rule. Second ID corresponds to set.
+
+outputAdd       : 'add' ID 'to' ID ';' ; // first ID corresponds to num var, second ID corresponds to inFile
+
+outputWriteSt   : outputWrite outputWriteCont;
+outputWriteCont : outputWrite outputWriteCont
+                | /* epsilon */
+                ;
+
+outputWrite     : 'write' ID filename ';' ; //ID corresponds to a inFile
+
+filename	    : './' filename
+                | '../' filename
+                | '/' filename
+                | ID '.csv'
+				| ALPHANUM '.csv';
+
+realNumber		: INT '.' INT ;
+
+INT     : [0-9]+ ;
+AND     : 'and' | 'AND' ;
+OR      : 'or' | 'OR' ;
+VAL     : 'value';
+THIS    : 'this';
+OPERATOR: ('>=' | '<=' | '>' | '<' | '==' | '!=');
+ID      : [a-zA-Z_] [0-9a-zA-Z_]+ ;
+ALPHANUM: [0-9a-zA-Z_/\-]+ ;
+NEWLINE : '\r'? '\n' -> skip;
+WS      : [ \t]+ -> skip ;  // tells ANTLR to ignore these
 ~~~
 
-The grammar matches the program as expected and is 
+The grammar matches the language as expected and is 
 able to handle all the functionality we have currently 
-designed the program with.
+designed the language with.
 
 
 Translation Behind-The-Scenes
@@ -392,25 +735,48 @@ Translation Behind-The-Scenes
 
 Variables
 --------
-All input files are read in as 2d arrays of strings. Those strings are then stored in a HashMap data type with the
+All input files are read in as 2D arrays of strings. 
+Those strings are then stored in a HashMap data type with the
 key being the variable name the user assigned to that input file.
 
-**Headers:** There are 2 separate HashMaps. One for column headers and the other for row headers. The key is the
-header name and the value is the index of that row/column in the corresponding file's 2d array
+**Headers:** There are 2 separate HashMaps. One for column headers 
+and the other for row headers. The key is the
+header name and the value is the index of that row/column 
+in the corresponding file's 2d array.
 
-**Subsets:** Subsets are a class that contain the string of the in-file name and a linked list of cell locations. Subset
+**Subsets:** Subsets are a class that contain the string of the 
+in-file name and a linked list of cell locations. Subset 
 variables are stored in a HashTable.
 
-**Cells:** Cells can be referenced by the format fileVar.colHeader.rowHeader or by variable name if previously declared
-using `cell foo = inFile.col.row`. It can be used to access the value at that cell or to define a range or location in
-a subset. Visiting a cellReference returns the location of the cell and sets the currentCell value to the proper cell
-object, which contains the in-file variable name and the cell location within that file, as well as a getVal function.
+**Cells:** Cells can be referenced by the format 
+fileVar.colHeader.rowHeader or by variable name if 
+previously declared using `cell foo = inFile.col.row`. 
+It can be used to access the value at that cell or to 
+define a range or location in a subset. Visiting a 
+cellReference returns the location of the cell and sets 
+the currentCell value to the proper cell object, which 
+contains the in-file variable name and the cell location 
+within that file, as well as a getVal function.
 
 Output
 ------
-In the output, functions can be applied to certain subsets. This is achieved by store the function context at assignment
+In the output, functions can be applied to certain subsets. 
+This is achieved by storing the function context at assignment
 and visiting it while parsing the use rule.
-rammar. We may also go back and restructure
+Numerical variable contexts are also stored, which 
+allows the program to evaluate a numerical operation before 
+and after a function is applied.
+
+Reflection
+===============
+
+P01
+-------------
+
+This grammar is not exhaustive, but it covers most cases
+fairly well. It is possible that we will add more functionality
+to the language in the future, in which case we would
+have to add to the grammar. We may also go back and restructure
 the grammar in places to make it less ambiguous, especially
 if we discover issues further down the line. However,
 at this point in time the grammar works quite well for
@@ -448,6 +814,28 @@ operators were a nice addition to the language.
 We still need to put some finishing touches on the output phase 
 of the program, but overall we're pretty encouraged by the progress 
 we've seen!
+
+P04
+-------------
+
+The language is now at a point where it is functional and 
+usable. There are more potential changes we could make to it in 
+the future, but we're pretty happy with where it's at right now.
+The grammar has been fully fleshed out to allow for all the 
+core functionality that the language is intended to accomplish.
+
+It ended up being more complicated than we thought to get the 
+language to this point - there were a lot of edge cases and 
+specific functionality that we hadn't considered and had to rework 
+our grammar and implementation slightly to support. However, 
+the language should now be at a point where it accomplishes 
+its intended purpose. It is simple to use but still allows for 
+advanced manipulation and analysis.
+
+Overall, this project was fun to work on! It was a lot of work,
+but it was really interesting to figure out how to approach actually 
+implementing the language, and it was quite rewarding to have everything 
+come together. Perhaps we'll be able to use our language in the future!
 
 
 
