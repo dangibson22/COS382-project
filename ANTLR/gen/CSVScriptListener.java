@@ -177,16 +177,6 @@ public interface CSVScriptListener extends ParseTreeListener {
 	 */
 	void exitCellReference(CSVScriptParser.CellReferenceContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link CSVScriptParser#schemeAssignment}.
-	 * @param ctx the parse tree
-	 */
-	void enterSchemeAssignment(CSVScriptParser.SchemeAssignmentContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CSVScriptParser#schemeAssignment}.
-	 * @param ctx the parse tree
-	 */
-	void exitSchemeAssignment(CSVScriptParser.SchemeAssignmentContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link CSVScriptParser#r}.
 	 * @param ctx the parse tree
 	 */
@@ -266,36 +256,6 @@ public interface CSVScriptListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitIfStatement(CSVScriptParser.IfStatementContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CSVScriptParser#forStatement}.
-	 * @param ctx the parse tree
-	 */
-	void enterForStatement(CSVScriptParser.ForStatementContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CSVScriptParser#forStatement}.
-	 * @param ctx the parse tree
-	 */
-	void exitForStatement(CSVScriptParser.ForStatementContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CSVScriptParser#forAction}.
-	 * @param ctx the parse tree
-	 */
-	void enterForAction(CSVScriptParser.ForActionContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CSVScriptParser#forAction}.
-	 * @param ctx the parse tree
-	 */
-	void exitForAction(CSVScriptParser.ForActionContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link CSVScriptParser#forIf}.
-	 * @param ctx the parse tree
-	 */
-	void enterForIf(CSVScriptParser.ForIfContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link CSVScriptParser#forIf}.
-	 * @param ctx the parse tree
-	 */
-	void exitForIf(CSVScriptParser.ForIfContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link CSVScriptParser#conditional}.
 	 * @param ctx the parse tree

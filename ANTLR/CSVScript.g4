@@ -21,11 +21,9 @@ actionBlock		: action ';' actionBlock
 				| /* epsilon */
 				;
 action			: ifStatement
-				| forStatement
 				| subsetAssignment
 				| cellAssignment
 				| numAssignment
-				| schemeAssignment
 				| functionAssignment
 				;
 
@@ -64,8 +62,6 @@ cellReference   : THIS '.' 'col' '.' ID
                 | ID // Cell variable name
                 ;
 
-schemeAssignment: 'scheme' ID '=' '{' r '}';
-
 r				: ID ':' expr rules;
 
 rules			: ',' r //ID corresponds to a subset or cell
@@ -97,14 +93,6 @@ variable        : ID
 functionAssignment: 'function' ID '=' expr ; //A rule is a mathematical operation to apply to the value of a cell or subset
 
 ifStatement		: 'if' '(' conditional ')' actionBlock 'end if';
-
-forStatement	: 'for' ID 'in' ID forAction 'end for' ;
-
-forAction       : forIf ;
-
-forIf           : ifStatement
-                | /* epsilon */
-                ;
 
 conditional		: value OPERATOR value
 				| '('conditional')' AND '('conditional')'

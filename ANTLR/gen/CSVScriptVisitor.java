@@ -112,12 +112,6 @@ public interface CSVScriptVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCellReference(CSVScriptParser.CellReferenceContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link CSVScriptParser#schemeAssignment}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitSchemeAssignment(CSVScriptParser.SchemeAssignmentContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link CSVScriptParser#r}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -165,24 +159,6 @@ public interface CSVScriptVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitIfStatement(CSVScriptParser.IfStatementContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link CSVScriptParser#forStatement}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitForStatement(CSVScriptParser.ForStatementContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link CSVScriptParser#forAction}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitForAction(CSVScriptParser.ForActionContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link CSVScriptParser#forIf}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitForIf(CSVScriptParser.ForIfContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link CSVScriptParser#conditional}.
 	 * @param ctx the parse tree

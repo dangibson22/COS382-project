@@ -16,16 +16,9 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
     private final HashMap<String, CSVScriptParser.ExprContext> functionContexts = new HashMap<>();
     private final HashMap<String, LinkedList<String>> outputNumVars = new HashMap<>();
 
-    //private final HashMap<String, CSVScriptParser.RContext> schemeContexts = new HashMap();
-
-    //private final HashMap<String, Scheme> schemeVars = new HashMap<>();
-
     private String currentInFile;
-    private String loopControlVar;
-    private int[] loopLoc;
     private Cell currentCell;
     private Cell valCell;
-    private Float funcExprVal;
     private boolean noRowHeader;
     private boolean noColHeader;
 
@@ -71,40 +64,6 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
             this.colHead = colHead;
         }
     }
-
-    /*
-    private class Scheme {
-        private HashMap<String, Float> schemeValues;
-        private HashMap<String, String> schemeOps;
-
-        public Scheme() {
-            schemeValues = new HashMap<>();
-            schemeOps = new HashMap<>();
-        }
-
-        public void addSubset(String subset, Float value, String op) {
-            schemeValues.put(subset, value);
-            schemeOps.put(subset, op);
-        }
-
-        public Float getValue(String subset) {
-            return schemeValues.get(subset);
-        }
-
-        public String getOp(String subset) {
-            return schemeOps.get(subset);
-        }
-
-        public LinkedList<String> getSubsets() {
-            LinkedList<String> subsetNames = new LinkedList<>();
-            for (String name : schemeValues.keySet()) {
-                subsetNames.push(name);
-            }
-            return subsetNames;
-        }
-
-    }
-     */
 
     private int[] getRowColSize(File spreadsheet) throws FileNotFoundException {
         int[] rowColSize = {1, 1}; //[rowCount, colCount]
@@ -292,7 +251,6 @@ public class dslVisitor<T> extends CSVScriptBaseVisitor<T> {
     @Override
     public T visitReference(CSVScriptParser.ReferenceContext ctx) {
         LinkedList<int[]> cellLocs = new LinkedList<>();
-        //int fileIdx = fileVarListIdx.get(currentInFile);
         boolean isRange = ctx.getToken(19, 0) != null;
         if (!isRange) {
             if (ctx.getToken(17, 0) != null) { //row reference
