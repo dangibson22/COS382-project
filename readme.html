@@ -34,12 +34,15 @@ file:
 --------
 a CSV file that has been read in as a 2d array
 
-Example:<br>
-`read foo.csv as bar;` creates a file variable named bar.<br>
+Example:
+
+`read foo.csv as bar;` creates a file variable named bar.
+
 `read foo.csv as bar (noColHeaders)` You can also add flags if your spreadsheet does not contain headers, such as the
 sample below which contains no column headers. Options include `(noColHeaders, noRowHeaders)`
+
 <div class="noheader">
-    |
+                  |    |    |    | 
 ------------------|----|----|----|----
 Quiz1Scores       | 12 | 14 | 10 | 12
 Quiz2Scores       | 43 | 44 | 39 | 45
@@ -60,11 +63,14 @@ subset:
 -------
 an object that contains a set of specified cells that can all be manipulated at once.
 
-Examples:<br>
+Examples:
+
 `subset foo = [table.row.col to table.row2.col2];` creates a subset that contains all cells bounded by the
-two cells.<br>
+two cells.
+
 `subset foo = [row a to row b];` contains all cells in the box bounded by those rows. The language can use `col`
-but cannot compute a range of a row to a column.<br>
+but cannot compute a range of a row to a column.
+
 `subset foo = [table.col.row, col a to col b];` Using commas, the programmer can specify a set of cells that are
 not connected.
 
@@ -72,23 +78,50 @@ cell:
 ---------
 a reference to a specific cell in a specific table.
 
-Example:<br>
+Example:
+
 `cell foo = table.col.row;` creates a cell variable 'foo' that refers to the reference.
 
 function
 ----------
-Defines a mathematical function to apply to a subset in the output section.<br>
-The `value` keyword is used to access the current value in the cell being manipulated.<br>
+Defines a mathematical function to apply to a subset in the output section.
+
+The `value` keyword is used to access the current value in the cell being manipulated.
+
 You can also access the current cell's location by using `this.col` or `this.foo.row`, allowing
 you to access a different cell in the same row or the same column.
 
-Examples:<br>
-`function add2 = value + 2;` adds 2 to each cell in the subset.<br>
+Examples:
+
+`function add2 = value + 2;` adds 2 to each cell in the subset.
+
 `function convertToPercent = value / this.col.total;` accesses the cells value and divides it by the total value
 for that same column (works if assignments are separated by column).
 
 Script Overview
 ===============
+
+Overview
+----------------
+
+A file is made up of three primary sections, defined as follows:
+
+~~~
+input:
+
+end input;
+
+actions:
+
+end actions;
+
+output:
+
+end output;
+~~~
+
+Key functionality is split between these three sections.
+Below is a description of each of these phases.
 
 Input
 ----------------
@@ -101,11 +134,27 @@ Spaces in column headers will be replaced with underscores.
 **Conflicting names**: If 2 columns contain the same name, the second one will have the number 1 appended to the end, and the next 2, and so on.
 If a column and row share the same name, '_row' will be appended to the row version.
 
+To read in a file, utilize the following line:
+
+~~~
+read filename.csv as fileVariable;
+~~~
+
+where `filename` is the path to the file being read in,
+and `fileVariable` is the name for the variable used to 
+represent the spreadsheet.
+
+Because variable names are used load in a spreadsheet,
+multiple files can be read into one script.
+
 Actions
 ---------------
 
-Within the actions section, the programmer can declare subsets of specific cells as well as functions, or mathematical
-manipulations to apply to each cell within those subsets.
+Actions consist of the bulk of the script. New subsets can be defined, 
+special functions can be declared designed to manipulate data,
+and operations such as minimum, maximum and average can be applied to 
+a set of data. These are all applied in the 
+`output` section of the program.
 
 The actions section is intended to define any 
 modifications to be made to the data. This way, all 
@@ -113,24 +162,216 @@ computation is contained within the actions section,
 and the output section only uses the precomputed 
 data types to prepare the output.
 
+**Subsets** are intended to represent a specific set of 
+data within a spreadsheet. They can be declared in the following 
+format:
+
+~~~
+fileVariable subset subsetVariable = [ref];
+~~~
+
+`fileVariable` is the spreadsheet being referenced, and `subsetVariable` 
+is the variable name this subset is assigned to.
+`ref` is a generic term used here as a placeholder for the 
+multiple types of input that can be used for a subset, which 
+include the following:
+
+~~~
+file subset sub1 = [col quiz1];
+file subset sub2 = [row tommy];
+file subset sub3 = [tommy.quiz1];
+file subset sub4 = [col quiz1, col quiz2];
+file subset sub5 = [col quiz1 to col quiz3];
+file subset sub6 = [col quiz1, row tommy to row billy];
+file subset sub7 = [col quiz1, col quiz3, tommy.quiz4 to billy.quiz6];
+~~~
+
+There is lots of potential to control the input of a subset.
+Subsets can be declared from a row, column, cell reference, or a range 
+and/or combiation of any of the above. This allows for a powerful 
+tool to disect a dataset. 
+
+Important to note: subset names must be distinct 
+from row/column headers!
+
+**Cell variables** are used to refer to a specific cell.
+They can be defined in the following formats:
+
+~~~
+cell cell1 = this.col.quiz4;
+cell cell2 = this.tommy.row;
+cell cell3 = file.tommy.quiz4;
+cell cell4 = cell3;
+~~~
+
+In the first two cases, the cell being referenced is more general,
+referring to cells that meet a specific criteria. This is designed 
+for use in functions, where the `row` or `col` may change depending 
+on the cell being accessed. More on this below.
+
+In the third case, there is one cell being referenced, providing 
+the file variable, the row name, and the column name. In the 
+fourth case, a previously defined cell variable is accessed.
+
+**Functions** are pre-defined operations used to cause a modification 
+to a certain set of data. Functions are declared in the following format:
+
+~~~
+function funcVar = expr;
+~~~
+
+`funcVar` is the variable name of the function, and `expr` is a 
+placeholder used to represent the different operations that 
+can be used in a function. These operations include addition, 
+subtraction, multiplication, division, and any combination of 
+the above. Complicated operations also support use of parentheses 
+to express calculation order and utilize standard order of operations.
+
+As discussed earlier, functions also allow for the use of cell 
+variables to define expressions. Consider the following lines:
+
+~~~
+cell totalCell = this.row.total;
+function getPercent = value / totalCell;
+~~~
+
+When the `getPercent` function is applied to a subset in 
+the program will iterate through each element in the subset.
+As it iterates and accesses each cell, it will update the `row` 
+attribute in the `totalCell` definition to be the `row` used in 
+the current iterator cell. This allows for functions that 
+work across a wider range of cells.
+
+Because functions are not applied until the `output` phase, they can 
+be defined generally and can be used on multiple stored files.
+
+**Num Variables** are used to store numerical values. They are 
+defined in the following format:
+
+~~~
+num num1 = 1;
+num num2 = 2.5;
+num num3 = (5 + 17) / 3;
+~~~
+
+Numerical variables can also be used to calculate the min, max or 
+average of a subset. This is defined as follows:
+
+~~~
+num minVal = min set1;
+num maxVal = max set2;
+num avgVal = avg set3 max 100;
+~~~
+
+The `avg` operator requires a maximum value to be 
+specified to calculate the average, allowing an instructor 
+to test multiple possibilities for class scores.
+
+It is important to note that these actions are simply stored 
+until the `output` phase; currently they are not used in any way.
 
 Output
 ---------------
 
 The output section is used to define the structure of the resulting file. 
-It applies pre-defined rules and functions to certain subsets
-and writes those results to the specified CSV file.
+It applies functions to certain subsets 
+and writes those results to the specified CSV file,
+as well as allowing a user to append additional variables 
+to that file.
+
+There are three key operations in the `output` phase:
+functions, additions, and writes.
+
+**Function Application** is when a previously defined 
+function is applied to a subset. This looks like the 
+following:
+
+~~~
+use funcVar on subsetVar;
+~~~
+
+The operation specified in the `funcVar` function is applied to every 
+cell in the `subsetVar` subset.
+
+**Addition of Variables** allows the user to output numerical 
+variables at the end of the output file. This is specified 
+in the following format:
+
+~~~
+add numVar to fileVar;
+~~~
+
+`numVar` is the numerical variable previously defined, while 
+`fileVar` is the file variable the user wishes to append the 
+variable onto. The extra variables are added onto the bottom 
+of the output CSV file, including a header with the text 
+"Extra Variables" above them. Both the variable names and 
+values are outputted to allow the user to track which 
+data they are outputting.
+
+**TODO** - add info about ordering here
+
+The **write** section allows the user to finally take all 
+their prepared actions and output them to a CSV file. This 
+is defined in the following format:
+
+~~~
+write fileVar to filename.csv;
+~~~
+
+`fileVar` is the file variable the user wishes to output, 
+and `filename.csv` is the file the user wishes to write out to.
+
 
 Sample Program
 ===============
+
+Consider the following CSV file:
+
+![Example gradebook CSV file](./screenshots/gradebook1-csv.jpg)
 
 The following code is an example of a program written 
 in this language. This is what we used to test the 
 grammar and help structure it.
 
 ~~~
-INSERT PROGRAM HERE
+input:
+
+read testEnv/gradebook.csv as gradesTable;
+
+end input;
+
+
+actions:
+
+gradesTable subset quiz1set = [col quiz1];
+
+function add2ExtraCredit = value + 2;
+
+num val1 = 4;
+num m_score = max quiz1set;
+num min_score = min quiz1set;
+num a_score = avg quiz1set max 100;
+num expr_val = 5 + (9 * 3);
+
+end actions;
+
+
+output:
+
+use add2ExtraCredit on quiz1set;
+add m_score to gradesTable;
+add a_score to gradesTable;
+add min_score to gradesTable;
+add val1 to gradesTable;
+write gradesTable out.csv;
+
+end output;
 ~~~
+
+Once this script has run, this is the resulting output CSV file:
+
+(screenshot here)
 
 Grammar
 ===============
@@ -169,25 +410,7 @@ Output
 ------
 In the output, functions can be applied to certain subsets. This is achieved by store the function context at assignment
 and visiting it while parsing the use rule.
-
-
-Testing
-====================
-
-A whole suite of test files were used to check against isolated issues, such as no output file, an integer being used
-as a variable id, actions in the output block, and no input block. We also tested against a larger script that should
-utilize most, if not all of the grammar rules.
-
-Reflection
-===================
-
-P01
--------------
-
-This grammar is not exhaustive, but it covers most cases
-fairly well. It is possible that we will add more functionality
-to the language in the future, in which case we would
-have to add to the grammar. We may also go back and restructure
+rammar. We may also go back and restructure
 the grammar in places to make it less ambiguous, especially
 if we discover issues further down the line. However,
 at this point in time the grammar works quite well for
