@@ -15,9 +15,13 @@ computer + OS     | Euler lab machines (Linux)
 Introduction to Language
 ===============
 
-**Domain:** Teachers managing a CSV gradebook
+Domain
+-------
+Teachers managing a CSV gradebook
 
-**Problem:** This language is meant to enable educators to perform 
+Problem
+---------------
+This language is meant to enable educators to perform
 manipulations on a gradebook, such as getting the highest / lowest 
 grade, an average for an assignment, or even curving a grade or 
 applying a new weighting system.
@@ -147,7 +151,6 @@ Translation Behind-The-Scenes
 
 Variables
 --------
-
 All input files are read in as 2d arrays of strings. Those strings are then stored in a HashMap data type with the
 key being the variable name the user assigned to that input file.
 
@@ -161,6 +164,11 @@ variables are stored in a HashTable.
 using `cell foo = inFile.col.row`. It can be used to access the value at that cell or to define a range or location in
 a subset. Visiting a cellReference returns the location of the cell and sets the currentCell value to the proper cell
 object, which contains the in-file variable name and the cell location within that file, as well as a getVal function.
+
+Output
+------
+In the output, functions can be applied to certain subsets. This is achieved by store the function context at assignment
+and visiting it while parsing the use rule.
 
 
 Testing
