@@ -11,6 +11,7 @@ name              | Daniel Gibson & Trevor Mitchell
 computer + OS     | Euler lab machines (Linux)
 </div>
 
+
 Introduction to Language
 ===============
 
@@ -25,11 +26,62 @@ applying a new weighting system.
 Variable Types and Declarations
 ================================
 
-`file`: a CSV file that has been read in as a 2d array
+file:
+--------
+a CSV file that has been read in as a 2d array
 
-`subset`: an object that contains a list of cell locations and the file it refers to.
+Example:<br>
+`read foo.csv as bar;` creates a file variable named bar.<br>
+`read foo.csv as bar (noColHeaders)` You can also add flags if your spreadsheet does not contain headers, such as the
+sample below which contains no column headers. Options include `(noColHeaders, noRowHeaders)`
+<div class="noheader">
+    |
+------------------|----|----|----|----
+Quiz1Scores       | 12 | 14 | 10 | 12
+Quiz2Scores       | 43 | 44 | 39 | 45
+</div>
 
-`cell`: an object that contains the file it resides in, the row index, and the col index.
+
+headers:
+--------
+upon reading in a file, the script is populated with variables that refer to row and column headers, allowing
+the programmer to access cells with `tableVar.colHeaderName.rowHeaderName`. If the noRowHeader or noColHeader is set,
+the respective field is populated with headers "row_1, row_2, ..."
+
+If a header cell is empty, its name will become "col_n" where n is the index of the header. If a row and column have
+the same name, the "_row" is appended to the end of the row. If two columns share the same name, then the second one
+will have "_n" appended at the end, where n is the occurrence (2 for the second, 3 for the third, and so on)
+
+subset:
+-------
+an object that contains a set of specified cells that can all be manipulated at once.
+
+Examples:<br>
+`subset foo = [table.row.col to table.row2.col2];` creates a subset that contains all cells bounded by the
+two cells.<br>
+`subset foo = [row a to row b];` contains all cells in the box bounded by those rows. The language can use `col`
+but cannot compute a range of a row to a column.<br>
+`subset foo = [table.col.row, col a to col b];` Using commas, the programmer can specify a set of cells that are
+not connected.
+
+cell:
+---------
+a reference to a specific cell in a specific table.
+
+Example:<br>
+`cell foo = table.col.row;` creates a cell variable 'foo' that refers to the reference.
+
+function
+----------
+Defines a mathematical function to apply to a subset in the output section.<br>
+The `value` keyword is used to access the current value in the cell being manipulated.<br>
+You can also access the current cell's location by using `this.col` or `this.foo.row`, allowing
+you to access a different cell in the same row or the same column.
+
+Examples:<br>
+`function add2 = value + 2;` adds 2 to each cell in the subset.<br>
+`function convertToPercent = value / this.col.total;` accesses the cells value and divides it by the total value
+for that same column (works if assignments are separated by column).
 
 Script Overview
 ===============
@@ -48,10 +100,8 @@ If a column and row share the same name, '_row' will be appended to the row vers
 Actions
 ---------------
 
-Actions consist of the bulk of the script. New subsets can be defined, 
-conditional statements and loops can provide manipulations to data, and
-weight systems aka schemes, can be declared. These are all applied in the 
-`output` section of the program.
+Within the actions section, the programmer can declare subsets of specific cells as well as functions, or mathematical
+manipulations to apply to each cell within those subsets.
 
 The actions section is intended to define any 
 modifications to be made to the data. This way, all 
@@ -59,16 +109,12 @@ computation is contained within the actions section,
 and the output section only uses the precomputed 
 data types to prepare the output.
 
-**For loops ** will likely not be implemented super often, as functions can be applied to each cell in a set. However,
-it still does provide some usefulness, especially when combined with conditional statements to only modify cells that
-match a given criteria. The first ID in a for loop statement will be the variable name of the current cell, and the second
-ID will be the set that is being iterated over.
 
 Output
 ---------------
 
 The output section is used to define the structure of the resulting file. 
-It applies pre-defined schemes, rules and functions to certain subsets 
+It applies pre-defined rules and functions to certain subsets
 and writes those results to the specified CSV file.
 
 Sample Program
@@ -79,48 +125,7 @@ in this language. This is what we used to test the
 grammar and help structure it.
 
 ~~~
-input:
-
-read filepath.csv as inFile;    //populates an inFile variable with key-value pairs of columns, which is an object of key-value pairs of rows 
-                                //that contain cell data.
-read secondFile.csv as alterate (noRowHeader);
-
-end input;
-
-
-actions:
-
-subset quiz = [quiz1, quiz2 to quiz5];  //Defined using row names
-subset groupA = [tommy, billy, joe];    //Defined using col names
-subset bestQuizGrades = [tommy.quiz4, billy.quiz2];  //Defined using individual cells
-
-function add2ExtraCredit = value + 2; //Functions can be applied to sets of values to set the new value = to the old one + 2 in this instance.
-function convertToPercent = value / total.value;    //This example can be used for a table that inputs quizes as a score and has a column for
-                                                    //Each student as well as a "total" column for the highest possible.
-
-scheme classWeights = {       //For each column in a given subset, averages the values of the subset as value then performs a function
-    quiz: value * .2,     //Performs an action on the given subset
-    test: value * .4,
-    project: value *.4,
-}
-
-cell max = tommy.quiz2
-for entry in quiz2: //Iterates through each cell object in a subset.
-    if (entry > max): //Compares entry cell.value to max cell.value
-        cell max = entry;
-    end if;
-end for;
-
-end actions;
-
-
-output:
-
-use classWeights on inFile;
-use add2ExtraCredit on groupA.quiz2;
-write inFile out.csv;
-
-end output;
+INSERT PROGRAM HERE
 ~~~
 
 Grammar
